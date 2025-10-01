@@ -19,7 +19,6 @@
       ./configuration.nix
       home-manager.nixosModules.home-manager
       {
-       programs.home-manager.enable = true;
        home-manager.useGlobalPkgs = true;
        home-manager.useUserPackages = true;
        home-manager.users.suzu = {
