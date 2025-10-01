@@ -27,7 +27,6 @@
   users.users.suzu = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-    ];
   };
   security.sudo.wheelNeedsPassword = true;
 
