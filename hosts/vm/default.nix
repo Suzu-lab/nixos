@@ -7,7 +7,8 @@
     # Import machine hardware config
     imports = [ 
       ./hardware-configuration.nix
-      ../../modules/base.nix		# default system module 
+      ../../modules/base.nix		# default system module
+      home-manager.nixosModules.home-manager  #Home-manager module 
     ];
 
     # VM guest services

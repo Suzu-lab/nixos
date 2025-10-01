@@ -11,7 +11,7 @@
     let
       mkHost = hostPath: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        #specialArgs = { inherit home-manager; };	# Passing home-manager to as an argument to the host configuration files
+        specialArgs = { inherit home-manager; };	# Passing home-manager as an argument to the host configuration files
         modules = [ hostPath ];
       };
   in {
