@@ -1,10 +1,14 @@
-# Home-manager usuário suzu
+  # Home-manager user suzu
 
   { pkgs, ... }: {
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
+    home.username = "suzu";
+    home.homeDirectory = "/home/suzu";
+    home.stateVersion = "25.05";
+    
+    imports = [
+      ../modules/cli-fish.nix     # import module for fish cli shell
+    ];
 
-    home-manager.users.suzu = {
-      home.stateVersion = "25.05";
-    };
+    shell = pkgs.fish;
+    programs.home-manager.enable = true;
   }

@@ -1,18 +1,34 @@
-# Configuration file specific for this machine
+  # Configuration file specific for this machine
 
-{ config, pkgs, ... }:
-{
-  networking.hostName = "vm";
+  { config, pkgs, ... }:
+  {
+    networking.hostName = "vm";
 
-  # Import machine hardware config
-  imports = [ ./hardware-configuration.nix ];
+    # Import machine hardware config
+    imports = [ 
+      ./hardware-configuration.nix
+      ../../modules/base.nix		# default system module 
+    ];
 
-  # VM guest services
-  services.qemuGuest.enable = true;
+    # VM guest services
+    services.qemuGuest.enable = true;
 
-  # Keyboard configuration (Console will use the same config according to modules/base.nix)
-  services.xserver = {
-    xkb.layout = "us";
-    xkb.variant = "intl"; # enables US keyboard with dead keys
-  };
-}
+    # Keyboard configuration (Console will use the same config according to modules/base.nix)
+    services.xserver = {
+      xkb.layout = "us";
+      xkb.variant = "intl"; # enables US keyboard with dead keys
+    };
+
+    # User configuration
+    users.users.suzu = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" ];
+    };
+
+    # Home-Manager config
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = true;
+    home-manager.users.suzu = import ../../users/suzu.nix;
+
+  }
+

@@ -22,13 +22,6 @@
     font = "Lat2-Terminus16";
     useXkbConfig = true; # use xkb.options in tty.
   };
-  
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.suzu = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-  };
-  security.sudo.wheelNeedsPassword = true;
 
   # Nix flakes
   nix.settings = {
@@ -36,11 +29,12 @@
     warn-dirty = false;
     auto-optimise-store = true;
   };
-
+  
+  programs.nix-index.enable = true;
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    curl git htop neofetch tree vim wget
+    curl git htop neofetch tree wget
   ];
 
   # This option defines the first version of NixOS you have installed on this particular machine,

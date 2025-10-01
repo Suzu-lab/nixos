@@ -11,12 +11,7 @@
     let
       mkHost = hostPath: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [
-          ./modules/base.nix
-          (import hostPath)
-          home-manager.nixosModules.home-manager
-          ./modules/users/suzu.nix
-        ];
+        modules = [ hostPath ];
       };
   in {
     nixosConfigurations = { 
