@@ -1,32 +1,26 @@
 {
- description = "NixOS + Home Manager base setup";
+  description = "NixOS + Home Manager base setup";
 
- inputs = {
-  nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-  home-manager.url = "github:nix-community/home-manager/release-25.05";
-  home-manager.inputs.nixpkgs.follows = "nixpkgs";
- };
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
- outputs = { self, nixpkgs, home-manager, ... }@inputs:
-  let
-   forSystem = system: pkgs: {
-   };
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+    let
+      mkHost = hostPath: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./modules/base.nix
+          (import hostPath)
+          home-manager.nixosModules.home-manager
+          ./modules/users/suzu.nix
+        ];
+      };
   in {
-   nixosConfigurations = { 
-    vm = nixpkgs.lib.nixosSystem {
-     system = "x86_64-linux";
-     modules = [
-      ./configuration.nix
-      home-manager.nixosModules.home-manager
-      {
-       home-manager.useGlobalPkgs = true;
-       home-manager.useUserPackages = true;
-       home-manager.users.suzu = {
-        home.stateVersion = "25.05";
-       };
-      }
-     ];
+    nixosConfigurations = { 
+      vm = mkHost ./hosts/vm/default.nix;
     };
-   };
   };
 }
