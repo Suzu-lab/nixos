@@ -24,6 +24,7 @@
       isNormalUser = true;
       extraGroups = [ "wheel" "networkmanager" ];
     };
+    security.sudo.wheelNeedsPassword = true;
 
     # Home-Manager config
     home-manager.useGlobalPkgs = true;
