@@ -5,10 +5,10 @@
     networking.hostName = "vm";
 
     # Import machine hardware config
-    imports = [ 
+    imports = [
       ./hardware-configuration.nix
       ../../modules/base.nix		# default system module
-      home-manager.nixosModules.home-manager  #Home-manager module 
+      home-manager.nixosModules.home-manager  #Home-manager module
     ];
 
     # VM guest services
@@ -24,6 +24,7 @@
     users.users.suzu = {
       isNormalUser = true;
       extraGroups = [ "wheel" "networkmanager" ];
+      shell = pkgs.fish;	# Defines fish as default user shell
     };
     security.sudo.wheelNeedsPassword = true;
 
