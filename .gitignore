@@ -1,0 +1,5 @@
+# ignores locks and other local-only generated files
+result
+*.swp
+.direnv/
+*.qcow2
