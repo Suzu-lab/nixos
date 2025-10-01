@@ -3,7 +3,7 @@
 
  inputs = {
   nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-  home-manager.url = "github:nix-community/home-manager";
+  home-manager.url = "github:nix-community/home-manager/release-25.05";
   home-manager.inputs.nixpkgs.follows = "nixpkgs";
  };
 
@@ -23,7 +23,7 @@
        home-manager.useUserPackages = true;
        home-manager.users.suzu = {
         home.stateVersion = "25.05";
-        program.home-manager.enable = true;
+        programs.home-manager.enable = true;
        };
       }
      ];
