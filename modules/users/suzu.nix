@@ -6,7 +6,7 @@
     home.stateVersion = "25.05";
     
     imports = [
-      ../modules/cli-fish.nix     # import module for fish cli shell
+      ../cli-fish.nix     # import module for fish cli shell
     ];
 
     shell = pkgs.fish;
