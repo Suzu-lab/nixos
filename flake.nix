@@ -19,11 +19,11 @@
       ./configuration.nix
       home-manager.nixosModules.home-manager
       {
+       programs.home-manager.enable = true;
        home-manager.useGlobalPkgs = true;
        home-manager.useUserPackages = true;
        home-manager.users.suzu = {
         home.stateVersion = "25.05";
-        programs.home-manager.enable = true;
        };
       }
      ];
