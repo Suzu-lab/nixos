@@ -1,6 +1,6 @@
   # Configuration file specific for this machine
 
-  { config, pkgs, ... }:
+  { config, pkgs, home-manager... }:
   {
     networking.hostName = "vm";
 
@@ -29,7 +29,7 @@
     # Home-Manager config
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
-    home-manager.users.suzu = import ../../users/suzu.nix;
+    home-manager.users.suzu = import ../../modules/users/suzu.nix;
 
   }
 
