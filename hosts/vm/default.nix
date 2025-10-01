@@ -2,7 +2,7 @@
 
 { config, pkgs, ... }:
 {
-  networking.hostname = "vm";
+  networking.hostName = "vm";
 
   # Import machine hardware config
   imports = [ ./hardware-configuration.nix ];
