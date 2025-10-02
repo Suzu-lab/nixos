@@ -15,6 +15,11 @@
     # VM guest services
     services.qemuGuest.enable = true;
 
+		# Video drivers for virtio
+		environment.systemPackages = [
+			pkgs.xorg.sf86videoqxl
+		];
+
     # Keyboard configuration (Console will use the same config according to modules/base.nix)
     services.xserver = {
       xkb.layout = "us";
