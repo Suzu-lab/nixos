@@ -15,11 +15,11 @@
     # VM guest services
     services.qemuGuest.enable = true;
 		services.spice-vdagentd.enable = true;
-		services.spice-vdagentd.drivers.enable = true;
 
 		# Video drivers for virtio
 		environment.systemPackages = [
 			pkgs.xorg.xf86videoqxl
+			spice-vdagent
 		];
 
     # Keyboard configuration (Console will use the same config according to modules/base.nix)
