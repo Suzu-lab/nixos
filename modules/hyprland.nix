@@ -44,8 +44,8 @@
   		enable = true;
   		alsa.enable = true;
   		pulse.enable = true;
+    	wireplumber.enable = true;
   	};
-  	services.wireplumber.enable = true;
 
 		# Polkit and essential services for hot plug USB
 		security.polkit.enable = true;
