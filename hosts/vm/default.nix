@@ -19,7 +19,6 @@
 		# Video drivers for virtio
 		environment.systemPackages = [
 			pkgs.xorg.xf86videoqxl
-			spice-vdagent
 		];
 
     # Keyboard configuration (Console will use the same config according to modules/base.nix)
