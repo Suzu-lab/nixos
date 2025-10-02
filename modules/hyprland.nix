@@ -17,7 +17,7 @@
   		QT_QPA_PLATFORM = "wayland;xcb";		# Qt apps
   		SDL_VIDEODRIVER = "wayland,x11";		#SDL
   		_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
-  	}
+  	};
 
   	# Minimal display manager
   	services.greetd = {
