@@ -50,7 +50,7 @@
 		# Polkit and essential services for hot plug USB
 		security.polkit.enable = true;
 		services.dbus.enable = true;
-		services gvfs.enable = true;
+		services.gvfs.enable = true;
 		services.tumbler.enable = true;
 		services.udisks2.enable = true;
 
