@@ -5,7 +5,7 @@
     services.xserver.enable = false;
 
   	# Enables Hyprland WM
-  	programs/hyprland = {
+  	programs.hyprland = {
   		enable = true;
   		xwayland.enable = true; # enable compatibility layer for x11 apps
   	};
