@@ -63,7 +63,6 @@
   	# Essential GUI apps
   	environment.systemPackages = with pkgs; [
   		kitty
-  		thunar
   		waybar
   		wl-clipboard
   		grim
