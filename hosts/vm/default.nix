@@ -8,6 +8,7 @@
     imports = [
       ./hardware-configuration.nix
       ../../modules/base.nix		# default system module
+      ../../modules/hyprland.nix # set desktop environment
       home-manager.nixosModules.home-manager  #Home-manager module
     ];
 
