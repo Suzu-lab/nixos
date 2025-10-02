@@ -14,8 +14,8 @@
 
     # VM guest services
     services.qemuGuest.enable = true;
-		services.spice.enable = true;
-		services.spice.drivers.enable = true;
+		services.spice-vdagent.enable = true;
+		services.spice-vdagent.drivers.enable = true;
 
 		# Video drivers for virtio
 		environment.systemPackages = [
