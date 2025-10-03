@@ -1,6 +1,13 @@
   # Declarative config files for the desktop environment
   { pkgs, ... }:
   {
+
+    # Useful packages for Hyprland
+    home.packages = with pkgs; [
+    	waybar
+    	wl-clipboard
+    ];
+
     # Hyprland config (~/.config/hypr/hyprland.conf)
     xdg.configFile."hypr/hyprland.conf".text = ''
     ############################################################
