@@ -237,8 +237,8 @@
     	background: #282a36;
     }
 
-    #clock (
+    #clock {
     	padding: 0px 10px;
-    )
+    }
     '';
   }
