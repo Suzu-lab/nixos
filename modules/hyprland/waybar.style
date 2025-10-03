@@ -16,17 +16,17 @@
   }
 
   window#waybar {
-   	background: var(bg);
-   	color: var(fg);
+   	background: @bg;
+   	color: @fg;
   }
 
   #workspaces button {
-  	color: var(muted);
+  	color: @muted;
   }
 
   #workspaces button.active {
-  	color: var(fg);
-  	border-bottom: 2px solid var(accent);
+  	color: @fg;
+  	border-bottom: 2px solid @accent;
   }
 
   #clock,#cpu,#memory {
@@ -34,5 +34,5 @@
   }
 
   #cpu.warning,#memory.warning{
-  	color: var(warn);
+  	color: @warn;
   }
