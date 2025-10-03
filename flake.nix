@@ -3,8 +3,21 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Home Manager flake
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Zen browser flake
+    zen-browser = {
+    	url = "github:0xc000022070/zen-browser-flake";
+      inputs = {
+				home-manager.follows = "home-manager";
+      	nixpkgs.follows = "nixpkgs";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -15,7 +28,7 @@
         modules = [ hostPath ];
       };
   in {
-    nixosConfigurations = { 
+    nixosConfigurations = {
       vm = mkHost ./hosts/vm/default.nix;
     };
   };

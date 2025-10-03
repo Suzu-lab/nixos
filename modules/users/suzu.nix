@@ -8,9 +8,11 @@
     imports = [
       ../cli-fish.nix     # import module for fish cli shell
       ../hyprland-suzu.nix
+      ../apps/zen.nix
     ];
 
     home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
     programs.home-manager.enable = true;
+
 
   }
