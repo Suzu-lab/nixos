@@ -26,6 +26,7 @@
     # Autostart
     ############################################################
     exec-once = waybar
+    exec-once = systemctl --user start hyprpolkitagent
 
     ############################################################
     # Environment variables
