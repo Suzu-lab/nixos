@@ -9,13 +9,13 @@
   }
 
   # Catppuccin Mocha colors
-  :root (
+  :root {
   	--bg: #1e1e2e;
   	--fg: #cdd6f4;
   	--muted:#6c7086;
   	--accent: #89b4fa;
   	--warn: #f38ba8;
-  )
+  }
 
   window#waybar {
    	background: var(--bg);
