@@ -199,7 +199,7 @@
     '';
 
     # Waybar config (~/.config/waybar/config.jsonc)
-    xdg.configFile."waybar/config".text = ''
+    xdg.configFile."waybar/config.jsonc".text = ''
     {
       "style": "~/.config/waybar/style.css",
 
@@ -238,7 +238,7 @@
     }
 
     #clock (
-    	padding: 0 10px;
+    	padding: 0px 10px;
     )
     '';
   }
