@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, zen-browser, ...}: {
+{ pkgs, zen-browser, ...}: {
 	imports = [
 		zen-browser.homeModules.beta
 	];
