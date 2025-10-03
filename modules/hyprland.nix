@@ -1,4 +1,4 @@
-  # Module for setting and configuring Hyprland alongside some basic GUI apps
+  # Module for setting and configuring the basic Hyprland services
   { pkgs, ... }:
   {
     # Enables graphic server without X
@@ -55,28 +55,4 @@
 		services.tumbler.enable = true;
 		services.udisks2.enable = true;
 
-		#configure Thunar plugins
-		programs.thunar = {
-			enable = true;
-			plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
-		};
-
-  	# Essential GUI apps
-  	environment.systemPackages = with pkgs; [
-  		kitty
-  		waybar
-  		wl-clipboard
-  		grim
-  		slurp
-  		xarchiver
-  		hyprpolkitagent
-  	];
-
-  	# GUI fonts
-  	fonts.packages = with pkgs; [
-  		noto-fonts
-  		noto-fonts-cjk-sans
-  		noto-fonts-emoji
-  		font-awesome
-  	];
   }

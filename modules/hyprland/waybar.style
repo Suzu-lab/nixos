@@ -1,0 +1,17 @@
+  ############################################################
+  ## Base styles
+  ############################################################
+
+  * {
+  	font-family: "Noto Sans", "Font Awesome 6 Free";
+    font-size: 12px;
+    color: #f8f8f2;
+  }
+
+  window#waybar {
+   	background: #282a36;
+  }
+
+  #clock {
+   	padding: 0px 10px;
+  }
