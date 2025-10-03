@@ -4,7 +4,7 @@
 	];
 
 	xdg.mimeApps = let
-		association = builtins.listToAttrs (map (name: {
+		associations = builtins.listToAttrs (map (name: {
 			inherit name;
 			value = let
 				zen-browser = config.programs.zen-browser.package;
