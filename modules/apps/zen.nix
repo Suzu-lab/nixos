@@ -67,7 +67,7 @@
 				"firefox-extension@steamdb.info" = "steam-database";
 				"ublock@raymondhill.net" = "ublock-origin";
 			};
-			Preferences = mkLockedAttrs = {
+			Preferences = mkLockedAttrs {
 				"browser.aboutConfig.showWarning" = false;
 				"browser.tabs.warnOnClose" = false;
 				"browser.tabs.hoverPreview.enabled" = true;
