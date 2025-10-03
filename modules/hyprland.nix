@@ -7,6 +7,7 @@
   	# Enables Hyprland WM
   	programs.hyprland = {
   		enable = true;
+      withUWSM = true;				# Use Universal Wayland Session Manager to integrate hyprland with systemd
   		xwayland.enable = true; # enable compatibility layer for x11 apps
   	};
 
