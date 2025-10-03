@@ -1,5 +1,5 @@
   # Declarative config files for the desktop environment
-  { pkgs, ... }:
+  { pkgs, home-manager, ... }:
   {
     #configure Thunar plugins
     programs.thunar = {
