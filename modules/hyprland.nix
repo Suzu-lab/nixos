@@ -69,7 +69,7 @@
   		grim
   		slurp
   		xarchiver
-  		polkit_gnome
+  		hyprpolkitagent
   	];
 
   	# GUI fonts
