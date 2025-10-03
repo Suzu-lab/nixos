@@ -20,7 +20,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
+  outputs = inputs @ { self, nixpkgs, home-manager, zen-browser, ... }:
     let
       mkHost = hostPath: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
