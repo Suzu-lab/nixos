@@ -1,38 +1,38 @@
-  ############################################################
-  ## Base styles
-  ############################################################
+############################################################
+## Base styles
+############################################################
 
-  # Catppuccin Mocha colors
-  @define-color bg #1e1e2e;
-  @define-color fg #cdd6f4;
-  @define-color	muted #6c7086;
-  @define-color	accent #89b4fa;
-  @define-color	warn #f38ba8;
+# Catppuccin Mocha colors
+@define-color bg #1e1e2e;
+@define-color fg #cdd6f4;
+@define-color	muted #6c7086;
+@define-color	accent #89b4fa;
+@define-color	warn #f38ba8;
 
-  * {
-  	font-family: "Noto Sans", "Font Awesome 6 Free";
-    font-size: 12px;
-    color: #f8f8f2;
-  }
+* {
+	font-family: "Noto Sans", "Font Awesome 6 Free";
+  font-size: 12px;
+  color: #f8f8f2;
+}
 
-  window#waybar {
-   	background: @bg;
-   	color: @fg;
-  }
+window#waybar {
+ 	background: @bg;
+ 	color: @fg;
+}
 
-  #workspaces button {
-  	color: @muted;
-  }
+#workspaces button {
+  color: @muted;
+}
 
-  #workspaces button.active {
-  	color: @fg;
-  	border-bottom: 2px solid @accent;
-  }
+#workspaces button.active {
+ 	color: @fg;
+ 	border-bottom: 2px solid @accent;
+}
 
-  #clock,#cpu,#memory {
-  	padding: 0px 10px;
-  }
+#clock,#cpu,#memory {
+ 	padding: 0px 10px;
+}
 
-  #cpu.warning,#memory.warning{
-  	color: @warn;
-  }
+#cpu.warning,#memory.warning{
+ 	color: @warn;
+}
