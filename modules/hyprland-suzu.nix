@@ -199,7 +199,7 @@
     '';
 
     # Waybar config (~/.config/waybar/config.jsonc)
-    xdg.configFile."waybar/config.jsonc".text = ''
+    xdg.configFile."waybar/config".text = ''
     {
       "style": "~/.config/waybar/style.css",
 
