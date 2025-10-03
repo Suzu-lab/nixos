@@ -13,8 +13,7 @@
       grim
       hyprlock
       hyprpaper
-      hyprpolikitagent
-  		kitty
+      kitty
   		mako
   		slurp
   		waybar
