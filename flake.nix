@@ -20,11 +20,11 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
     let
       mkHost = hostPath: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit home-manager; };	# Passing home-manager as an argument to the host configuration files
+        specialArgs = { inherit home-manager zen-browser; };	# Passing home-manager as an argument to the host configuration files
         modules = [ hostPath ];
       };
   in {
