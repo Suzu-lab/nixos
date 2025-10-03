@@ -1,6 +1,6 @@
-{ inputs, config, pkgs, ...}: {
+{ inputs, config, pkgs, zen-browser, ...}: {
 	imports = [
-		inputs.zen-browser.homeModules.beta
+		zen-browser.homeModules.beta
 	];
 
 	programs.zen-browser.enable = true;
