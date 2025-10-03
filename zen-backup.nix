@@ -3,7 +3,7 @@
 		inputs.zen-browser.homeModules.beta
 	];
 
-/*	xdg.mimeApps = let
+	xdg.mimeApps = let
 		associations = builtins.listToAttrs (map (name: {
 			inherit name;
 			value = let
@@ -85,5 +85,5 @@
 		};
 
 
-	};*/
+	};
 }
