@@ -1,0 +1,12 @@
+window {
+	background-color: #1e1e2e;
+}
+
+#input {
+	margin: 6px;
+	padding: 6px;
+}
+
+#entry {
+	padding: 6px;
+}

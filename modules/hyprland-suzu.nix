@@ -10,4 +10,14 @@
 
     # Config of waybar style sheet (~/.config/waybar/style.css)
     xdg.configFile."waybar/style.css".source = ./hyprland/waybar.style;
+
+    # Hyprpaper config (~/.config/hypr/hyprpaper.conf)
+    xdg.configFile."hypr/hyprpaper.conf".source = ./hyprland/hyprpaper.conf;
+
+    # Mako config (~/.config/mako/config)
+    xdg.configFile."mako/config".source = ./hyprland/mako.conf;
+
+    # Wofi config (~/.config/wofi/style.css)
+    xdg.configFile."wofi/style.css".source = ./hyprland/wofi.style;
+
   }

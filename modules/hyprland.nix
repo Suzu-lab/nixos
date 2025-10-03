@@ -69,9 +69,11 @@
       hyprpaper
       kitty
       mako
+      polkit_gnome
       slurp
       waybar
       wl-clipboard
+      wofi
       xarchiver
     ];
 

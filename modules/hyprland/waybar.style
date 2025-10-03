@@ -8,10 +8,33 @@
     color: #f8f8f2;
   }
 
+  # Catppuccin Mocha colors
+  :root (
+  	--bg: #1e1e2e;
+  	--fg: #cdd6f4;
+  	--muted:#6c7086;
+  	--accent: #89b4fa;
+  	--warn: #f38ba8;
+  )
+
   window#waybar {
-   	background: #282a36;
+   	background: var(--bg);
+   	color: var(--fg);
   }
 
-  #clock {
-   	padding: 0px 10px;
+  #workspaces button {
+  	color: var(--muted);
+  }
+
+  #workspaces button.active {
+  	color: var(--fg);
+  	border-bottom: 2px solid var(--accent);
+  }
+
+  #clock,#cpu,#memory {
+  	padding: 0px 10px;
+  }
+
+  #cpu.warning,#memory.warning{
+  	color: var(--warn);
   }
