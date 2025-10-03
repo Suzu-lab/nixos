@@ -1,5 +1,5 @@
   # Declarative config files for the desktop environment
-  ( pkgs, ... ):
+  { pkgs, ... }:
   {
     # Hyprland config (~/.config/hypr/hyprland.conf)
     xdg.configFile."hypr/hyprland.conf".text = ''
