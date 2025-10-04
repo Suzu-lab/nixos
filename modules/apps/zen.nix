@@ -32,7 +32,7 @@
 			defaultApplications = associations;
 		};
 
-	programs.zen-browser = {
+	inputs.zen-browser.packages."${system}".beta.override = {
 		enable = true;
 
 		policies = let
