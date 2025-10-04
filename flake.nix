@@ -30,6 +30,9 @@
         specialArgs = { inherit inputs pkgs; };	# Export all inputs
         modules = [
         	hostPath 	# path to machine config
+
+					# Zen-browser module
+					inputs.zen-browser.homeModules.beta
 					# Home Manager Modules
 					# Home-Manager config
 					home-manager.nixosModules.home-manager
