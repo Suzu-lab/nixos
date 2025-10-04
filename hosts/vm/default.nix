@@ -7,8 +7,9 @@
     # Import machine hardware config
     imports = [
       ./hardware-configuration.nix
-      ../../modules/base.nix		# default system module
-      ../../modules/hyprland.nix # set desktop environment
+      ../../modules/nixos/base.nix		# default system module
+      ../../modules/nixos/hardware/audio.nix 	# pipewire module
+      ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
     ];
 
     # VM guest services

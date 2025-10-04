@@ -6,13 +6,37 @@
     home.stateVersion = "25.05";
 
     imports = [
-      ../cli-fish.nix     # import module for fish cli shell
-      ../hyprland-suzu.nix
-      ../apps/zen.nix
+      ../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
+      ../../modules/home-manager/hyprland/default.nix # module for configuring Hyprland
+      ../../modules/home-manager/desktop/fonts.nix
+      ../../modules/home-manager/apps/thunar.nix	# specific Thunar configs
+      ../../modules/home-manager/apps/zen.nix # specific Zen browser config
     ];
 
     home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
     programs.home-manager.enable = true;
+
+		# User packages
+		home.packages = with pkgs; [
+			######################################################
+			# Tools for Hyprland
+			######################################################
+			cliphist
+			grim
+			hyprlock
+			hyprpaper
+			kitty
+			mako
+			polkit_gnome
+			slurp
+			waybar
+			wl-clipboard
+			wofi
+			xarchiver
+
+			#######################################################
+
+		];
 
 
   }
