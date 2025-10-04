@@ -11,7 +11,7 @@
   	};
 
   	# Global variables for forcing wayland wherever possible
-  	environment.sessionVariables = {
+  	home.sessionVariables = {
   		NIXOS_OZONE_WL = "1";								# Electron apps/Steam
   		GDK_BACKEND = "wayland,x11";				# GTK apps
   		QT_QPA_PLATFORM = "wayland;xcb";		# Qt apps
