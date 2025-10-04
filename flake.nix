@@ -22,7 +22,7 @@
 
   outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
     let
-      mkHost = hostPath: nixpkgs.lib.nixosSystem {
+      mkHost = { hostPath, userConfig }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };	# Export all inputs
         modules = [
