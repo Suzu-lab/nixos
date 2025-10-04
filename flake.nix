@@ -44,7 +44,7 @@
     nixosConfigurations = {
       vm = mkHost {
       	hostPath = ./hosts/vm/default.nix;
-      	userConfig = import ./modules/users/suzu.nix
+      	userConfig = import ./modules/users/suzu.nix;
     };
   };
 }
