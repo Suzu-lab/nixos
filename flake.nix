@@ -22,9 +22,12 @@
 
   outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
     let
+			system = "x86_64-linux";
+			pkgs = nixpkgs.legacyPackages.${system};
+
       mkHost = { hostPath, userConfig }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };	# Export all inputs
+        specialArgs = { inherit inputs pkgs; };	# Export all inputs
         modules = [
         	hostPath 	# path to machine config
 					# Home Manager Modules
