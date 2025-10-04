@@ -1,6 +1,6 @@
   # Configuration file specific for this machine
 
-  { config, pkgs, input, ... }:
+  { config, pkgs, inputs, ... }:
   {
     networking.hostName = "vm";
 
@@ -9,7 +9,6 @@
       ./hardware-configuration.nix
       ../../modules/base.nix		# default system module
       ../../modules/hyprland.nix # set desktop environment
-      input.home-manager.nixosModules.home-manager  #Home-manager module
     ];
 
     # VM guest services
