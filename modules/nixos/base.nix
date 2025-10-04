@@ -36,8 +36,8 @@
     enableZshIntegration = false;
     enableFishIntegration = true;
   };
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
+
+  # Base packages used at system level
   environment.systemPackages = with pkgs; [
     curl git htop neofetch tree wget
   ];

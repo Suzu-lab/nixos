@@ -40,8 +40,11 @@
 						home-manager.useUserPackages = true;
 
 						home-manager.backupFileExtension = "backup";
-						# User config
+
+						# Inheritance for Home Manager modules
 						home-manager.extraSpecialArgs = { inherit inputs; };
+
+						# User config
 						home-manager.users.suzu = import userConfig;
 					}
         ];
