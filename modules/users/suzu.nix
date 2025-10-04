@@ -1,6 +1,6 @@
   # Home-manager user suzu
 
-  { pkgs, ... }: {
+  { inputs, pkgs, ... }: {
     home.username = "suzu";
     home.homeDirectory = "/home/suzu";
     home.stateVersion = "25.05";
