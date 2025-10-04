@@ -1,6 +1,6 @@
 # Configuration options for Zen Browser
 
-{ inputs, pkgs, ...}:	{
+{ config, inputs, pkgs, ...}:	{
 
 		imports = [ inputs.zen-browser.homeModules.beta ];
 
