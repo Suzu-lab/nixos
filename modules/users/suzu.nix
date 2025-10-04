@@ -8,7 +8,6 @@
     imports = [
       ../cli-fish.nix     # import module for fish cli shell
       ../hyprland-suzu.nix
-			inputs.zen-browser.homeModules.beta
       ../apps/zen.nix
     ];
 

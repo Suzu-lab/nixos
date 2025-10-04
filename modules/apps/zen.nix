@@ -2,6 +2,7 @@
 
 { config, inputs, pkgs, ...}:	{
 
+	  imports = inputs.zen-browser.homeModules.beta;
 
 		xdg.mimeApps = let
 			associations = builtins.listToAttrs (map (name: {
