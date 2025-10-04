@@ -11,7 +11,7 @@
       ../apps/zen.nix
     ];
 
-    home.packages = with pkgs; [ inputs.zen-browser.packages."${system}".beta ]
+    home.packages = with pkgs; [ inputs.zen-browser.packages."${system}".beta ];
     home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
     programs.home-manager.enable = true;
 
