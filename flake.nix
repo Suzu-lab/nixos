@@ -23,16 +23,15 @@
   outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
     let
 			system = "x86_64-linux";
-			pkgs = nixpkgs.legacyPackages.${system};
+			# pkgs = nixpkgs.legacyPackages.${system};
 
       mkHost = { hostPath, userConfig }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs pkgs; };	# Export all inputs
+        specialArgs = { inherit inputs; };	# Export all inputs
         modules = [
         	hostPath 	# path to machine config
 
-					# Zen-browser module
-					inputs.zen-browser.homeModules.beta
+
 					# Home Manager Modules
 					# Home-Manager config
 					home-manager.nixosModules.home-manager
@@ -50,7 +49,7 @@
     nixosConfigurations = {
       vm = mkHost {
       	hostPath = ./hosts/vm/default.nix;
-      	userConfig = (import ./modules/users/suzu.nix) { inherit inputs pkgs; };
+      	userConfig = ./modules/users/suzu.nix);
     	};
   	};
   };
