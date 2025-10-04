@@ -36,13 +36,5 @@
     };
     security.sudo.wheelNeedsPassword = true;
 
-    # Home-Manager config
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-
-    home-manager.backupFileExtension = "backup";
-
-    home-manager.users.suzu = import ../../modules/users/suzu.nix;
-
   }
 

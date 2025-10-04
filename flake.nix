@@ -25,11 +25,26 @@
       mkHost = hostPath: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };	# Export all inputs
-        modules = [ hostPath ];
+        modules = [
+        	hostPath 	# path to machine config
+					# Home Manager Modules
+					# Home-Manager config
+					home-manager.nixosModules.home-manager
+					{
+						home-manager.useGlobalPkgs = true;
+						home-manager.useUserPackages = true;
+
+						home-manager.backupFileExtension = "backup";
+						# User config
+						home-manager.users.suzu = userConfig;
+					}
+        ];
       };
   in {
     nixosConfigurations = {
-      vm = mkHost ./hosts/vm/default.nix;
+      vm = mkHost {
+      	hostPath = ./hosts/vm/default.nix;
+      	userConfig = import ./modules/users/suzu.nix
     };
   };
 }
