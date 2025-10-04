@@ -41,7 +41,7 @@
 
 						home-manager.backupFileExtension = "backup";
 						# User config
-						home-manager.users.suzu = userConfig;
+						home-manager.users.suzu = ( import userConfig) { inherit inputs; };
 					}
         ];
       };
