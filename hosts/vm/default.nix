@@ -1,6 +1,6 @@
   # Configuration file specific for this machine
 
-  { config, pkgs, ... }:
+  { config, pkgs, input, ... }:
   {
     networking.hostName = "vm";
 
