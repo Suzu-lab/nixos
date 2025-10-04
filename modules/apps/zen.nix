@@ -32,7 +32,7 @@
 			defaultApplications = associations;
 		};
 
-	programs.zen-browser.enable = {
+	programs.zen-browser = {
 		enable = true;
 
 		policies = let
