@@ -7,7 +7,7 @@
 
     imports = [
       ../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
-      ../../modules/home-manager/hyprland/default.nix # module for configuring Hyprland
+      ../../modules/home-manager/desktop/hyprland/default.nix # module for configuring Hyprland
       ../../modules/home-manager/desktop/fonts.nix
       ../../modules/home-manager/apps/thunar.nix	# specific Thunar configs
       ../../modules/home-manager/apps/zen.nix # specific Zen browser config
