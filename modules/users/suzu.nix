@@ -8,7 +8,7 @@
     imports = [
       ../cli-fish.nix     # import module for fish cli shell
       ../hyprland-suzu.nix
-      ../apps/zen.nix
+      ../apps/zen.nix { inherit inputs pkgs; }
     ];
 
     home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
