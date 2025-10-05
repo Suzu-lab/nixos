@@ -26,7 +26,6 @@
 				"gtk-4.0/gtk-dark".source = "${config.gtk.theme.package}/share/theme/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
 			};
 
-			}
 			# Cursor theme
 			home.pointerCursor = {
 				name = "Catppuccin-Macchiato-Cursors";
