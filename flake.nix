@@ -31,7 +31,9 @@
         modules = [
         	hostPath 	# path to machine config
 
-
+					nixpkgs.config = {
+						allowUnfree = true;
+					};
 					# Home Manager Modules
 					# Home-Manager config
 					home-manager.nixosModules.home-manager
