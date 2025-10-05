@@ -10,6 +10,10 @@
 			xwayland.enable = true;
 		};
 
+		# Imports GTK3 theming
+		imports = [
+			./theming-gtk.nix
+		];
 
 		# Home-Manager configuration (variables and dotfiles)
 		home-manager.users.suzu = {
