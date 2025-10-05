@@ -2,8 +2,9 @@
 	{ pkgs, ... }:
 	{
 		home-manager.users.suzu = {
-			home.packages = withpkgs; [
+			home.packages = with pkgs; [
 				# Add package to set QT theme to fit GTK
+				qt5ct
 			];
 
 			# Central GTK themes configuration
