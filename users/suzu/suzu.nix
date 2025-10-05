@@ -20,6 +20,7 @@
  	    # User packages
  	    home.packages = with pkgs; [
  	    	evince
+ 	    	onlyoffice-bin
 
  	    ];
     };

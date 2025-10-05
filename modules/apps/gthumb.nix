@@ -4,8 +4,7 @@
 		# Install through Home-Manager
 		home-manager.users.suzu.home.packages = with pkgs; [
 			# Installed with plugins
-			(gthumb.withPlugins [
-				gthumb-plugins.image-viewer
+			gthumb
 			])
 		];
 
