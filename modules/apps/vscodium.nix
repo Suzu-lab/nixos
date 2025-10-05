@@ -8,7 +8,7 @@
 				package = pkgs.vscodium;
 
 				# Declarative extensions
-				extensions = with pkgs.vscode-extensions; [
+				profiles.default.extensions = with pkgs.vscode-extensions; [
 					# Theme
 					catppuccin.catppuccin-vsc
 
@@ -25,7 +25,7 @@
 				];
 
 				# Settings.json config
-				userSettings = {
+				profiles.default.userSettings = {
 					"workbench.colorTheme" = "Catppuccin Macchiato";
 					"workbench.iconTheme" = "vscode-icons";
 					"editor.fontFamily" = "'JetBrainsMono Nerd Font', 'monospace'";
