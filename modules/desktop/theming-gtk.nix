@@ -21,7 +21,7 @@
 			# Cursor theme
 			home.pointerCursor = {
 				name = "Catppuccin-Macchiato-Cursors";
-				package = pkgs.catppuccin-cursors.Macchiato;
+				package = pkgs.catppuccin-cursors.macchiatoDark;
 				size = 24;
 				gtk.enable = true;
 			};
