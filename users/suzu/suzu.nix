@@ -16,6 +16,28 @@
     	home.stateVersion = "25.05";
 
  	    programs.home-manager.enable = true;
+
+ 	    # User packages
+ 	    home.packages = with pkgs; [
+ 	    	######################################################
+ 	    	# Tools for Hyprland
+ 	    	######################################################
+ 	    	cliphist
+ 	    	grim
+ 	    	hyprlock
+ 	    	hyprpaper
+ 	    	kitty
+ 	    	mako
+ 	    	polkit_gnome
+ 	    	slurp
+ 	    	waybar
+ 	    	wl-clipboard
+ 	    	wofi
+ 	    	xarchiver
+
+ 	    	#######################################################
+ 	    	evince
+ 	    ];
     };
 
     imports = [
@@ -25,28 +47,4 @@
 			../../modules/apps/thunar.nix # Thunar config
       ../../modules/apps/zen.nix # specific Zen browser config
     ];
-
-		# User packages
-		home.packages = with pkgs; [
-			######################################################
-			# Tools for Hyprland
-			######################################################
-			cliphist
-			grim
-			hyprlock
-			hyprpaper
-			kitty
-			mako
-			polkit_gnome
-			slurp
-			waybar
-			wl-clipboard
-			wofi
-			xarchiver
-
-			#######################################################
-			evince
-		];
-
-
   }
