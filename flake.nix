@@ -25,7 +25,7 @@
 			system = "x86_64-linux";
 			# pkgs = nixpkgs.legacyPackages.${system};
 
-      mkHost = { hostPath, userConfig }: nixpkgs.lib.nixosSystem {
+      mkHost = { hostPath }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };	# Export all inputs
         modules = [
@@ -44,8 +44,6 @@
 						# Inheritance for Home Manager modules
 						home-manager.extraSpecialArgs = { inherit inputs; };
 
-						# User config
-						home-manager.users.suzu = import userConfig;
 					}
         ];
       };
@@ -53,7 +51,6 @@
     nixosConfigurations = {
       vm = mkHost {
       	hostPath = ./hosts/vm/default.nix;
-      	userConfig = ./users/suzu/suzu.nix;
     	};
   	};
   };

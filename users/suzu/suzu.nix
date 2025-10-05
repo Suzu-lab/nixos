@@ -1,19 +1,30 @@
   # Home-manager user suzu
 
   { inputs, pkgs, ... }: {
-    home.username = "suzu";
-    home.homeDirectory = "/home/suzu";
-    home.stateVersion = "25.05";
+
+		users.users.suzu = {
+			isNormalUser = true;
+		  extraGroups = [ "wheel" "networkmanager" ];
+		  ignoreShellProgramCheck = true;
+		  shell = pkgs.fish;	# Defines fish as default user shell
+		};
+		  security.sudo.wheelNeedsPassword = true;
+
+		home-manager.users.suzu = {
+			home.username = "suzu";
+			home.homeDirectory = "/home/suzu";
+    	home.stateVersion = "25.05";
+
+ 	    programs.home-manager.enable = true;
+    };
 
     imports = [
-      ../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
-      ../../modules/home-manager/desktop/hyprland/default.nix # module for configuring Hyprland
-      ../../modules/home-manager/desktop/fonts.nix
-      ../../modules/home-manager/apps/zen.nix # specific Zen browser config
+      ../../modules/cli/fish.nix     # import module for fish cli shell
+      ../../modules/desktop/hyprland.nix # module for configuring Hyprland
+      ../../modules/desktop/fonts.nix
+			../../modules/apps/thunar.nix # Thunar config
+      ../../modules/apps/zen.nix # specific Zen browser config
     ];
-
-    home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
-    programs.home-manager.enable = true;
 
 		# User packages
 		home.packages = with pkgs; [

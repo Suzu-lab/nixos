@@ -10,8 +10,8 @@
       ../../modules/nixos/base.nix		# default system module
       ../../modules/nixos/hardware/audio.nix 	# pipewire module
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
-      ../../modules/nixos/apps/hyprland.nix 	# activate hyprland at system level
-      ../../modules/nixos/apps/thunar.nix 	# activate thunar at system level
+      # User config
+      ../../users/suzu/suzu.nix
     ];
 
     # VM guest services
@@ -29,14 +29,4 @@
       xkb.variant = "intl"; # enables US keyboard with dead keys
     };
 
-    # User configuration
-    users.users.suzu = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" ];
-      ignoreShellProgramCheck = true;
-      shell = pkgs.fish;	# Defines fish as default user shell
-    };
-    security.sudo.wheelNeedsPassword = true;
-
   }
-
