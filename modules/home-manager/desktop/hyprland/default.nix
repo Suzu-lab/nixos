@@ -7,6 +7,16 @@
   		xwayland.enable = true; # enable compatibility layer for x11 apps
   	};
 
+  	# Global variables for forcing wayland wherever possible
+  	home.sessionVariables = {
+  		NIXOS_OZONE_WL = "1";								# Electron apps/Steam
+  		GDK_BACKEND = "wayland,x11";				# GTK apps
+  		QT_QPA_PLATFORM = "wayland;xcb";		# Qt apps
+  		SDL_VIDEODRIVER = "wayland,x11";		#SDL
+  		_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
+  	};
+
+
   	# Declarative config files for the desktop environment
   	# Hyprland config (~/.config/hypr/hyprland.conf)
   	xdg.configFile."hypr/hyprland.conf".source = ./dotfiles/hyprland.conf;
