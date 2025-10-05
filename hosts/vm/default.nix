@@ -10,6 +10,8 @@
       ../../modules/nixos/base.nix		# default system module
       ../../modules/nixos/hardware/audio.nix 	# pipewire module
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
+      ../../modules/nixos/apps/hyprland.nix 	# activate hyprland at system level
+      ../../modules/nixos/apps/thunar.nix 	# activate thunar at system level
     ];
 
     # VM guest services
