@@ -1,6 +1,6 @@
   #configure Thunar and it's plugins
 	{ pkgs, ... }: {
-  	programs.xfce.thunar = {
+  	programs.thunar = {
    		enable = true;
    		plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
   	};
