@@ -20,6 +20,7 @@
  	    # User packages
  	    home.packages = with pkgs; [
  	    	evince
+
  	    ];
     };
 
@@ -29,8 +30,10 @@
       ../../modules/desktop/fonts.nix
 
 			# Modules for specific programs and configurations
-			../../modules/apps/thunar.nix 	# Thunar
-			../../modules/apps/vscodium.nix # VS Codium
-      ../../modules/apps/zen.nix 			# Zen browser (flake)
+			../../modules/apps/celluloid.nix	# Celluloid (mpv wrapper)
+			../../modules/apps/gthumb.nix			# gthumb (image viewer)
+			../../modules/apps/thunar.nix 		# Thunar
+			../../modules/apps/vscodium.nix 	# VS Codium
+      ../../modules/apps/zen.nix 				# Zen browser (flake)
     ];
   }
