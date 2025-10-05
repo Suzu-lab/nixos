@@ -30,10 +30,11 @@
         specialArgs = { inherit inputs; };	# Export all inputs
         modules = [
         	hostPath 	# path to machine config
-
-					nixpkgs.config = {
-						allowUnfree = true;
-					};
+					{
+						nixpkgs.config = {
+							allowUnfree = true;
+						};
+					}
 					# Home Manager Modules
 					# Home-Manager config
 					home-manager.nixosModules.home-manager
