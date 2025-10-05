@@ -1,5 +1,5 @@
 	# Config for VS Codium
-	{ pkgs, ..., }:
+	{ pkgs, ... }:
 	{
 		# Config done in home-manager
 		home-manager.users.suzu = {
