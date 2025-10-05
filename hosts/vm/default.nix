@@ -23,7 +23,7 @@
 			pkgs.xorg.xf86videoqxl
 		];
 
-    # Keyboard configuration (Console will use the same config according to modules/base.nix)
+    # Keyboard configuration (Console will use the same config according to modules/nixos/base.nix)
     services.xserver = {
       xkb.layout = "us";
       xkb.variant = "intl"; # enables US keyboard with dead keys
