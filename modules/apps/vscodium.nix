@@ -10,7 +10,7 @@
 				# Declarative extensions
 				extensions = with pkgs.vscode-extensions; [
 					# Theme
-					catpuccin.catpuccin-vsc
+					catppuccin.catppuccin-vsc
 
 					# Languages and tools
 					ms-python.python
@@ -26,7 +26,7 @@
 
 				# Settings.json config
 				userSettings = {
-					"workbench.colorTheme" = "Catpuccin Macchiato";
+					"workbench.colorTheme" = "Catppuccin Macchiato";
 					"workbench.iconTheme" = "vscode-icons";
 					"editor.fontFamily" = "'JetBrainsMono Nerd Font', 'monospace'";
 					"editor.fontSize" = 14;
