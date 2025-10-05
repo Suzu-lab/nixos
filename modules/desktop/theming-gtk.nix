@@ -11,8 +11,11 @@
 			gtk = {
 				enable = true;
 				# Using Catppuccin theme for now
-				theme.name = "Catppuccin-Macchiato";
-				theme.package = pkgs.catppuccin-gtk;
+				theme.name = "Catppuccin-Macchiato-Dark";
+				theme.package = pkgs.catppuccin-gtk.override {
+					tweaks = [ "black" ];
+					variant = "macchiato";
+				};
 
 				iconTheme.name = "Papirus-Dark";
 				iconTheme.package = pkgs.papirus-icon-theme;
