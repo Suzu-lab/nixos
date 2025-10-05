@@ -2,32 +2,32 @@
 
   { config, pkgs, ... }:
   {
-    # Enabling fish through at system level
-    programs.fish = {
-      enable = true;
-      interactiveShellInit = ''
-        set -gx EDITOR micro
-        set -gx VISUAL micro
-        set -gx PAGER less
-      '';
-      shellAliases = {
-        ll = "ls -lh";
-        la = "ls -lha";
-        gs = "git status";
-        gl = "git log --oneline --graph --decorate";
-        edit = "micro";
-      };
-    };
-
-    programs.starship = {
-      enable = true;
-      settings = {
-        add_newline = false;
-        character = { success_symbol = ">"; error_symbol = ">"; };
-      };
-    };
-
+    # Enabling fish through home-manager
 		home-manager.users.suzu = {
+    	programs.fish = {
+      	enable = true;
+      	interactiveShellInit = ''
+	        set -gx EDITOR micro
+  	      set -gx VISUAL micro
+    	    set -gx PAGER less
+      	'';
+	      shellAliases = {
+  	      ll = "ls -lh";
+    	    la = "ls -lha";
+      	  gs = "git status";
+        	gl = "git log --oneline --graph --decorate";
+        	edit = "micro";
+      	};
+    	};
+
+    	programs.starship = {
+      	enable = true;
+	      settings = {
+  	      add_newline = false;
+    	    character = { success_symbol = ">"; error_symbol = ">"; };
+      	};
+    	};
+
     	# User CLI tools
     	home.packages = with pkgs; [
       	bat btop direnv eza fd micro nh nix-direnv ripgrep
