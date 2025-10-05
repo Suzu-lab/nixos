@@ -20,7 +20,13 @@
 				iconTheme.name = "Papirus-Dark";
 				iconTheme.package = pkgs.papirus-icon-theme;
 			};
+			xdg.configFile = {
+				"gtk-4.0/assets".source = "${config.gtk.theme.package}/share/theme/${config.gtk.theme.name}/gtk-4.0/assets";
+				"gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/theme/${config.gtk.theme.name}/gtk-4.0/gtk.css";
+				"gtk-4.0/gtk-dark".source = "${config.gtk.theme.package}/share/theme/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+			};
 
+			}
 			# Cursor theme
 			home.pointerCursor = {
 				name = "Catppuccin-Macchiato-Cursors";
