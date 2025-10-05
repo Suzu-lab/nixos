@@ -19,23 +19,6 @@
 
  	    # User packages
  	    home.packages = with pkgs; [
- 	    	######################################################
- 	    	# Tools for Hyprland
- 	    	######################################################
- 	    	cliphist
- 	    	grim
- 	    	hyprlock
- 	    	hyprpaper
- 	    	kitty
- 	    	mako
- 	    	polkit_gnome
- 	    	slurp
- 	    	waybar
- 	    	wl-clipboard
- 	    	wofi
- 	    	xarchiver
-
- 	    	#######################################################
  	    	evince
  	    ];
     };
@@ -44,7 +27,10 @@
       ../../modules/cli/fish.nix     # import module for fish cli shell
       ../../modules/desktop/hyprland.nix # module for configuring Hyprland
       ../../modules/desktop/fonts.nix
-			../../modules/apps/thunar.nix # Thunar config
-      ../../modules/apps/zen.nix # specific Zen browser config
+
+			# Modules for specific programs and configurations
+			../../modules/apps/thunar.nix 	# Thunar
+			../../modules/apps/vscodium.nix # VS Codium
+      ../../modules/apps/zen.nix 			# Zen browser (flake)
     ];
   }

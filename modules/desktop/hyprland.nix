@@ -21,6 +21,25 @@
   			_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
   		};
 
+			# Base apps required for Hyprland
+			home.packages = with pkgs; [
+ 	    	######################################################
+ 	    	# Tools for Hyprland
+ 	    	######################################################
+ 	    	cliphist
+ 	    	grim
+ 	    	hyprlock
+ 	    	hyprpaper
+ 	    	kitty
+ 	    	mako
+ 	    	polkit_gnome
+ 	    	slurp
+ 	    	waybar
+ 	    	wl-clipboard
+ 	    	wofi
+ 	    	xarchiver
+ 	    ];
+
   		# Declarative config files for the desktop environment
   		# Hyprland config (~/.config/hypr/hyprland.conf)
   		xdg.configFile."hypr/hyprland.conf".source = ./dotfiles/hyprland.conf;
