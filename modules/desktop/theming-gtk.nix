@@ -4,7 +4,7 @@
 		home-manager.users.suzu = {
 			home.packages = with pkgs; [
 				# Add package to set QT theme to fit GTK
-				qt5ct
+				libsForQt5.qt5ct
 			];
 
 			# Central GTK themes configuration
