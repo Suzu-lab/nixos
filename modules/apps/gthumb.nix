@@ -5,7 +5,6 @@
 		home-manager.users.suzu.home.packages = with pkgs; [
 			# Installed with plugins
 			gthumb
-			])
 		];
 
 		# Declaractive config through dconf
