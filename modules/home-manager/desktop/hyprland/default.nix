@@ -2,10 +2,10 @@
   { pkgs, ... }:
   {
   	# Enables Hyprland WM
-  	wayland.windowManager.hyprland = {
-  		enable = true;
-  		xwayland.enable = true; # enable compatibility layer for x11 apps
-  	};
+  	#wayland.windowManager.hyprland = {
+  	#	enable = true;
+  	#	xwayland.enable = true; # enable compatibility layer for x11 apps
+  	#};
 
   	# Global variables for forcing wayland wherever possible
   	home.sessionVariables = {
