@@ -43,6 +43,11 @@
 				autoImport = true;
 				followSystem = true;
 			};
+
+			stylix.targets.zen-browser = {
+				enable = true;
+				profileNames = [ "default" ];
+			};
 		};
 
 
