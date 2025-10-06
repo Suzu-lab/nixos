@@ -43,7 +43,8 @@
 				};
 			};
 
-
+			# Test config for Waybar
+			programs.waybar.enable = true;
 			# Base apps required for Hyprland
 			home.packages = with pkgs; [
  	    	######################################################
@@ -57,7 +58,7 @@
  	    	polkit_gnome
  	    	slurp
  	    	swappy
- 	    	waybar
+# 	    	waybar
  	    	wl-clipboard
  	    	wlogout
  	    	wofi
