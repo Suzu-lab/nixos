@@ -38,7 +38,11 @@
 				};
 			};
 
-
+			# Force full integration with Home Manager
+			homeManagerIntegration = {
+				autoImport = true;
+				followSystem = true;
+			};
 		};
 
 
@@ -51,7 +55,10 @@
 			];
 
 			# Specific Stylix module for Zen Browser (must be done in Home manager)
-			stylix.targets.zen-browser.profileNames = [ "default" ];
+			stylix.targets.zen-browser = {
+				enable = true;
+				profileNames = [ "default" ];
+			};
 
 			# Central GTK themes configuration
 			gtk = {
