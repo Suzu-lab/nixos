@@ -73,5 +73,7 @@
 
 			# Makes QT apps use qt5ct to use GTK themes
 			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
+			# Test for Waybar Stylix
+			stylix.targets.waybar.enable = true;
 		};
 	}
