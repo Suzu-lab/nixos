@@ -53,7 +53,7 @@
 						home-manager.extraSpecialArgs = { inherit inputs; };
 					}
 					# Stylix module
-					stylix.nixosMosules.stylix
+					stylix.nixosModules.stylix
         ];
       };
   in {
