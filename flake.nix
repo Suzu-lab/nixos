@@ -26,7 +26,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, stylix, zen-browser, ... }@inputs:
     let
 			system = "x86_64-linux";
 			# pkgs = nixpkgs.legacyPackages.${system};
