@@ -38,8 +38,7 @@
 				};
 			};
 
-			# Specific module for Zen Browser
-			targets.zen-browser.profileNames = [ "default" ];
+
 		};
 
 
@@ -50,6 +49,9 @@
 				# Add package to set QT theme to fit GTK
 				libsForQt5.qt5ct
 			];
+
+			# Specific Stylix module for Zen Browser (must be done in Home manager)
+			stylix.targets.zen-browser.profileNames = [ "default" ];
 
 			# Central GTK themes configuration
 			gtk = {
