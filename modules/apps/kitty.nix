@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
 	home-manager.users.suzu = {
-		program.kitty = {
+		programs.kitty = {
 			enable = true;
 			shellIntegration.enableFishIntegration = true;
 		};
