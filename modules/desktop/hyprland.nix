@@ -73,7 +73,7 @@
   		xdg.configFile."waybar/config.jsonc".source = ./dotfiles/waybar.jsonc;
 
   		# Config of waybar style sheet (~/.config/waybar/style.css)
-  		xdg.configFile."waybar/style.css".source = ./dotfiles/waybar.css;
+#  		xdg.configFile."waybar/style.css".source = ./dotfiles/waybar.css;
 
   		# Hyprpaper config (~/.config/hypr/hyprpaper.conf)
   		xdg.configFile."hypr/hyprpaper.conf".source = ./dotfiles/hyprpaper.conf;
