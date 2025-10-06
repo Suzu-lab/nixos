@@ -75,5 +75,6 @@
 			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
 			# Test for Waybar Stylix
 			stylix.targets.waybar.enable = true;
+			stylix.targets.zen-browser.enable = true;
 		};
 	}
