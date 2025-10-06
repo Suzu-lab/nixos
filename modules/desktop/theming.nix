@@ -37,6 +37,9 @@
 					name = "Noto Color Emoji";
 				};
 			};
+
+			# Specific module for Zen Browser
+			targets.zen-browser.profileNames = [ "default" ];
 		};
 
 
