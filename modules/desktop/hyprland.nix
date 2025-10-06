@@ -12,7 +12,7 @@
 
 		# Imports GTK3 theming
 		imports = [
-			./theming-gtk.nix
+			./theming.nix
 			../apps/kitty.nix
 		];
 
