@@ -44,10 +44,10 @@
 				followSystem = true;
 			};
 
-			zen-browser = {
-				enable = true;
-				profileNames = [ "default" ];
-			};
+#			zen-browser = {
+#				enable = true;
+#				profileNames = [ "default" ];
+#			};
 		};
 
 
