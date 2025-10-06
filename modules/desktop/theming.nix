@@ -1,5 +1,5 @@
 	# Module for adjusting GTK and QT theming for desktop
-	{ pkgs, ... }:
+	{ pkgs, inputs, ... }:
 	{
 		# Stylix configuration - it needs apps to be called as modules within home-manager for them to get the themes applied to them
 		stylix = {
@@ -60,7 +60,7 @@
 			];
 
 			# Specific Stylix module for Zen Browser (must be done in Home manager)
-			stylix.zen-browser = {
+			stylix.target.zen-browser = {
 				enable = true;
 				profileNames = [ "default" ];
 			};
