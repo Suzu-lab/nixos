@@ -24,7 +24,6 @@
 				# Settings.json config
 				profiles.default.userSettings = {
 					"workbench.iconTheme" = "vscode-icons";
-					"editor.fontSize" = 14;
 
 					# Wayland decorations config
 					"window.titleBarStyle" = "custom";
