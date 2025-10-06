@@ -44,7 +44,7 @@
 				followSystem = true;
 			};
 
-			targets.zen-browser = {
+			zen-browser = {
 				enable = true;
 				profileNames = [ "default" ];
 			};
@@ -60,7 +60,7 @@
 			];
 
 			# Specific Stylix module for Zen Browser (must be done in Home manager)
-			stylix.targets.zen-browser = {
+			stylix.zen-browser = {
 				enable = true;
 				profileNames = [ "default" ];
 			};
