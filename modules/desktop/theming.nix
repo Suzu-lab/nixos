@@ -55,12 +55,6 @@
 				libsForQt5.qt5ct
 			];
 
-			# Specific Stylix module for Zen Browser (must be done in Home manager)
-			stylix.targets.zen-browser = {
-				enable = true;
-				profileNames = [ "default" ];
-			};
-
 			# Central GTK themes configuration
 			gtk = {
 				enable = true;
