@@ -13,6 +13,7 @@
 		# Imports GTK3 theming
 		imports = [
 			./theming-gtk.nix
+			../apps/kitty.nix
 		];
 
 		# Home-Manager configuration (variables and dotfiles)
@@ -51,9 +52,7 @@
  	    	cliphist
  	    	grim
  	    	hyprlock
- 	    	hyprpaper
  	    	hyprpicker
- 	    	kitty
  	    	mako
  	    	polkit_gnome
  	    	slurp
