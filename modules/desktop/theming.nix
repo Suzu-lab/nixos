@@ -44,7 +44,7 @@
 				followSystem = true;
 			};
 
-			stylix.targets.zen-browser = {
+			targets.zen-browser = {
 				enable = true;
 				profileNames = [ "default" ];
 			};
