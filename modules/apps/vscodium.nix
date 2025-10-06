@@ -9,9 +9,6 @@
 
 				# Declarative extensions
 				profiles.default.extensions = with pkgs.vscode-extensions; [
-					# Theme
-					catppuccin.catppuccin-vsc
-
 					# Languages and tools
 					ms-python.python
 					rust-lang.rust-analyzer
@@ -26,9 +23,7 @@
 
 				# Settings.json config
 				profiles.default.userSettings = {
-					"workbench.colorTheme" = "Catppuccin Macchiato";
 					"workbench.iconTheme" = "vscode-icons";
-					"editor.fontFamily" = "'JetBrainsMono Nerd Font', 'monospace'";
 					"editor.fontSize" = 14;
 
 					# Wayland decorations config
