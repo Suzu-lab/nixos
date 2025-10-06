@@ -10,6 +10,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+		# Stylix flake
+		stylix = {
+			url = "github:nix-community/stylix/release-25.05";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+
     # Zen browser flake
     zen-browser = {
     	url = "github:0xc000022070/zen-browser-flake";
@@ -36,7 +42,6 @@
 						};
 					}
 					# Home Manager Modules
-					# Home-Manager config
 					home-manager.nixosModules.home-manager
 					{
 						home-manager.useGlobalPkgs = true;
@@ -46,8 +51,9 @@
 
 						# Inheritance for Home Manager modules
 						home-manager.extraSpecialArgs = { inherit inputs; };
-
 					}
+					# Stylix module
+					stylix.nixosMosules.stylix
         ];
       };
   in {
