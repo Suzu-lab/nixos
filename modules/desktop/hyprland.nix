@@ -14,6 +14,7 @@
 		imports = [
 			./theming.nix
 			../apps/kitty.nix
+			./waybar.nix
 		];
 
 		# Home-Manager configuration (variables and dotfiles)
@@ -43,8 +44,6 @@
 				};
 			};
 
-			# Test config for Waybar
-			programs.waybar.enable = true;
 			# Base apps required for Hyprland
 			home.packages = with pkgs; [
  	    	######################################################
@@ -58,7 +57,6 @@
  	    	polkit_gnome
  	    	slurp
  	    	swappy
-# 	    	waybar
  	    	wl-clipboard
  	    	wlogout
  	    	wofi
@@ -70,7 +68,7 @@
   		xdg.configFile."hypr/hyprland.conf".source = ./dotfiles/hyprland.conf;
 
   		# Waybar config (~/.config/waybar/config.jsonc)
-  		xdg.configFile."waybar/config.jsonc".source = ./dotfiles/waybar.jsonc;
+#  		xdg.configFile."waybar/config.jsonc".source = ./dotfiles/waybar.jsonc;
 
   		# Config of waybar style sheet (~/.config/waybar/style.css)
 #  		xdg.configFile."waybar/style.css".source = ./dotfiles/waybar.css;
