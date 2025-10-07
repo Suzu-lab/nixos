@@ -23,6 +23,9 @@
 					"hyprland/window" = {
 						format = "[{}]";
 					};
+					"pulseaudio" = {
+						format = "{icon} {volume}%";
+					}
 				};
 			};
 		};
