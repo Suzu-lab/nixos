@@ -66,7 +66,7 @@
 
 
 			# Activate cliphist as a Home Manager module
-			programs.cliphist.enable = true;
+			services.cliphist.enable = true;
 			# Activate swappy as a Home Manager module
 			programs.swappy.enable = true;
 			# Activate wlogout as a Home Manager module
