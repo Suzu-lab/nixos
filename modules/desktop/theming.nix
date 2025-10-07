@@ -10,7 +10,7 @@
 			autoEnable = true;
 
 			# Sets the theme to be used. It accepts Tinted-Schemes, from https://github.com/tinted-theming/schemes
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+			base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
 
 			# Sets the theme to be picked from the wallpaper colors. base16scheme must be deactivated for this option to work
 			# polarity = "dark"; # Also accepts "light"
