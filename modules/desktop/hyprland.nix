@@ -14,6 +14,7 @@
 		imports = [
 			./theming.nix
 			../apps/kitty.nix
+			./mako.nix
 			./waybar.nix
 		];
 
@@ -53,7 +54,6 @@
  	    	grim
  	    	hyprlock
  	    	hyprpicker
- 	    	mako
  	    	polkit_gnome
  	    	slurp
  	    	swappy
@@ -77,7 +77,7 @@
   		xdg.configFile."hypr/hyprpaper.conf".source = ./dotfiles/hyprpaper.conf;
 
   		# Mako config (~/.config/mako/config)
-  		xdg.configFile."mako/config".source = ./dotfiles/mako.conf;
+#  		xdg.configFile."mako/config".source = ./dotfiles/mako.conf;
 
   		# Wofi config (~/.config/wofi/style.css)
   		xdg.configFile."wofi/style.css".source = ./dotfiles/wofi.css;
