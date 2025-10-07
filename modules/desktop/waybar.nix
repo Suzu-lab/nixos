@@ -25,7 +25,7 @@
 					};
 					"pulseaudio" = {
 						format = "{icon} {volume}%";
-					}
+					};
 				};
 			};
 		};
