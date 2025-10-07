@@ -17,13 +17,14 @@
 
  	    programs.home-manager.enable = true;
 
+			programs.onlyoffice.enable = true;
+
  	    # User packages
  	    home.packages = with pkgs; [
 				#################################################################
 				# User programs
 				#################################################################
  	    	evince
- 	    	onlyoffice-bin
 
 
 				#################################################################
