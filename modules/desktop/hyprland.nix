@@ -16,6 +16,7 @@
 			../apps/kitty.nix
 			./mako.nix
 			./waybar.nix
+			./wofi.nix
 		];
 
 		# Home-Manager configuration (variables and dotfiles)
@@ -59,7 +60,6 @@
  	    	swappy
  	    	wl-clipboard
  	    	wlogout
- 	    	wofi
  	    	xarchiver
  	    ];
 
@@ -80,6 +80,6 @@
 #  		xdg.configFile."mako/config".source = ./dotfiles/mako.conf;
 
   		# Wofi config (~/.config/wofi/style.css)
-  		xdg.configFile."wofi/style.css".source = ./dotfiles/wofi.css;
+#  		xdg.configFile."wofi/style.css".source = ./dotfiles/wofi.css;
 		};
   }
