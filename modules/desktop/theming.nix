@@ -52,7 +52,7 @@
 		home-manager.users.suzu = {
 			home.packages = with pkgs; [
 				# Add package to set QT theme to fit GTK
-				libsForQt5.qt5ct
+#				libsForQt5.qt5ct
 			];
 
 			# Central GTK themes configuration
@@ -72,7 +72,7 @@
 			};
 
 			# Makes QT apps use qt5ct to use GTK themes
-			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
+#			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
 			# Test for Waybar Stylix
 			stylix.targets.waybar.enable = true;
 			stylix.targets.zen-browser = {
