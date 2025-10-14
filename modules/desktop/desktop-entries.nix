@@ -41,7 +41,7 @@
 
 		# Custom .desktop entry for OnlyOffice
 		"onlyoffice-desktopeditors" = {
-			name = "OnlyOffice"
+			name = "OnlyOffice";
 			exec = "onlyoffice-desktopeditors --system-title-bar %U";
 		};
 	};
