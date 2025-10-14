@@ -73,8 +73,9 @@
 
 			# Makes QT apps use qt5ct to use GTK themes
 #			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
-			# Test for Waybar Stylix
+			# Waybar styling
 			stylix.targets.waybar.enable = true;
+			# Zen Browser styling
 			stylix.targets.zen-browser = {
 				enable = true;
 				profileNames = [ "default" ];

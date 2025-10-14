@@ -87,11 +87,5 @@
 				};
 			};
 		};
-		# Specific Stylix module for Zen Browser (must be done in Home manager)
-#		stylix.targets.zen-browser = {
-#			enable = true;
-#			profileNames = [ "default" ];
-#		};
-
 	};
 }
