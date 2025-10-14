@@ -6,43 +6,43 @@
 		"kvantummanager"= {
 			name = "Kvantum Manager";
 			exec = "kvantummanager";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"qt5ct"= {
 			name = "Qt5 Settings";
 			exec = "qt5ct";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"qt6ct"= {
 			name = "Qt6 Settings";
 			exec = "qt6ct";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"htop"= {
 			name = "Htop";
 			exec = "htop";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"btop"= {
 			name = "Btop++";
 			exec = "btop";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"micro"= {
 			name = "Micro";
 			exec = "micro";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 		"org.nixos.nixos-manual"= {
 			name = "NixOS Manual";
 			exec = "nixos-manual";
-			NoDisplay = true;
+			noDisplay = true;
 		};
 
 		# Custom .desktop entry for OnlyOffice
-		"onlyoffice-desktopeditors" = {
-			name = "OnlyOffice";
-			exec = "onlyoffice-desktopeditors --system-title-bar %U";
-		};
+#		"onlyoffice-desktopeditors" = {
+#			name = "OnlyOffice";
+#			exec = "onlyoffice-desktopeditors --system-title-bar %U";
+#		};
 	};
 }
