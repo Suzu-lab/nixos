@@ -17,7 +17,7 @@
 
  	    programs.home-manager.enable = true;
 
-			#programs.onlyoffice.enable = true;
+			programs.onlyoffice.enable = true;
 
  	    # User packages
  	    home.packages = with pkgs; [
@@ -40,6 +40,7 @@
       ../../modules/cli/fish.nix     # import module for fish cli shell
       ../../modules/desktop/hyprland.nix # module for configuring Hyprland
       ../../modules/desktop/fonts.nix
+      ../../modules/desktop/desktop-entries.nix # module for custom desktop entries
 
 			# Modules for specific programs and configurations
 			../../modules/apps/celluloid.nix	# Celluloid (mpv wrapper)
