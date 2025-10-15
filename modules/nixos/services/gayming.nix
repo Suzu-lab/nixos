@@ -11,7 +11,7 @@
 				dedicatedServer.openFirewall = true;
 			};
 
-			environmnet.systemPackages = with pkgs; [
+			environment.systemPackages = with pkgs; [
 				protonup-qt
 			];
 		};

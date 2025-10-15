@@ -10,7 +10,7 @@
       ../../modules/nixos/base.nix		# default system module
       ../../modules/nixos/hardware/audio.nix 	# pipewire module
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
-      ../../modulse/nixos/services/gayming.nix #module for setting up Steam and other gaming options
+      ../../modules/nixos/services/gayming.nix #module for setting up Steam and other gaming options
       # User config
       ../../users/suzu/suzu.nix
     ];
