@@ -2,31 +2,28 @@
 ## Base styles
 ############################################################*/
 
-/*# Catppuccin Mocha colors*/
-@define-color bg #1e1e2e;
-@define-color fg #cdd6f4;
-@define-color	muted #6c7086;
-@define-color	accent #89b4fa;
-@define-color	warn #f38ba8;
-
 * {
-	font-family: "Noto Sans", "Font Awesome 6 Free";
+	font-family: "JetbrainsMono Nerd Font", "Font Awesome 6 Free";
   font-size: 12px;
-  color: #f8f8f2;
+  color: @base05;
 }
 
 window#waybar {
- 	background: @bg;
- 	color: @fg;
+ 	background: @base00;
+ 	color: @base02;
+}
+
+button:hover {
+	background-color: @base03;
 }
 
 #workspaces button {
-  color: @muted;
+  color: @base01;
 }
 
 #workspaces button.active {
- 	color: @fg;
- 	border-bottom: 2px solid @accent;
+ 	color: @base02;
+ 	border-bottom: 2px solid @base0C;
 }
 
 #clock,#cpu,#memory {
@@ -34,5 +31,5 @@ window#waybar {
 }
 
 #cpu.warning,#memory.warning{
- 	color: @warn;
+ 	color: @base0A;
 }

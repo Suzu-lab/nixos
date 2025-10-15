@@ -1,6 +1,12 @@
 	# Module for adjusting GTK and QT theming for desktop
-	{ pkgs, inputs, ... }:
+	{ pkgs, config, inputs, lib,  ... }:
+	let
+		colors = config.lib.stylix.colors;
+	in
 	{
+		imports = [
+			./fonts.nix
+		];
 		# Stylix configuration - it needs apps to be called as modules within home-manager for them to get the themes applied to them
 		stylix = {
 			# Enable Stylix
@@ -10,10 +16,10 @@
 			autoEnable = true;
 
 			# Sets the theme to be used. It accepts Tinted-Schemes, from https://github.com/tinted-theming/schemes
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+			base16Scheme = "${pkgs.base16-schemes}/share/themes/tarot.yaml";
 
 			# Sets the theme to be picked from the wallpaper colors. base16scheme must be deactivated for this option to work
-			# polarity = "dark"; # Also accepts "light"
+		  # polarity = "dark"; # Also accepts "light"
 
 			# Sets a wallpaper.
 			# image = ./wallpaper.png;
@@ -46,9 +52,6 @@
 
 		};
 
-
-
-
 		home-manager.users.suzu = {
 			home.packages = with pkgs; [
 				# Add package to set QT theme to fit GTK
@@ -74,11 +77,29 @@
 			# Makes QT apps use qt5ct to use GTK themes
 #			home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
 			# Waybar styling
-			stylix.targets.waybar.enable = true;
+			stylix.targets = {
+				waybar = {
+					enable = false;
+				};
 			# Zen Browser styling
-			stylix.targets.zen-browser = {
-				enable = true;
-				profileNames = [ "default" ];
+				zen-browser = {
+					enable = true;
+					profileNames = [ "default" ];
+				};
+
+				gtk = {
+					enable = true;
+					# Solve Thunar font color on selected items
+					extraCss = ''
+						* :selected {
+							color: #${colors.base00};
+						}
+						/* Override accent color in gtk apps */
+						:root {
+							--accent-bg-color: #${colors.base0D};
+						}
+					'';
+				};
 			};
 		};
 	}

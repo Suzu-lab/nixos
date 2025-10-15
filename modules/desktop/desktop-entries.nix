@@ -40,9 +40,10 @@
 		};
 
 		# Custom .desktop entry for OnlyOffice
-#		"onlyoffice-desktopeditors" = {
-#			name = "OnlyOffice";
-#			exec = "onlyoffice-desktopeditors --system-title-bar %U";
-#		};
+		"onlyoffice-desktopeditors" = {
+			name = "OnlyOffice";
+			exec = "onlyoffice-desktopeditors --custom-title-bar %U";
+			categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
+		};
 	};
 }

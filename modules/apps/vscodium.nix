@@ -26,7 +26,7 @@
 					"workbench.iconTheme" = "vscode-icons";
 
 					# Wayland decorations config
-					"window.titleBarStyle" = "custom";
+					"window.titleBarStyle" = "native";
 
 					# Specific language configuration
 					"[nix]" = {
