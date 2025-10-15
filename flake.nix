@@ -10,6 +10,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Nix user repo (NUR) - has extensions for Firefox/Zen Browser already packaged
+    nurpkgs = {
+    	url = "github:/nix-community/NUR";
+    	inputs.nixpkgs.follows = "nixpkgs";
+    };
+
 		# Stylix flake
 		stylix = {
 			url = "github:nix-community/stylix/";
@@ -26,7 +32,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, zen-browser, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nurpkgs, stylix, zen-browser, ... }@inputs:
     let
 			system = "x86_64-linux";
 			# pkgs = nixpkgs.legacyPackages.${system};
@@ -52,6 +58,8 @@
 						# Inheritance for Home Manager modules
 						home-manager.extraSpecialArgs = { inherit inputs; };
 					}
+					# NUR module
+					nurpkgs.modules.nixos.default
 					# Stylix module
 					stylix.nixosModules.stylix
         ];

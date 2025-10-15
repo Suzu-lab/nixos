@@ -56,6 +56,7 @@
 				DisablePocket = true;
 				DisableTelemetry = true;
 				DontCheckDefaultBrowser = true;
+				NoDefaultBookmarks = true;
 				OfferToSaveLogins = false;
 				EnableTrackingProtection = {
 					Value = true;
@@ -63,13 +64,21 @@
 					Cryptomining = true;
 					Fingerprinting = true;
 				};
-				# Defines extensions - https://github.com/0xc000022070/zen-browser-flake/issues/59#issuecomment-2964607780
-				ExtensionSettings = mkExtensionSettings {
-					"{762f9885-5a13-4abd-9c77-433dcd38b8fd}" = "return-youtube-dislikes";
-					"{74145f27-f039-47ce-a470-a662b129930a}" = "clearurls";
-					"firefox-extension@steamdb.info" = "steam-database";
-					"ublock@raymondhill.net" = "ublock-origin";
+				# Defines extensions using packages from the NUR
+				ExtensionSettings = {
+					packages = with pkgs.nur.repos.rycee.firefox-addons; [
+						bitwarden
+						ublock-origin
+					];
 				};
+
+				# Defines extensions - https://github.com/0xc000022070/zen-browser-flake/issues/59#issuecomment-2964607780
+#				ExtensionSettings = mkExtensionSettings {
+#					"{762f9885-5a13-4abd-9c77-433dcd38b8fd}" = "return-youtube-dislikes";
+#					"{74145f27-f039-47ce-a470-a662b129930a}" = "clearurls";
+#					"firefox-extension@steamdb.info" = "steam-database";
+#					"ublock@raymondhill.net" = "ublock-origin";
+#				};
 				Preferences = mkLockedAttrs {
 					"browser.aboutConfig.showWarning" = false;
 					"browser.tabs.warnOnClose" = false;
