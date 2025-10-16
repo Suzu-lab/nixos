@@ -2,13 +2,13 @@
 	{ pkgs, ... }:
 	{
 		# Install through Home-Manager
-		home-manager.users.suzu.home.packages = with pkgs; [
+		home.packages = with pkgs; [
 			# Installed with plugins
 			gthumb
 		];
 
 		# Declaractive config through dconf
-		home-manager.users.suzu.dconf.settings = {
+		dconf.settings = {
 			"org/gnome/gThumb/browser" = {
 				# Ignore hidden files by default
 				show-hidden = false;

@@ -1,15 +1,6 @@
   # Module for setting and configuring the basic Hyprland desktop
   { lib, pkgs, config, ... }:
   {
-  	# Enables graphic server without X
-  	services.xserver.enable = false;
-
-		# Enables Hyprland
-		programs.hyprland = {
-			enable = true;
-			xwayland.enable = true;
-		};
-
 		# Imports GTK3 theming
 		imports = [
 			./theming.nix
@@ -19,8 +10,6 @@
 			./wofi.nix
 		];
 
-		# Home-Manager configuration (variables and dotfiles)
-		home-manager.users.suzu = {
   		# Global variables for forcing wayland wherever possible
   		home.sessionVariables = {
   			NIXOS_OZONE_WL = "1";								# Electron apps/Steam
@@ -28,7 +17,13 @@
   			QT_QPA_PLATFORM = "wayland;xcb";		# Qt apps
   			SDL_VIDEODRIVER = "wayland,x11";		#SDL
   			_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
+  			XDG_CURRENT_DESKTOP = "Hyprland";
   		};
+
+			# Required services
+			services.cliphist.enable = true;
+			programs.swappy.enable = true;
+			programs.wlogout.enable = true;
 
 			# Enables Polkit GNOME authentication agent at system level
 			systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -63,11 +58,6 @@
  	    ];
 
   		# Declarative config files for the desktop environment
-  		# Hyprland config (~/.config/hypr/hyprland.conf)
-  		# xdg.configFile."hypr/hyprland.conf".source = ./dotfiles/hyprland.conf;
-
-  		home.sessionVariables.XDG_CURRENT_DESKTOP = "Hyprland";
-
   		wayland.windowManager.hyprland = {
   			enable = true;
   			settings = {
@@ -75,7 +65,8 @@
   				"$mainMod" = "SUPER";
   				"$terminal" = "kitty";
   				"$fileManager" = "thunar";
-  				"$menu" = "killall wofi || wofi --show drun --allow-images";
+  				"$menu" = "pkill wofi ; wofi --show drun --allow-images";
+  				"$cliphist" = "pkill wofi ; cliphist list | wofi --dmenu | cliphist decode | wl-copy";
 
   				# Autostart
   				exec-once = [
@@ -178,13 +169,13 @@
 						"nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
 					];
 
-			# Keybindings
+					# Keybindings
 					bind = [
 						"$mainMod, Q, exec, $terminal"
 						"$mainMod, C, killactive"
 						"$mainMod, M, exit"
 						"$mainMod, E, exec, $fileManager"
-						"$mainMod, V, togglefloating"
+						"$mainMod, V, exec, $cliphist"
 						"$mainMod, R, exec, $menu"
 						"$mainMod, P, pseudo,"
 						"$mainMod, J, togglesplit,"
@@ -233,12 +224,4 @@
 					];
 				};
 			};
-
-			# Activate cliphist as a Home Manager module
-			services.cliphist.enable = true;
-			# Activate swappy as a Home Manager module
-			programs.swappy.enable = true;
-			# Activate wlogout as a Home Manager module
-			programs.wlogout.enable = true;
-		};
-  }
+		}

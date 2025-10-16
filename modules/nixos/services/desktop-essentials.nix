@@ -4,6 +4,9 @@
     # Enables graphic server without X
     services.xserver.enable = false;
 
+		# Allow unfree packages
+		nixpkgs.config.allowUnfree = true;
+
   	# Minimal display manager
   	services.greetd = {
   		enable = true;

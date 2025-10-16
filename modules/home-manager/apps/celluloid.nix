@@ -2,12 +2,12 @@
 	{ pkgs, ... }:
 	{
 		# Installation through Home-Manager
-		home-manager.users.suzu.home.packages = with pkgs; [
+		home.packages = with pkgs; [
 			celluloid
 		];
 
 		# Declarative config through dconf
-		home-manager.users.suzu.dconf.settings = {
+		dconf.settings = {
 			"io/github/celluloid-player/celluloid" = {
 				# Toggle for keeping window always on top
 				always-on-top = false;

@@ -1,7 +1,7 @@
 # Module for setting up special .desktop entries
 { pkgs, ... }:
 {
-	home-manager.users.suzu.xdg.desktopEntries = {
+	xdg.desktopEntries = {
 		# Hiding desktop entries
 		"kvantummanager"= {
 			name = "Kvantum Manager";
@@ -33,7 +33,7 @@
 			exec = "micro";
 			noDisplay = true;
 		};
-		"org.nixos.nixos-manual"= {
+		"nixos-manual"= {
 			name = "NixOS Manual";
 			exec = "nixos-manual";
 			noDisplay = true;
@@ -44,6 +44,16 @@
 			name = "OnlyOffice";
 			exec = "onlyoffice-desktopeditors --custom-title-bar %U";
 			categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
+		};
+
+		# Fixing electron apps rendering in Wayland
+		"codium" = {
+			name = "VSCodium";
+			exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland %F";
+		};
+		"ferdium" = {
+			name = "Ferdium";
+			exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland %F";
 		};
 	};
 }

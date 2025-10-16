@@ -1,6 +1,6 @@
 # Base configuration file common to any system I use
 
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 {
   # Use EFI systemd boot
@@ -22,6 +22,19 @@
     font = "Lat2-Terminus16";
     useXkbConfig = true; # use xkb.options in tty.
   };
+
+  # Keyboard configuration (Console will use the same config according to modules/nixos/base.nix)
+  services.xserver = {
+    xkb.layout = "us";
+    xkb.variant = "intl"; # enables US keyboard with dead keys
+  };
+
+	# Home Manager config
+	home-manager.useGlobalPkgs = true;
+	home-manager.useUserPackages = true;
+	home-manager.backupFileExtension = "backup";
+	# Inheritance for Home Manager modules
+	home-manager.extraSpecialArgs = { inherit inputs; };
 
   # Nix flakes
   nix.settings = {
