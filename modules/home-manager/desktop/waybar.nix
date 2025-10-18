@@ -31,22 +31,41 @@ in
 				mainBar = {
 					layer = "top";
 					position = "top";
+					height = 30;
 					modules-left = [
 						"hyprland/workspaces"
 						"hyprland/window"
-						"hyprland/windowcount"
+#						"hyprland/windowcount"
 					];
 					modules-center = [
 						"clock"
 					];
 					modules-right = [
-						"pulseaudio" "cpu" "memory" "network" "tray"
+						"tray" "pulseaudio" "network" "cpu" "memory"
 					];
 					# options for the modules
+					"hyprland/workspaces" = {
+						format = "{icon}";
+						format-icons = {
+							"1" = "";
+							"2" = "";
+							"3" = "";
+							"4" = "";
+							"5" = "";
+							"urgent" = "";
+							"focused" = "";
+							"default" = "";
+						};
+					};
+					"hyprland/window" = {
+						format = "[{}]";
+					};
 					clock = {
+						format = " {:%H:%M}";
+						format-alt = " {:%d/%m/%Y}";
 						tooltip-format = "<tt><small>{calendar}</small></tt>";
 						calendar = {
-							mode = "year";
+							mode = "month";
 							mode-mon-col = 3;
 							weeks-pos = "right";
 							on-scroll = 1;
@@ -59,22 +78,33 @@ in
 								today = "<span color='#${colors.base08}'><b>{}</b></span>";
 							};
 						};
-						actions = {
-							on-click-right = "mode";
-							on-click-forward = "tz_up";
-							on-click-backward = "tz_down";
-							on-scroll-up = "shift_down";
-							on-scroll-down = "shift_up";
-						};
 					};
-					"hyprland/window" = {
-						format = "[{}]";
+					tray = {
+						icon-size = 18;
+						spacing = 10;
 					};
 					pulseaudio = {
-						format = "  {volume:2}%";
+						format = "{icon}  {volume:2}%";
 						format-muted = "  {volume:2}%";
+						format-icons = {
+							default = ["" "" ""];
+						};
 						on-click = "${pkgs.pamixer}/bin/pamixer --toggle-mute";
 						on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
+					};
+					network = {
+						format-wifi = "  {essid}";
+						format-ethernet = "󰈀  Eth";
+						format-disconnected = "󰖪  Disc";
+						tooltip-format-wifi = "SSID: {essid}\Signal: {signalStrength}%";
+						on-click = "kitty -e nmtui";
+					};
+					cpu = {
+						format = "  {usage}%";
+						tooltip = true;
+					};
+					memory = {
+						format = "  {}%";
 					};
 				};
 			};

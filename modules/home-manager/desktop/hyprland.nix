@@ -98,6 +98,8 @@
   					gaps_in = 5;
   					gaps_out = 10;
   					border_size = 2;
+  					resize_on_border = "true";
+  					layout = "dwindle";
   				};
 
 					# Decorations
@@ -167,6 +169,10 @@
 						"suppressevent maximize,class:.*"
 						# Fix dragging issues with XWayland
 						"nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
+						# Make pavucontrol open as a small floating window
+						"float, class:^(org.pulseaudio.pavucontrol)$"
+						"size 60% 70%, class:^(org.pulseaudio.pavucontrol)$"
+						"center, class:^(org.pulseaudio.pavucontrol)$"
 					];
 
 					# Keybindings

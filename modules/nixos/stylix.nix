@@ -6,7 +6,7 @@
 			autoEnable = true;
 
 			# Sets the theme to be used. It accepts Tinted-Schemes, from https://github.com/tinted-theming/schemes
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/tarot.yaml";
+			base16Scheme = "${pkgs.base16-schemes}/share/themes/rebecca.yaml";
 
 			# Sets a wallpaper.
 			# image = ./wallpaper.png;

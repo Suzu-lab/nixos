@@ -3,27 +3,46 @@
 ############################################################*/
 
 * {
+	border: none;
+	border-radius: 0;
 	font-family: "JetbrainsMono Nerd Font", "Font Awesome 6 Free";
-  font-size: 12px;
+  font-size: 14px;
   color: @base05;
+  min-height: 0;
 }
 
 window#waybar {
- 	background: @base00;
+ 	background: transparent;
  	color: @base02;
 }
 
-button:hover {
-	background-color: @base03;
+#workspaces, #window, #clock, #pulseaudio, #network, #cpu, #memory, #tray {
+  background-color: @base00;
+  padding: 0px 10px;
+  margin: 4px 0px;
 }
 
 #workspaces button {
-  color: @base01;
+ 	color: @base03;
+ 	padding: 0 5px;
 }
 
-#workspaces button.active {
- 	color: @base02;
- 	border-bottom: 2px solid @base0C;
+#workspaces button:hover {
+ 	background-color: @base01;
+}
+
+#workspaces button:focus {
+	color: @base0D;
+ 	background-color: @base01;
+}
+
+/*#workspaces button:urgent {
+ 	background-color: @base08;
+}*/
+
+#workspaces {
+ 	border-radius: 10px 0px 0px 10px;
+ 	margin-left: 10px;
 }
 
 #clock,#cpu,#memory {
