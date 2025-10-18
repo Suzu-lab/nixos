@@ -90,7 +90,22 @@
   					follow_mouse = 1;
   				};
 
-					##############################################
+					###############################################
+					# Displays
+					###############################################
+
+					monitor = [
+						# Main display
+						"DP-1, highres, 0x0, 1, vrr, 1"
+						# Hyte display (right)
+						"DP-2, preferred, 3840x0, auto, vrr, 1, transform, 3"
+						# LG Ultrawide display 1 (top)
+						"DP-3, highres, 620x-1080, 1, vrr, 1, transform, 2"
+						# LG Ultrawide display 2 (left)
+						"HDMI-A-1, highres, -1080x-200, 1, vrr, 1, transform, 1"
+					];
+
+					###############################################
   				# Eye-candy
   				###############################################
 					# Gaps between windows
@@ -162,6 +177,14 @@
 					master = {
 						new_status = "master";
 					};
+
+					# Workspace rules (for assigning workspaces to the monitors)
+					workspace = [
+						"r[1-10], monitor:DP-1"
+						"name:communication, monitor:HDMI-A-1, default:true"
+						"name:video, monitor:DP-3, default:true"
+						"name:panel, monitor:DP-2, default:true"
+					];
 
 					# Windows rules
 					windowrule = [

@@ -4,9 +4,11 @@
 		home-manager.users.suzu = {
 			imports = [
 			  ../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
+			  ../../modules/home-manager/cli/git.nix
 			  ../../modules/home-manager/desktop/hyprland.nix # module for configuring Hyprland
 			  ../../modules/home-manager/desktop/fonts.nix
 			  ../../modules/home-manager/desktop/desktop-entries.nix # module for custom desktop entries
+
 
 			# Modules for specific programs and configurations
 				../../modules/home-manager/apps/celluloid.nix	# Celluloid (mpv wrapper)
