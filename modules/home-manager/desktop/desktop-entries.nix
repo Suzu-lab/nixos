@@ -49,11 +49,11 @@
 		# Fixing electron apps rendering in Wayland
 		"codium" = {
 			name = "VSCodium";
-			exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland %F";
+			exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --wayland-text-input-version=3 %F";
 		};
 		"ferdium" = {
 			name = "Ferdium";
-			exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland %F";
+			exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --wayland-text-input-version=3 %F";
 		};
 	};
 }

@@ -11,12 +11,19 @@
   	services.greetd = {
   		enable = true;
   		settings = {
+				initial_session = {
+					command = "Hyprland";
+					user = "suzu";
+				};
   			default_session = {
-  				command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+  				command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd Hyprland";
   				user = "suzu";
   			};
   		};
   	};
+
+		# Auto-login because fuck typing passwords
+#		services.getty.autologinUser = "suzu";
 
   	# Desktop integration portals (required for file pickers, screenshots, etc)
   	xdg.portal = {

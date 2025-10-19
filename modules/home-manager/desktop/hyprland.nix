@@ -18,6 +18,11 @@
   			SDL_VIDEODRIVER = "wayland,x11";		#SDL
   			_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
   			XDG_CURRENT_DESKTOP = "Hyprland";
+  			GTK_IM_MODULE = "fcitx";
+  			QT_IM_MODULE = "fcitx";
+  			XMODIFIERS = "@im=fcitx";
+  			SDL_IM_MODULE = "fcitx";
+  			INPUT_METHOD = "fcitx";
   		};
 
 			# Required services
@@ -25,19 +30,36 @@
 			programs.swappy.enable = true;
 			programs.wlogout.enable = true;
 
-			# Enables Polkit GNOME authentication agent at system level
-			systemd.user.services.polkit-gnome-authentication-agent-1 = {
-				Unit = {
-					Description = "Polkit GNOME Authentication Agent";
+			systemd.user.services = {
+				# Enables Polkit GNOME authentication agent at system level
+				polkit-gnome-authentication-agent-1 = {
+					Unit = {
+						Description = "Polkit GNOME Authentication Agent";
+					};
+					Service = {
+						ExecStart = "{pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+						Restart = "on-failure";
+						RestartSec = 1;
+						TimeoutStopSec = 10;
+					};
+					Install = {
+						Wantedby = [ "graphical-session.target"];
+					};
 				};
-				Service = {
-					ExecStart = "{pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-					Restart = "on-failure";
-					RestartSec = 1;
-					TimeoutStopSec = 10;
-				};
-				Install = {
-					Wantedby = [ "graphical-session.target"];
+				# ibus daemon for complex input methods
+				fcitx5-daemon = {
+					Unit = {
+						Description = "Fcitx 5 Daemon";
+						After = [ "graphical-session.target" ];
+						PartOf = [ "graphical-session.target" ];
+					};
+					Service = {
+						ExecStart = "${pkgs.fcitx5}/bin/fcitx5";
+						Restart = "on-failure";
+					};
+					Install = {
+						WantedBy = [ "graphical-session.target" ];
+					};
 				};
 			};
 
@@ -55,6 +77,10 @@
  	    	xarchiver
  	    	pavucontrol
  	    	pamixer
+
+ 	    	fcitx5 # package for solving special character problems
+ 	    	fcitx5-gtk
+ 	    	libsForQt5.fcitx5-qt
  	    ];
 
   		# Declarative config files for the desktop environment
