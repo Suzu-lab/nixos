@@ -33,31 +33,39 @@ in
 					position = "top";
 					height = 30;
 					modules-left = [
-						"hyprland/workspaces"
 						"hyprland/window"
+						"pulseaudio"
+						"cpu"
+						"memory"
 #						"hyprland/windowcount"
 					];
 					modules-center = [
-						"clock"
+						"hyprland/workspaces"
 					];
 					modules-right = [
-						"tray" "pulseaudio" "network" "cpu" "memory"
+						"tray" "network" "clock"
 					];
 					# options for the modules
 					"hyprland/workspaces" = {
-						format = "{icon}";
+						format = "{name}";
 						format-icons = {
-							"1" = "";
-							"2" = "";
-							"3" = "";
-							"4" = "";
-							"5" = "";
-							"urgent" = "";
-							"focused" = "";
-							"default" = "";
+#							"1" = "";
+#							"2" = "";
+#							"3" = "";
+#							"4" = "";
+#							"5" = "";
+#							"urgent" = "";
+#							"focused" = "";
+#							"default" = "";
+							"default" = " ";
+							"active" = " ";
+							"urgent" = " ";
 						};
+						on-scroll-up = "hyprctl dispatch workspace e+1";
+						on-scroll-down = "hyprctl dispatch workspace e-1";
 					};
 					"hyprland/window" = {
+						max-length = 22;
 						format = "[{}]";
 					};
 					clock = {

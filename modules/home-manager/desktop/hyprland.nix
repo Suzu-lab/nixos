@@ -5,6 +5,7 @@
 		imports = [
 			./theming.nix
 			../apps/kitty.nix
+			./hyprpaper.nix
 			./mako.nix
 			./waybar.nix
 			./wofi.nix
