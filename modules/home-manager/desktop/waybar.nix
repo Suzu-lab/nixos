@@ -31,6 +31,7 @@ in
 				mainBar = {
 					layer = "top";
 					position = "top";
+					output = "DP-1";
 					height = 30;
 					modules-left = [
 						"hyprland/window"

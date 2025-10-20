@@ -12,7 +12,7 @@
   		enable = true;
   		settings = {
 				initial_session = {
-					command = "Hyprland";
+					command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd Hyprland";
 					user = "suzu";
 				};
   			default_session = {

@@ -71,6 +71,7 @@
  	    	######################################################
  	    	grim
  	    	hyprlock
+ 	    	hyprpaper
  	    	hyprpicker
  	    	polkit_gnome
  	    	slurp
