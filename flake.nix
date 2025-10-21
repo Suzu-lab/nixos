@@ -34,7 +34,8 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
 	let
-		mypkgs = import ./pkgs/default.nix { inherit pkgs; };
+		pkgs = nixpkgs.legacyPackages.x86_64-linux;
+		mypkgs = import ./pkgs { inherit pkgs; };
 	in
  	{
     nixosConfigurations = {

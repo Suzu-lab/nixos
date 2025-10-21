@@ -83,6 +83,7 @@
  	    	fcitx5 # package for solving special character problems
  	    	fcitx5-gtk
  	    	libsForQt5.fcitx5-qt
+ 	    	kdePackages.fcitx5-configtool
  	    ];
 
   		# Declarative config files for the desktop environment
@@ -239,7 +240,7 @@
 						"$mainMod, X, exec, wlogout"
 						"$mainMod SHIFT, R, exec, hyprctl reload"
 						# Screenshot
-						", Print, exec, grim -g $(slurp -w 0) - | swappy -f -"
+						", Print, exec, bash -c 'grim -g \"$(slurp -w 0)\" - | swappy -f -'"
 
 						# Move focus with mainMod + arrow keys
 						"$mainMod, left, movefocus, l"
