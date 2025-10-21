@@ -33,7 +33,10 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
- {
+	let
+		mypkgs = import ./pkgs/default.nix { inherit pkgs; };
+	in
+ 	{
     nixosConfigurations = {
       vm = nixpkgs.lib.nixosSystem {
       	system = "x86_64-linux";
@@ -44,11 +47,11 @@
       };
       yosai = nixpkgs.lib.nixosSystem {
       	system = "x86_64-linux";
-      	specialArgs = { inherit inputs; };
+      	specialArgs = { inherit inputs mypkgs; };
       	modules = [
       		./hosts/yosai/default.nix
       	];
-	  };
+	  	};
   	};
   };
 }

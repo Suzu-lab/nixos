@@ -1,5 +1,5 @@
   # Home-manager user suzu
-	{ inputs, pkgs, ... }:
+	{ inputs, pkgs, mypkgs, ... }:
   {
 		home-manager.users.suzu = {
 			imports = [
@@ -24,7 +24,7 @@
 
  	    programs.home-manager.enable = true;
 
-			programs.onlyoffice.enable = true;
+#			programs.onlyoffice.enable = true;
 
  	    # User packages
  	    home.packages = with pkgs; [
@@ -33,6 +33,9 @@
 				#################################################################
  	    	evince
 				ferdium
+
+				# Customized derivation for OnlyOffice 9.0.4
+				mypkgs.onlyoffice-904
 
 				#################################################################
 				# Utilities and backends

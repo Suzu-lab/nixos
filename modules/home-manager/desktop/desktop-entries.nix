@@ -42,6 +42,7 @@
 		# Custom .desktop entry for OnlyOffice
 		"onlyoffice-desktopeditors" = {
 			name = "OnlyOffice";
+#			exec = "onlyoffice-desktopeditors --system-title-bar --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --wayland-text-input-version=3 %U";
 			exec = "onlyoffice-desktopeditors --custom-title-bar %U";
 			categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
 		};
