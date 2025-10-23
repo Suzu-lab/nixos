@@ -9,6 +9,7 @@
       ../../modules/nixos/base.nix		# default system module
       ../../modules/nixos/hardware/audio.nix 	# pipewire module
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
+      ../../modules/nixos/services/firewall.nix # Firewall settings
       ../../modules/nixos/services/gayming.nix #module for setting up Steam and other gaming options
       ../../modules/nixos/desktop/hyprland.nix
       ../../modules/nixos/stylix.nix

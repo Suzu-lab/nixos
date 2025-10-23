@@ -32,10 +32,12 @@
 				# User programs
 				#################################################################
  	    	evince
-				ferdium
+
 
 				# Customized derivation for OnlyOffice 9.0.4
 				mypkgs.onlyoffice-904
+				# Customized derivation for Ferdium 7.1.1 (newer Electron)
+				mypkgs.ferdium-711
 
 				#################################################################
 				# Utilities and backends

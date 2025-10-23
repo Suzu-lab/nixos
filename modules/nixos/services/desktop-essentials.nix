@@ -4,6 +4,9 @@
     # Enables graphic server without X
     services.xserver.enable = false;
 
+    # Enables real time priority
+    security.rtkit.enable = true;
+
 		# Allow unfree packages
 		nixpkgs.config.allowUnfree = true;
 
@@ -28,9 +31,11 @@
   	# Desktop integration portals (required for file pickers, screenshots, etc)
   	xdg.portal = {
   		enable = true;
+  		xdgOpenUsePortal = true;
   		extraPortals = with pkgs; [
   			xdg-desktop-portal-hyprland
   			xdg-desktop-portal-gtk
+#  			kdePackages.xdg-desktop-portal-kde
   		];
   	};
 

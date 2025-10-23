@@ -5,10 +5,12 @@
 		imports = [
 			./theming.nix
 			../apps/kitty.nix
+			../cli/fcitx5.nix
 			./hyprpaper.nix
 			./mako.nix
 			./waybar.nix
 			./wofi.nix
+			./hyprland/layouts.nix
 		];
 
   		# Global variables for forcing wayland wherever possible
@@ -19,11 +21,7 @@
   			SDL_VIDEODRIVER = "wayland,x11";		#SDL
   			_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
   			XDG_CURRENT_DESKTOP = "Hyprland";
-  			GTK_IM_MODULE = "fcitx";
-  			QT_IM_MODULE = "fcitx";
-  			XMODIFIERS = "@im=fcitx";
-  			SDL_IM_MODULE = "fcitx";
-  			INPUT_METHOD = "fcitx";
+  			XDG_SESSION_TYPE = "wayland";
   		};
 
 			# Required services
@@ -47,21 +45,6 @@
 						Wantedby = [ "graphical-session.target"];
 					};
 				};
-				# ibus daemon for complex input methods
-				fcitx5-daemon = {
-					Unit = {
-						Description = "Fcitx 5 Daemon";
-						After = [ "graphical-session.target" ];
-						PartOf = [ "graphical-session.target" ];
-					};
-					Service = {
-						ExecStart = "${pkgs.fcitx5}/bin/fcitx5";
-						Restart = "on-failure";
-					};
-					Install = {
-						WantedBy = [ "graphical-session.target" ];
-					};
-				};
 			};
 
 			# Base apps required for Hyprland
@@ -79,11 +62,6 @@
  	    	xarchiver
  	    	pavucontrol
  	    	pamixer
-
- 	    	fcitx5 # package for solving special character problems
- 	    	fcitx5-gtk
- 	    	libsForQt5.fcitx5-qt
- 	    	kdePackages.fcitx5-configtool
  	    ];
 
   		# Declarative config files for the desktop environment
@@ -104,6 +82,7 @@
   					"mako"
   					"cliphist store"
   					"${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+  					"xwaylandvideobridge"
   				];
 
   				# Environment variables
@@ -143,7 +122,6 @@
   					gaps_out = 10;
   					border_size = 2;
   					resize_on_border = "true";
-  					layout = "dwindle";
   				};
 
 					# Decorations
@@ -196,23 +174,21 @@
   					];
   				};
 
-					# See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-  				dwindle = {
-  					pseudotile = "true";
-  					preserve_split = "true";
-  				};
-
-					# See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-					master = {
-						new_status = "master";
-					};
-
 					# Workspace rules (for assigning workspaces to the monitors)
 					workspace = [
-						"r[1-10], monitor:DP-1"
-						"name:communication, monitor:HDMI-A-1, default:true"
-						"name:video, monitor:DP-3, default:true"
-						"name:panel, monitor:DP-2, default:true"
+						"r[1], monitor:DP-1"
+						"r[2], monitor:DP-1"
+						"r[3], monitor:DP-1"
+						"r[4], monitor:DP-1"
+						"r[5], monitor:DP-1"
+						"r[6], monitor:DP-1"
+						"r[7], monitor:DP-1"
+						"r[8], monitor:DP-1"
+						"r[9], monitor:DP-1"
+						"r[10], monitor:DP-1"
+						"name:communication, monitor:HDMI-A-1, default:true, persistent:true"
+						"name:video, monitor:DP-3, default:true, persistent:true"
+						"name:panel, monitor:DP-2, default:true, persistent:true"
 					];
 
 					# Windows rules
@@ -225,6 +201,14 @@
 						"float, class:^(org.pulseaudio.pavucontrol)$"
 						"size 60% 70%, class:^(org.pulseaudio.pavucontrol)$"
 						"center, class:^(org.pulseaudio.pavucontrol)$"
+
+						# Window rules to hide the xwayland window
+						"opacity 0.0 override, class:^(xwaylandvideobridge)$"
+						"noanim, class:^(xwaylandvideobridge)$"
+						"noinitialfocus, class:^(xwaylandvideobridge)$"
+						"maxsize 1 1, class:^(xwaylandvideobridge)$"
+						"noblur, class:^(xwaylandvideobridge)$"
+						"nofocus, class:^(xwaylandvideobridge)$"
 					];
 
 					# Keybindings
