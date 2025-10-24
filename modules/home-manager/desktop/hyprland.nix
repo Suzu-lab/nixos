@@ -1,5 +1,5 @@
   # Module for setting and configuring the basic Hyprland desktop
-  { lib, pkgs, config, ... }:
+  { lib, pkgs, config, inputs, ... }:
   {
 		# Imports GTK3 theming
 		imports = [
@@ -65,8 +65,24 @@
  	    ];
 
   		# Declarative config files for the desktop environment
-  		wayland.windowManager.hyprland = {
+  		wayland.windowManager.hyprland =
+  			let
+  				hyprpkg = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
+  				hyprplugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  			in
+  			{
   			enable = true;
+				#Using Hyprlands packages from the flake (to make plugins work)
+				package = hyprpkg.hyprland;
+				portalPackage = hyprpkg.xdg-desktop-portal-hyprland;
+
+				#Set up plugins (from the flake)
+				plugins = [
+					hyprplugins.hyprexpo #Workspace overview
+					hyprplugins.hyprtrails #Window trails - purely aesthetics
+					hyprplugins.hyprscrolling #Scrolling layout
+				];
+
   			settings = {
   				# Default apps and mainmod variable
   				"$mainMod" = "SUPER";
@@ -90,6 +106,16 @@
   					"XCURSOR_SIZE,24"
   					"HYPRCURSOR_SIZE,24"
   				];
+
+					# Options for the plugins
+					plugin = {
+						hyprexpo = {
+							columns = 2;
+							gap_size = 5;
+							workspace_method = "first 1";
+							gesture_distance = 300;
+						};
+					};
 
   				# Keyboard
   				input = {
@@ -258,6 +284,18 @@
 						# Scroll through existing workspaces with mainMod + scroll
 						"$mainMod, mouse_down, workspace, e+1"
 						"$mainMod, mouse_up, workspace, e-1"
+
+						# Use hyprexpo
+						"$mainMod, space, hyprexpo:expo, toggle"
+
+						# Keybinds specific to hyprscrolling
+						"$mainMod, mouse_left, layoutmsg, colresize -conf"
+						"$mainMod, mouse_right, layoutmsg, colresize +conf"
+						"$mainMod, F, layoutmsg, fit visible"
+						"$mainMod SHIFT, left, layoutmsg, movewindowto l"
+						"$mainMod SHIFT, right, layoutmsg, movewindowto r"
+						"$mainMod SHIFT, up, layoutmsg, movewindowto u"
+						"$mainMod SHIFT, down, layoutmsg, movewindowto d"
 					];
 					bindm = [
 						# Move/resize windows with mainMod + LMB/RMB and dragging

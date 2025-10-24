@@ -30,6 +30,14 @@
       	nixpkgs.follows = "nixpkgs";
       };
     };
+
+    # Flake for Hyprland to use the cool plugins by Vaxrys.
+    hyprland.url = "github:hyprwm/Hyprland";
+
+    hyprland-plugins = {
+    	url = "github:hyprwm/hyprland-plugins";
+    	inputs.hyprland.follows = "hyprland";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

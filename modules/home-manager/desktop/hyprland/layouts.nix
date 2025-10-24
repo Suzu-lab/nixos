@@ -5,7 +5,7 @@
 			settings = {
 
 				# Set the default layout between dwindle or master
-				general.layout = "dwindle";
+				general.layout = "scrolling";
 
 				# See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
 				dwindle = {
@@ -56,6 +56,26 @@
 
 					# Specifies a scale factor of the windows on the special workspace [0-1]
 					special_scale_factor = 1;
+				};
+
+				# Settings for the hyprscrolling layout plugin. Comment out if not using hyprscrolling
+				plugin = {
+					hyprscrolling = {
+						# If windows will be fullscreen while alone
+						fullscreen_on_one_column = "true";
+
+						# The default percentage of screen width each window will take
+						column_width = 0.5;
+
+						# Method to use to bring a focused column into view. 0 - center, 1 - fit
+						focus_fit_method = 0;
+
+						# If the layout will move to make a focused window to be fully visible
+						follow_focus = "true";
+
+						# List of predetermined column widths to change with +conf and -conf keybinds
+						explicit_column_widths = "0.333, 0.5, 0.667, 1.0";
+					};
 				};
 			};
 		};
