@@ -5,6 +5,7 @@
 		imports = [
 			./theming.nix
 			../apps/kitty.nix
+			../apps/yazi.nix
 			../cli/fcitx5.nix
 			./hyprpaper.nix
 			./mako.nix
@@ -59,7 +60,6 @@
  	    	polkit_gnome
  	    	slurp
  	    	wl-clipboard
- 	    	xarchiver
  	    	pavucontrol
  	    	pamixer
  	    ];
@@ -87,7 +87,7 @@
   				# Default apps and mainmod variable
   				"$mainMod" = "SUPER";
   				"$terminal" = "kitty";
-  				"$fileManager" = "thunar";
+  				"$fileManager" = "kitty -e yazi";
   				"$menu" = "pkill wofi ; wofi --show drun --allow-images";
   				"$cliphist" = "pkill wofi ; cliphist list | wofi --dmenu | cliphist decode | wl-copy";
 

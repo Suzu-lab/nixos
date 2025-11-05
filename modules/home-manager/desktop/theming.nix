@@ -19,18 +19,23 @@
 					profileNames = [ "default" ];
 				};
 
-				gtk = {
+/*				gtk = {
 					enable = true;
 					# Solve Thunar font color on selected items
 					extraCss = ''
 						* :selected {
 							color: #${colors.base00};
 						}
-						/* Override accent color in gtk apps */
+						# Override accent color in gtk apps
 						:root {
 							--accent-bg-color: #${colors.base0D};
 						}
 					'';
+				};
+*/
+				yazi = {
+					enable = true;
+					boldDirectory = true;
 				};
 			};
 

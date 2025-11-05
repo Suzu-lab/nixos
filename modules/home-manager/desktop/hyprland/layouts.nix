@@ -5,7 +5,7 @@
 			settings = {
 
 				# Set the default layout between dwindle or master
-				general.layout = "scrolling";
+				general.layout = "master";
 
 				# See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
 				dwindle = {
@@ -68,7 +68,7 @@
 						column_width = 0.5;
 
 						# Method to use to bring a focused column into view. 0 - center, 1 - fit
-						focus_fit_method = 0;
+						focus_fit_method = 1;
 
 						# If the layout will move to make a focused window to be fully visible
 						follow_focus = "true";

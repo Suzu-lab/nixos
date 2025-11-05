@@ -54,6 +54,7 @@
 		"ferdium" = {
 			name = "Ferdium";
 			exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
+#			exec = "ferdium --enable-features=WebRTCPipeWireCapturer %F";
 #			exec = "ferdium %F";
 		};
 	};
