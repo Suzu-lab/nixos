@@ -2,7 +2,7 @@
 { pkgs, ... }:
 {
 	# Installs the unfree version of _7zz with rar support
-	pkgs.yazy.override {_7zz = pkgs._7zz-rar; }
+#	pkgs.yazy.override {_7zz = pkgs._7zz-rar; }
 	programs.yazi = {
 		enable = true;
 		enableFishIntegration = true;
@@ -49,6 +49,51 @@
 				micro_workers = 5;
 				macro_workers = 10;
 				bizarre_retry = 5;
+			};
+
+			# rules for apps used to open specific files
+			opener = {
+				edit = [
+					{
+						run = "micro \"$@\"";
+						block = true;
+					}
+				];
+				office = [
+					{
+						run = "onlyoffice-desktopeditors --system-title-bar \"$@\"";
+						orphan = true;
+						desc = "OnlyOffice";
+					}
+				];
+			};
+			open = {
+				append_rules = [
+					{
+						name = "*.xls";
+						use = "office";
+					}
+					{
+						name = "*.xlsx";
+						use = "office";
+					}
+					{
+						name = "*.doc";
+						use = "office";
+					}
+					{
+					name = "*.docx";
+					use = "office";
+					}
+					{
+					name = "*.ppt";
+					use = "office";
+					}
+					{
+					name = "*.pptx";
+					use = "office";
+					}
+				];
 			};
 		};
 	};
