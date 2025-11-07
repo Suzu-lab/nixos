@@ -6,7 +6,7 @@
 			autoEnable = true;
 
 			# Sets the theme to be used. It accepts Tinted-Schemes, from https://github.com/tinted-theming/schemes
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-terminal-dark.yaml";
+			base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
 
 			# Sets a wallpaper.
 			# image = ./wallpaper.png;

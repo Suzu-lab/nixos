@@ -59,6 +59,12 @@
 						block = true;
 					}
 				];
+				img = [
+					{
+						run = "imv . \"$@\"";
+						orphan = true;
+					}
+				];
 				office = [
 					{
 						run = "onlyoffice-desktopeditors --system-title-bar \"$@\"";
@@ -66,9 +72,43 @@
 						desc = "OnlyOffice";
 					}
 				];
+				pdf = [
+					{
+						run = "zathura \"$@\"";
+						orphan = true;
+					}
+				];
 			};
 			open = {
-				append_rules = [
+				rules = [
+					{
+						mime = "text/*";
+						use = "edit";
+					}
+					{
+						mime = "{audio,video}/*";
+						use = "play";
+					}
+					{
+						mime = "image/*";
+						use = "img";
+					}
+					{
+						mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}";
+						use = "extract";
+					}
+					{
+						mime = "application/{json,ndjson}";
+						use = "edit";
+					}
+					{
+						mime = "*/javascript";
+						use = "edit";
+					}
+					{
+						mime = "inode/empty";
+						use = "edit";
+					}
 					{
 						name = "*.xls";
 						use = "office";
@@ -82,16 +122,20 @@
 						use = "office";
 					}
 					{
-					name = "*.docx";
-					use = "office";
+						name = "*.docx";
+						use = "office";
 					}
 					{
-					name = "*.ppt";
-					use = "office";
+						name = "*.ppt";
+						use = "office";
 					}
 					{
-					name = "*.pptx";
-					use = "office";
+						name = "*.pptx";
+						use = "office";
+					}
+					{
+						name = "*.pdf";
+						use = ["pdf" "office"];
 					}
 				];
 			};

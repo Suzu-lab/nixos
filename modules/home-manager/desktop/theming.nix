@@ -9,35 +9,11 @@
 		];
 		# Stylix configuration
 		stylix = {
+			# Enable Stylix
 			enable = true;
-			targets = {
-				waybar = {
-					enable = false;
-				};
-				zen-browser = {
-					enable = true;
-					profileNames = [ "default" ];
-				};
 
-/*				gtk = {
-					enable = true;
-					# Solve Thunar font color on selected items
-					extraCss = ''
-						* :selected {
-							color: #${colors.base00};
-						}
-						# Override accent color in gtk apps
-						:root {
-							--accent-bg-color: #${colors.base0D};
-						}
-					'';
-				};
-*/
-				yazi = {
-					enable = true;
-					boldDirectory = true;
-				};
-			};
+			# Make it so Stylix doesn't automatically apply to the apps
+			autoEnable = false;
 
 			# Cursor theme
 			cursor = {

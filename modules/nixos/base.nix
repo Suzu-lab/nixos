@@ -52,7 +52,7 @@
 
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
-    curl git htop btop neofetch tree wget kdePackages.xwaylandvideobridge
+    coreutils curl git htop btop neofetch tree wget kdePackages.xwaylandvideobridge
   ];
 
   # Include fish in the environment shells

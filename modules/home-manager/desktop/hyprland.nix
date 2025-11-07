@@ -6,6 +6,7 @@
 			./theming.nix
 			../apps/kitty.nix
 			../apps/yazi.nix
+			../apps/zathura.nix
 			../cli/fcitx5.nix
 			./hyprpaper.nix
 			./mako.nix
@@ -240,12 +241,13 @@
 					# Keybindings
 					bind = [
 						"$mainMod, Q, exec, $terminal"
+						"$mainMod, W, exec, hyprctl getoption general:layout | grep -q 'dwindle' && hyprctl keyword general:layout master || hyprctl keyword general:layout dwindle"
 						"$mainMod, C, killactive"
 						"$mainMod, M, exit"
 						"$mainMod, E, exec, $fileManager"
 						"$mainMod, V, exec, $cliphist"
 						"$mainMod, R, exec, $menu"
-						"$mainMod, P, pseudo,"
+						"$mainMod, P, togglefloating,"
 						"$mainMod, J, togglesplit,"
 						"$mainMod, X, exec, wlogout"
 						"$mainMod SHIFT, R, exec, hyprctl reload"

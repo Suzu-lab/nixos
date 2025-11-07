@@ -29,7 +29,7 @@
 
     	# User CLI tools
    	home.packages = with pkgs; [
-     	bat btop direnv eza fd micro nh nix-direnv ripgrep
+     	bat btop direnv eza fd nh nix-direnv ripgrep
    	];
 
    	# Define default user shell as Fish
