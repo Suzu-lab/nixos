@@ -10,18 +10,27 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+		# Textfox flake - cool theme for Firefox based browsers (except Zen)
+		textfox.url = "github:adriankarlen/textfox";
+
     # Nix user repo (NUR) - has extensions for Firefox/Zen Browser already packaged
     nurpkgs = {
     	url = "github:/nix-community/NUR";
     	inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		# Stylix flake
+		# Stylix flake - theming for NixOS
 		stylix = {
 			url = "github:nix-community/stylix/";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
+		# Catpuccin flake - even better theming
+		catppuccin = {
+		  url = "github:catppuccin/nix";
+		  inputs.nixpkgs.follows = "nixpkgs";
+		};
+		
     # Zen browser flake
     zen-browser = {
     	url = "github:0xc000022070/zen-browser-flake";
@@ -40,7 +49,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, catppuccin, ... }@inputs:
 	let
 		pkgs = nixpkgs.legacyPackages.x86_64-linux;
 		mypkgs = import ./pkgs { inherit pkgs; };
@@ -56,7 +65,7 @@
       };
       yosai = nixpkgs.lib.nixosSystem {
       	system = "x86_64-linux";
-      	specialArgs = { inherit inputs mypkgs; };
+      	specialArgs = { inherit inputs mypkgs catppuccin; };
       	modules = [
       		./hosts/yosai/default.nix
       	];

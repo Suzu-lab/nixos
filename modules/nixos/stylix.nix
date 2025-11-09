@@ -1,12 +1,18 @@
 	# Stylix enable and setup
 	{ pkgs, ... }:
 	{
-		stylix = {
+		catppuccin = {
 			enable = true;
-			autoEnable = true;
+			flavor = "mocha";
+			accent = "pink";
+		};
+
+/*		stylix = {
+			enable = true;
+			autoEnable = false;
 
 			# Sets the theme to be used. It accepts Tinted-Schemes, from https://github.com/tinted-theming/schemes
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
+			base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-dark.yaml";
 
 			# Sets a wallpaper.
 			# image = ./wallpaper.png;
@@ -36,5 +42,5 @@
 				autoImport = true;
 				followSystem = true;
 			};
-		};
+		};*/
 	}

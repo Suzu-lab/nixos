@@ -22,7 +22,7 @@
 
 			# Settings.json config
 			profiles.default.userSettings = {
-				"workbench.iconTheme" = "vscode-icons";
+#				"workbench.iconTheme" = "vscode-icons";
 
 				# Wayland decorations config
 				"window.titleBarStyle" = "native";

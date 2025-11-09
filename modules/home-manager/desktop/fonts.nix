@@ -3,6 +3,7 @@
     home.packages = with pkgs; [
     	noto-fonts
     	noto-fonts-cjk-sans
+    	noto-fonts-color-emoji
     	noto-fonts-monochrome-emoji
     	font-awesome
     	nerd-fonts.jetbrains-mono
@@ -12,7 +13,7 @@
 			enable = true;
 			antialiasing = true;
 			defaultFonts = {
-				emoji = [ "Noto Emoji" ];
+				emoji = [ "Noto Color Emoji" ];
 				monospace = [ "Noto Mono" ];
 				sansSerif = [ "Noto Sans" ];
 				serif = [ "Noto Serif" ];

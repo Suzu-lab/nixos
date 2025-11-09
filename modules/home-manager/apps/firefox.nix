@@ -1,12 +1,9 @@
 # Configuration options for Floorp browser
 
 { config, inputs, pkgs, ...}:
-let
-	colors = config.lib.stylix.colors;
-in	
 {
 
-# imports = [ inputs.textfox.homeManagerModules.default ];
+imports = [ inputs.textfox.homeManagerModules.default ];
 
 	# Setting it as default app for opening web files
 
@@ -14,9 +11,9 @@ in
 		associations = builtins.listToAttrs (map (name: {
 			inherit name;
 		value = let
-			floorp = config.programs.floorp.package;
+			firefox = config.programs.firefox.package;
 		in
-			floorp.meta.desktopFilename;
+			firefox.meta.desktopFilename;
 		})[
 			"application/x-extension-shtml"
 			"application/x-extension-xhtml"
@@ -45,7 +42,7 @@ in
 		enable = true;
 		profile = "default";
 		config = 
-		with colors.withHashtag; {
+		with {
 
 			background = {
 				color = "${base00}"; # The background color of all elements
@@ -83,14 +80,15 @@ in
 			};
 			newtabLogo = "   __            __  ____          \A   / /____  _  __/ /_/ __/___  _  __\A  / __/ _ \\| |/_/ __/ /_/ __ \\| |/_/\A / /_/  __/>  </ /_/ __/ /_/ />  <  \A \\__/\\___/_/|_|\\__/_/  \\____/_/|_|  ";
 		};
-	};
-*/
-	programs.floorp = {
+	};*/
+
+	programs.firefox = {
 		enable = true;
 
 		# Sets a default profile always with the same name "default"
-		profiles.kp0nu39y = {
+		profiles.default = {
 			isDefault = true;
+			name = "Default";
 			search = {
 				default = "ddg";
 				force = true;
@@ -103,6 +101,7 @@ in
 			# This includes just a couple important extensions that I would want even in a new install
 			extensions = {
 				force = true;
+				
 				packages = with pkgs.nur.repos.rycee.firefox-addons; [
 					ublock-origin
 					bitwarden
@@ -120,18 +119,45 @@ in
 					];
 				};
 			};
+		};
 
-			# Defines customized settings
-			settings = {
-				# user.js (experimental, still seeing exactly what it does)
-				"floorp.user.js.customize" = "Fastfox";
+		# Define some hardening policies. Set it so the policies can't be changed, except through this declarative file
+		policies = let
+			mkLockedAttrs = builtins.mapAttrs (_: value: {
+				Value = value;
+				Status = "locked";
+			});
 
-				# Specific settings for Floorp UI
-				"floorp.delete.browser.border" = true;
-				"floorp.chrome.theme.mode" = 1;
+		in {
+			AutofillAddressEnabled = true;
+			AutofillCreditCardEnabled = false;
+			DisableAppUpdate = true;
+			DisableFeedbackCommands = true;
+			DisableFirefoxScreenshots = true;
+			DisableFirefoxStudies = true;
+			DisablePocket = true;
+			DisableTelemetry = true;
+			DisplayBookmarksToolbar = "never";
+			DisplayMenuBar = "never";
+			DontCheckDefaultBrowser = true;
+			HardwareAcceleration = true;
+			NoDefaultBookmarks = true;
+			OfferToSaveLogins = false;
+			PictureInPicture.enabled = false;
+			PromptForDownloadLocation = false;
+			EnableTrackingProtection = {
+				Value = true;
+				Locked = true;
+				Cryptomining = true;
+				Fingerprinting = true;
+			};
+			FirefoxSuggest = {
+				WebSuggestions = false;
+				SponsoredSuggestions = false;
+				ImproveSuggest = false;
+			};
 
-				
-
+			Preferences = mkLockedAttrs {
 				# URLbar behavior - enables suggest searches for basic search suggestions, disables everything else
 				"browser.urlbar.suggest.searches" = true;
 				"browser.urlbar.shortcuts.bookmarks" = false;
@@ -150,7 +176,7 @@ in
 				"privacy.resistFingerprinting" = true;
 				"privacy.firstparty.isolate" = true;
 				"privacy.trackingprotection.enabled" = true;
-				"network.cookie.cookieBehavior" = 1;
+				"network.cookie.cookieBehavior" = 5;
 				"dom.battery.enabled" = false;
 
 				# Enables hardware acceleration

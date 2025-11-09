@@ -1,10 +1,13 @@
   # Configuration file specific for this machine
-  { config, pkgs, inputs, ... }:
+  { catppuccin, config, pkgs, inputs, ... }:
   {
     imports = [
       # Import machine hardware config
       ./hardware-configuration.nix
 
+			# import theming module for system-level
+			catppuccin.nixosModules.catppuccin
+			
 			# Import system modules
       ../../modules/nixos/base.nix		# default system module
       ../../modules/nixos/hardware/audio.nix 	# pipewire module

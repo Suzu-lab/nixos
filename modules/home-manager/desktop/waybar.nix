@@ -1,24 +1,95 @@
 # Module for activating and configuring Waybar in Home Manager
 { pkgs, input, config, ...}:
-let
-	colors = config.lib.stylix.colors;
-in
 {
 	programs.waybar = {
 		enable = true;
 		# Style config will use a template because Stylix sucks at theming Waybar
-		style =
-		with colors.withHashtag;
-		''
-		@define-color base00 ${base00}; @define-color base01 ${base01};
-		@define-color base02 ${base02}; @define-color base03 ${base03};
-		@define-color base04 ${base04}; @define-color base05 ${base05};
-		@define-color base06 ${base06}; @define-color base07 ${base07};
-		@define-color base08 ${base08}; @define-color base09 ${base09};
-		@define-color base0A ${base0A}; @define-color base0B ${base0B};
-		@define-color base0C ${base0C}; @define-color base0D ${base0D};
-		@define-color base0E ${base0E}; @define-color base0F ${base0F};
-		'' + builtins.readFile ./dotfiles/waybar.css;
+		style = ''		
+		* {
+			border: none;
+			border-radius: 0;
+			font-family: "JetbrainsMono Nerd Font", "Font Awesome 6 Free";
+  		font-size: 16px;
+		  min-height: 0;
+		}
+
+		window#waybar {
+ 			background: transparent;
+		}
+
+		#workspaces, #window, #clock, #pulseaudio, #network, #cpu, #memory, #tray {
+  		background: transparent;
+  		color: @text;
+		  padding: 5px 5px;
+  		margin: 2px 4px;
+		}
+
+		#workspaces button {
+ 			color: @text;
+		 	background: linear-gradient(45deg, @surface0, @pink);
+ 			transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+ 			opacity: 0.5;
+ 			padding: 0px 5px;
+ 			margin: 0px 3px;
+ 			border-radius: 16px;
+ 			font-weight: bold;
+		}
+
+		#workspaces button.active {
+ 			color: @text;
+ 			background: linear-gradient(45deg, @surface0, @pink);
+ 			transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+ 			opacity: 1.0;
+ 			min-width: 40px;
+ 			padding: 0px 5px;
+ 			margin: 0px 3px;
+ 			border-radius: 16px;
+ 			font-weight: bold;
+		}
+
+		#workspaces button:hover {
+  		color: @text;
+  		background: linear-gradient(45deg, @surface0, @pink);
+  		transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+  		opacity: 0.8;
+  		border-radius: 4px;
+  		font-weight: bold;
+		}
+
+		tooltip {
+			background: @base;
+			border: 1px solid @base08;
+			border-radius: 12px;
+		}
+
+		tooltip label {
+			color: @pink;
+		}
+
+		#window, #pulseaudio, #cpu, #memory {
+  		background: @surface0;
+  		color: @text;
+		  border-radius: 24px 10px 24px 10px;
+		  padding: 0px 18px;
+		  margin: 0px 4px;
+  		margin-left: 7px;
+  		font-weight: bold;
+		}
+
+		#clock, #network, #tray {
+  		background: @flamingo;
+  		color: @base;
+		  border-radius: 10px 24px 10px 24px;
+		  padding: 0px 18px;
+  		margin: 4px 0px;
+  		margin-right: 7px;
+  		font-weight: bold;
+		}
+
+		#cpu.warning,#memory.warning{
+ 			color: @red;
+		}
+		'';
 		# Declarative configuration
 		settings =
 			let
@@ -50,14 +121,6 @@ in
 					"hyprland/workspaces" = {
 						format = "{name}";
 						format-icons = {
-#							"1" = "";
-#							"2" = "";
-#							"3" = "";
-#							"4" = "";
-#							"5" = "";
-#							"urgent" = "";
-#							"focused" = "";
-#							"default" = "";
 							"default" = " ";
 							"active" = " ";
 							"urgent" = " ";
@@ -80,11 +143,11 @@ in
 							on-scroll = 1;
 							on-click-right = "mode";
 							format = {
-								months = "<span color='#${colors.base0E}'><b>{}</b></span>";
-								days = "<span color='#${colors.base06}'><b>{}</b></span>";
-								weeks = "<span color='#${colors.base0B}'><b>{}</b></span>";
-								weekdays = "<span color='#${colors.base0B}'><b>{}</b></span>";
-								today = "<span color='#${colors.base08}'><b>{}</b></span>";
+								months = "<span color='#74c7ec'><b>{}</b></span>";
+								days = "<span color='#f2cdcd'><b>{}</b></span>";
+								weeks = "<span color='#f9e2af'><b>{}</b></span>";
+								weekdays = "<span color='#f9e2af'><b>{}</b></span>";
+								today = "<span color='#f38ba8'><b>{}</b></span>";
 							};
 						};
 					};

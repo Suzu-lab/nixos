@@ -1,14 +1,14 @@
 { config, lib, inputs, pkgs, ... }:
-let
-	colors = config.lib.stylix.colors;
-in
+#let
+#	colors = config.lib.stylix.colors;
+#in
 {
   programs.zathura = {
     enable = true;
 
 		package = (pkgs.zathura.override { plugins = with pkgs.zathuraPkgs; [ zathura_pdf_mupdf ]; });
 
-    options =
+/*    options =
     with colors.withHashtag; {
       recolor = true;
       selection-clipboard = "wl-clipboard";
@@ -48,5 +48,6 @@ in
       recolor-lightcolor = "${base01}";
       recolor-darkcolor = "${base05}";
     };
+    */
   };
 }

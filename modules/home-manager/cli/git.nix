@@ -3,13 +3,15 @@
 	{
 		programs.git = {
 			enable = true;
-			userName = "Suzu-lab";
-			userEmail = "sou.suzumi@gmail.com";
-			extraConfig = {
+			settings = {
+				user.name = "Suzu-lab";
+				user.email = "sou.suzumi@gmail.com";
+				extraConfig = {
 				# QoL
-				init.defaultBranch = "main";
-				pull.rebase = false;
-				github.user = "Suzu-lab";
+					init.defaultBranch = "main";
+					pull.rebase = false;
+					github.user = "Suzu-lab";
+				};
 			};
 		};
 		# Configure SSH

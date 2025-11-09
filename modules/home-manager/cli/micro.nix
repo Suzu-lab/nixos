@@ -3,7 +3,8 @@
 	programs.micro = {
 		enable = true;
 		settings = {
-			colorscheme = "simple";
+#			colorscheme = "simple";
+			tabsize = 2;
 		};
 	};
 }

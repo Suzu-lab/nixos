@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
-let
-	colors = config.lib.stylix.colors;
-in
+#let
+#	colors = config.lib.stylix.colors;
+#in
 {
 	programs.kitty = {
 		enable = true;
@@ -9,7 +9,7 @@ in
 
 		font.name = "Noto Mono";
 
-		extraConfig =
+/*		extraConfig =
 		with colors.withHashtag; ''
 			# Terminal base colors
 			background ${base00}
@@ -38,14 +38,15 @@ in
 
 			# ANSI bright colors
 			color8  ${base03}
-    	color9  ${base09}
+	    color9  ${base09}
     	color10 ${base01}
-    	color11 ${base02}
-    	color12 ${base04}
-    	color13 ${base06}
+   	 	color11 ${base02}
+   	 	color12 ${base04}
+   	 	color13 ${base06}
     	color14 ${base0F}
     	color15 ${base07}
 		'';
+		*/
 	};
 }
 
