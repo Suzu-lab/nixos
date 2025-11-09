@@ -1,10 +1,11 @@
 	# Home-manager user suzu
-	{ inputs, pkgs, mypkgs, catppuccin, ... }:
+	{ inputs, pkgs, mypkgs, catppuccin, nixowos, ... }:
   {
 		home-manager = {
 			users.suzu = {
 				imports = [
 					catppuccin.homeModules.catppuccin
+					nixowos.homeModules.default
 			  	../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
 				  ../../modules/home-manager/cli/git.nix
 				  ../../modules/home-manager/cli/micro.nix

@@ -24,6 +24,12 @@
 		  url = "github:catppuccin/nix";
 		  inputs.nixpkgs.follows = "nixpkgs";
 		};
+
+		# NixOwOs mainly as a joke (changes system name and fetch logos)
+		nixowos = {
+      url = "github:yunfachi/nixowos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 		
     # Zen browser flake
     zen-browser = {
@@ -43,7 +49,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, catppuccin, ... }@inputs:
+  outputs = { self, nixpkgs, catppuccin, nixowos, ... }@inputs:
 	let
 		pkgs = nixpkgs.legacyPackages.x86_64-linux;
 		mypkgs = import ./pkgs { inherit pkgs; };
@@ -59,7 +65,7 @@
       };
       yosai = nixpkgs.lib.nixosSystem {
       	system = "x86_64-linux";
-      	specialArgs = { inherit inputs mypkgs catppuccin; };
+      	specialArgs = { inherit inputs mypkgs catppuccin nixowos; };
       	modules = [
       		./hosts/yosai/default.nix
       	];

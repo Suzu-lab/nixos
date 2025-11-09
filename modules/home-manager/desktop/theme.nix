@@ -1,5 +1,5 @@
 # Using Catppuccin since it works better than Stylix, and I like the Catpuccin theme
-{ catppuccin, config, pkgs, inputs, lib,  ...}:
+{ catppuccin, config, pkgs, inputs, lib, nixowos,  ...}:
 
 {
 	# Documentation at https://nix.catppuccin.com/
@@ -15,4 +15,7 @@
 		# Accent color for the theme. "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
 		accent = "pink";
 	};
+
+	# Enables NixOwOS
+	nixowos.enable = true;
 }

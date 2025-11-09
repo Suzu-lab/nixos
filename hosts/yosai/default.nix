@@ -1,5 +1,5 @@
   # Configuration file specific for this machine
-  { catppuccin, config, pkgs, inputs, ... }:
+  { catppuccin, config, pkgs, inputs, nixowos, ... }:
   {
     imports = [
       # Import machine hardware config
@@ -7,6 +7,8 @@
 
 			# import theming module for system-level
 			catppuccin.nixosModules.catppuccin
+      # NixOwOS
+      nixowos.nixosModules.default
 			
 			# Import system modules
       ../../modules/nixos/base.nix		# default system module
