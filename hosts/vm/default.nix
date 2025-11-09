@@ -1,5 +1,5 @@
   # Configuration file specific for this machine
-  { config, pkgs, inputs, ... }:
+  { catppuccin, config, pkgs, inputs, ... }:
   {
     imports = [
       # Import machine hardware config
@@ -11,10 +11,10 @@
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
       ../../modules/nixos/services/gayming.nix #module for setting up Steam and other gaming options
       ../../modules/nixos/desktop/hyprland.nix
-      ../../modules/nixos/stylix.nix
+      ../../modules/nixos/theme.nix
 
 			# Importing system flakes modules
-			inputs.stylix.nixosModules.stylix
+			catppuccin.nixosModules.catppuccin
 			inputs.nurpkgs.modules.nixos.default
 
 			# Importing Home Manager module

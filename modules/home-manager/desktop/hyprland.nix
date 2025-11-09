@@ -1,9 +1,9 @@
   # Module for setting and configuring the basic Hyprland desktop
   { lib, pkgs, config, inputs, ... }:
   {
-		# Imports GTK3 theming
+		# Imports needed modules
 		imports = [
-			./theming.nix
+			./theme.nix
 			../apps/kitty.nix
 			../apps/yazi.nix
 			../apps/zathura.nix

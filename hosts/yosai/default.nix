@@ -10,15 +10,15 @@
 			
 			# Import system modules
       ../../modules/nixos/base.nix		# default system module
+      ../../modules/nixos/fonts.nix   # system-wide fonts (includding embedded bitmap option for Noto Emoji on Floorp)
       ../../modules/nixos/hardware/audio.nix 	# pipewire module
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
       ../../modules/nixos/services/firewall.nix # Firewall settings
       ../../modules/nixos/services/gayming.nix #module for setting up Steam and other gaming options
       ../../modules/nixos/desktop/hyprland.nix
-      ../../modules/nixos/stylix.nix
+      ../../modules/nixos/theme.nix
 
 			# Importing system flakes modules
-			inputs.stylix.nixosModules.stylix
 			inputs.nurpkgs.modules.nixos.default
 
 			# Importing Home Manager module

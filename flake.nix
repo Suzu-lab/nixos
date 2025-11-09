@@ -19,12 +19,6 @@
     	inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		# Stylix flake - theming for NixOS
-		stylix = {
-			url = "github:nix-community/stylix/";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-
 		# Catpuccin flake - even better theming
 		catppuccin = {
 		  url = "github:catppuccin/nix";

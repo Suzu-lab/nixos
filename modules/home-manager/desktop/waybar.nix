@@ -3,7 +3,7 @@
 {
 	programs.waybar = {
 		enable = true;
-		# Style config will use a template because Stylix sucks at theming Waybar
+		# Declarative style config
 		style = ''		
 		* {
 			border: none;
