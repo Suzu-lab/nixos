@@ -14,8 +14,53 @@
 		flavor = "mocha";
 		# Accent color for the theme. "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
 		accent = "pink";
+		# Set icon theme to something other than "bright pink"
+		gtk.icon.accent = "flamingo";
+		# Set cursors through catppuccin
+		cursors = {
+			enable = true;
+			flavor = "mocha";
+			accent = "pink";
+		};
 	};
 
 	# Enables NixOwOS
 	nixowos.enable = true;
+
+	# Configure cursor style
+#	home.pointerCursor = {
+#		enable = true;
+#		x11.enable = true;
+#		gtk.enable = true;
+#		package = pkgs.bibata-cursors;
+#		name = "Bibata-Modern-Amber";
+#	};
+
+	# Trying to set gtk themes
+	gtk = {
+		enable = true;
+		theme = {
+			package = pkgs.catppuccin-gtk.override {
+				accents = [ "pink" ];
+				size = "standard";
+				variant = "mocha";
+				tweaks = [ "black" ];
+			};
+			name = "catppuccin-mocha-pink-standard+black";
+		};
+	};
+
+	# Tweak to apply theme to gtk4
+	xdg.configFile = {
+		"gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
+  		"gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
+  		"gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+	};
+
+	# Trying to set up qt to use the same theme as gtk
+	qt = {
+		enable = true;
+		style.name = "kvantum";
+		platformTheme.name = "gtk";
+	};
 }
