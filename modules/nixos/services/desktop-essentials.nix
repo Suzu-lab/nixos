@@ -7,8 +7,8 @@
     # Enables real time priority
     security.rtkit.enable = true;
 
-		# Allow unfree packages
-		nixpkgs.config.allowUnfree = true;
+	# Allow unfree packages
+	nixpkgs.config.allowUnfree = true;
 
   	# Minimal display manager
   	services.greetd = {
@@ -29,15 +29,49 @@
 #		services.getty.autologinUser = "suzu";
 
   	# Desktop integration portals (required for file pickers, screenshots, etc)
-  	xdg.portal = {
+ 	xdg.portal = {
   		enable = true;
   		xdgOpenUsePortal = true;
   		extraPortals = with pkgs; [
-  			xdg-desktop-portal-gnome	# Needed for Niri to work and get screencasting/screensharing
-  			xdg-desktop-portal-gtk
+#  			xdg-desktop-portal-gnome
+				xdg-desktop-portal-hyprland
+				xdg-desktop-portal-gtk
+				xdg-desktop-portal-wlr
+				xdg-desktop-portal
 #  			kdePackages.xdg-desktop-portal-kde
   		];
-  	};
+		config = {
+			common = {
+        		default = [ 
+					"gtk"
+					"hyprland"
+				];
+				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
+				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
+				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
+      };
+			niri ={ 
+				default = [
+					"gtk"
+					"hyprland"
+#					"gnome"
+					"wlr"
+				];
+#				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
+#				"org.freedesktop.impl.portal.Screenshot" = "gnome";
+#				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
+
+			};
+		};
+  };
+
+	# Trying to add GNOME required shit for the xdg portal do work
+	environment.systemPackages = with pkgs; [
+  		nautilus
+	];
+
+	systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
+#	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
 
   	# Polkit and essential services for hot plug USB
   	security.polkit.enable = true;

@@ -16,6 +16,7 @@
      	  gs = "git status";
        	gl = "git log --oneline --graph --decorate";
        	edit = "micro";
+				neofetch = "fastfetch -c neofetch";
      	};
    	};
 

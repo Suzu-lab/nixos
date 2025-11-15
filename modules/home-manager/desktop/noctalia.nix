@@ -156,7 +156,7 @@
       };
       wallpaper = {
         enabled = true;
-        overviewEnabled = false;
+        overviewEnabled = true;
         directory = "";
         enableMultiMonitorDirectories = true;
         recursiveSearch = false;
@@ -173,7 +173,7 @@
             {
                 directory = "~/Wallpapers/Landscape";
                 name = "DP-1";
-                wallpaper = "~/Wallpapers/Landscape/joezunzun_06_landscape.png";
+                wallpaper = "/home/suzu/Wallpapers/Landscape/shion_01_landscape.png";
             }
             {
                 directory = "/home/suzu/Wallpapers/Landscape";
