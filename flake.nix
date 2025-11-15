@@ -10,16 +10,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		# Textfox flake - cool theme for Firefox based browsers (except Zen)
-		textfox.url = "github:adriankarlen/textfox";
-
     # Nix user repo (NUR) - has extensions for Firefox/Zen Browser already packaged
     nurpkgs = {
     	url = "github:/nix-community/NUR";
     	inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		# Catpuccin flake - even better theming
+		# Catpuccin theme flake
 		catppuccin = {
 		  url = "github:catppuccin/nix";
 		  inputs.nixpkgs.follows = "nixpkgs";
@@ -31,6 +28,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 		
+		# Noctalia-shell (Quickshell based shell to turn Hyprland/Niri/etc into full desktops - replaces stuff like waybar/mako/wofi
+		noctalia-shell = {
+			url = "github:noctalia-dev/noctalia-shell";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+
+		# Niri window compositor - a scrolling Wayland compositor to use instead of Hyprland
+		niri = {
+			url = "github:sodiboo/niri-flake";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+
     # Zen browser flake
     zen-browser = {
     	url = "github:0xc000022070/zen-browser-flake";
@@ -49,7 +58,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, catppuccin, nixowos, ... }@inputs:
+  outputs = { self, nixpkgs, catppuccin, nixowos, noctalia-shell, niri, ... }@inputs:
 	let
 		pkgs = nixpkgs.legacyPackages.x86_64-linux;
 		mypkgs = import ./pkgs { inherit pkgs; };
@@ -65,7 +74,7 @@
       };
       yosai = nixpkgs.lib.nixosSystem {
       	system = "x86_64-linux";
-      	specialArgs = { inherit inputs mypkgs catppuccin nixowos; };
+      	specialArgs = { inherit inputs mypkgs catppuccin nixowos noctalia-shell niri; };
       	modules = [
       		./hosts/yosai/default.nix
       	];

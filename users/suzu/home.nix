@@ -1,20 +1,24 @@
 	# Home-manager user suzu
-	{ inputs, pkgs, mypkgs, catppuccin, nixowos, ... }:
+	{ inputs, pkgs, mypkgs, catppuccin, nixowos, niri, ... }:
   {
 		home-manager = {
 			users.suzu = {
 				imports = [
 					catppuccin.homeModules.catppuccin
 					nixowos.homeModules.default
+#					niri.homeModules.niri
 			  	../../modules/home-manager/cli/fish.nix     # import module for fish cli shell
 				  ../../modules/home-manager/cli/git.nix
 				  ../../modules/home-manager/cli/micro.nix
-				  ../../modules/home-manager/desktop/hyprland.nix # module for configuring Hyprland
+
+					# Desktop modules
+					../../modules/home-manager/desktop/niri.nix # module for configuring Niri
+#				  ../../modules/home-manager/desktop/hyprland.nix # module for configuring Hyprland
 				  ../../modules/home-manager/desktop/fonts.nix
 			  	../../modules/home-manager/desktop/desktop-entries.nix # module for custom desktop entries
+					../../modules/home-manager/desktop/noctalia.nix # module for configuring noctalia
 
 					# Modules for specific programs and configurations
-					../../modules/home-manager/apps/firefox.nix
 				  ../../modules/home-manager/apps/floorp.nix 	# floorp (browser)
 					../../modules/home-manager/apps/mpv.nix	# mpv (video player)
 					../../modules/home-manager/apps/thunar.nix 		# Thunar

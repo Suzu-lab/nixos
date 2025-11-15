@@ -3,8 +3,6 @@
 { config, inputs, pkgs, ...}:
 {
 
-# imports = [ inputs.textfox.homeManagerModules.default ];
-
 	# Setting it as default app for opening web files
 
 	xdg.mimeApps = let

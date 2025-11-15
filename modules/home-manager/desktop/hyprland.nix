@@ -9,9 +9,9 @@
 			../apps/zathura.nix
 			../cli/fcitx5.nix
 			./hyprpaper.nix
-			./mako.nix
-			./waybar.nix
-			./wofi.nix
+#			./mako.nix
+#			./waybar.nix
+#			./wofi.nix
 			./hyprland/layouts.nix
 			./hyprland/decorations.nix
 		];
@@ -90,8 +90,12 @@
   				"$mainMod" = "SUPER";
   				"$terminal" = "kitty";
   				"$fileManager" = "kitty -e yazi";
-  				"$menu" = "pkill wofi ; wofi --show drun --allow-images";
-  				"$cliphist" = "pkill wofi ; cliphist list | wofi --dmenu | cliphist decode | wl-copy";
+#  				"$menu" = "pkill wofi ; wofi --show drun --allow-images";
+#  				"$cliphist" = "pkill wofi ; cliphist list | wofi --dmenu | cliphist decode | wl-copy";
+#					"$printscreen" = "bash -c 'grim -g \"$(slurp -w 0)\" - | swappy -f -'";
+					"$menu" = "noctalia-shell ipc call launcher toggle";
+					"$cliphist" = "noctalia-shell ipc call launcher wl-clipboard";
+
 
   				# Autostart
   				exec-once = [

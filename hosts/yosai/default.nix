@@ -1,9 +1,11 @@
   # Configuration file specific for this machine
-  { catppuccin, config, pkgs, inputs, nixowos, ... }:
+  { catppuccin, config, pkgs, inputs, nixowos, niri, ... }:
   {
     imports = [
       # Import machine hardware config
       ./hardware-configuration.nix
+
+      niri.nixosModules.niri
 
 			# import theming module for system-level
 			catppuccin.nixosModules.catppuccin
@@ -17,7 +19,11 @@
       ../../modules/nixos/services/desktop-essentials.nix 	# essential services for GUI
       ../../modules/nixos/services/firewall.nix # Firewall settings
       ../../modules/nixos/services/gayming.nix #module for setting up Steam and other gaming options
-      ../../modules/nixos/desktop/hyprland.nix
+      
+      # Modules needed for desktop usage
+      ../../modules/nixos/desktop/niri.nix
+#      ../../modules/nixos/desktop/hyprland.nix
+      ../../modules/nixos/desktop/noctalia.nix
       ../../modules/nixos/theme.nix
 
 			# Importing system flakes modules

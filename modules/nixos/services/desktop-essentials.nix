@@ -15,11 +15,11 @@
   		enable = true;
   		settings = {
 				initial_session = {
-					command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd Hyprland";
+					command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
 					user = "suzu";
 				};
   			default_session = {
-  				command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd Hyprland";
+  				command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
   				user = "suzu";
   			};
   		};
@@ -33,7 +33,7 @@
   		enable = true;
   		xdgOpenUsePortal = true;
   		extraPortals = with pkgs; [
-  			xdg-desktop-portal-hyprland
+  			xdg-desktop-portal-gnome	# Needed for Niri to work and get screencasting/screensharing
   			xdg-desktop-portal-gtk
 #  			kdePackages.xdg-desktop-portal-kde
   		];

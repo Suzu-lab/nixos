@@ -27,7 +27,7 @@
 	# Enables NixOwOS
 	nixowos.enable = true;
 
-	# Configure cursor style
+	# Configure cursor style. Using catppuccin cursor right now, so no sue for it.
 #	home.pointerCursor = {
 #		enable = true;
 #		x11.enable = true;
@@ -36,7 +36,7 @@
 #		name = "Bibata-Modern-Amber";
 #	};
 
-	# Trying to set gtk themes
+	# Setting gtk theme
 	gtk = {
 		enable = true;
 		theme = {
@@ -53,11 +53,11 @@
 	# Tweak to apply theme to gtk4
 	xdg.configFile = {
 		"gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
-  		"gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
-  		"gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+  	"gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
+  	"gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
 	};
 
-	# Trying to set up qt to use the same theme as gtk
+	# Setting qt to use te same theme as gtk
 	qt = {
 		enable = true;
 		style.name = "kvantum";
