@@ -52,7 +52,7 @@
 
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
-    coreutils curl git htop btop fastfetch tree wget
+    coreutils curl git htop btop fastfetch tree wget zip
   ];
 
   # Include fish in the environment shells
