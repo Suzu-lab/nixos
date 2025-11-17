@@ -31,10 +31,10 @@
   	# Desktop integration portals (required for file pickers, screenshots, etc)
  	xdg.portal = {
   		enable = true;
-  		xdgOpenUsePortal = true;
+#  		xdgOpenUsePortal = true;
   		extraPortals = with pkgs; [
-#  			xdg-desktop-portal-gnome
-				xdg-desktop-portal-hyprland
+				xdg-desktop-portal-gnome
+#				xdg-desktop-portal-hyprland
 				xdg-desktop-portal-gtk
 				xdg-desktop-portal-wlr
 				xdg-desktop-portal
@@ -44,23 +44,22 @@
 			common = {
         		default = [ 
 					"gtk"
-					"hyprland"
+					"gnome"
 				];
-				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
-				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
-				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
+#				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
+#				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
+#				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
+				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
+				"org.freedesktop.impl.portal.Screenshot" = "gnome";
+				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
       };
 			niri ={ 
 				default = [
 					"gtk"
-					"hyprland"
-#					"gnome"
+#					"hyprland"
+					"gnome"
 					"wlr"
 				];
-#				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
-#				"org.freedesktop.impl.portal.Screenshot" = "gnome";
-#				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
-
 			};
 		};
   };
@@ -71,7 +70,7 @@
 	];
 
 	systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
-#	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
+	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
 
   	# Polkit and essential services for hot plug USB
   	security.polkit.enable = true;

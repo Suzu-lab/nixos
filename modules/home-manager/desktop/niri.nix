@@ -15,7 +15,7 @@
   home.sessionVariables = {
   	NIXOS_OZONE_WL = "1";								# Electron apps/Steam
     OZONE_PLATFORM = "wayland";
-  	GDK_BACKEND = "wayland,x11";				# GTK apps
+#  	GDK_BACKEND = "wayland,x11";				# GTK apps
   	QT_QPA_PLATFORM = "wayland;xcb";		# Qt apps
   	SDL_VIDEODRIVER = "wayland,x11";		#SDL
   	_JAVA_AWT_WM_NONREPARENTING = "1";	#Java/Swing
