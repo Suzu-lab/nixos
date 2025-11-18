@@ -1,6 +1,10 @@
 # Declarative configuration for Noctalia-shell
-
-{ pkgs, inputs, noctalia-shell, ... }:
+{
+  pkgs,
+  inputs,
+  noctalia-shell,
+  ...
+}:
 {
   imports = [
     inputs.noctalia-shell.homeModules.default
@@ -8,7 +12,7 @@
 
   programs.noctalia-shell = {
     enable = true;
-    systemd.enable = true;  # Autostarts the shell as a systemd service.
+    systemd.enable = true; # Autostarts the shell as a systemd service.
     settings = {
       settingsVersion = 20;
       setupCompleted = true;
@@ -73,7 +77,7 @@
             }
             {
               id = "Tray";
-              blacklist = [];
+              blacklist = [ ];
               colorizeIcons = true;
             }
             {
@@ -81,19 +85,19 @@
               showUnreadBadge = true;
               hideWhenZero = true;
             }
-#            {
-#              id = "Battery";
-#              displayMode = "onhover";
-#              warningThreshold = 30;
-#            }
+            #            {
+            #              id = "Battery";
+            #              displayMode = "onhover";
+            #              warningThreshold = 30;
+            #            }
             {
               id = "Volume";
               displayMode = "onhover";
             }
-#            {
-#              id = "Brightness";
-#              displayMode = "onhover";
-#            }
+            #            {
+            #              id = "Brightness";
+            #              displayMode = "onhover";
+            #            }
             {
               id = "Clock";
               usePrimaryColor = true;
@@ -170,26 +174,26 @@
         transitionType = "random";
         transitionEdgeSmoothness = 0.05;
         monitors = [
-            {
-                directory = "~/Wallpapers/Landscape";
-                name = "DP-1";
-                wallpaper = "/home/suzu/Wallpapers/Landscape/shion_01_landscape.png";
-            }
-            {
-                directory = "/home/suzu/Wallpapers/Landscape";
-                name = "DP-3";
-                wallpaper =  "/home/suzu/Wallpapers/Landscape/xzu_05_landscape.png";
-            }
-            {
-                directory = "/home/suzu/Wallpapers/Portrait";
-                name = "HDMI-A-1";
-                wallpaper = "/home/suzu/Wallpapers/Portrait/guweiz_03_portrait.png";
-            }
-            {
-                directory = "/home/suzu/Wallpapers/Portrait";
-                name = "DP-2";
-                wallpaper = "/home/suzu/Wallpapers/Portrait/guweiz_29_portrait.png";
-            }
+          {
+            directory = "~/Wallpapers/Landscape";
+            name = "DP-1";
+            wallpaper = "/home/suzu/Wallpapers/Landscape/shion_01_landscape.png";
+          }
+          {
+            directory = "/home/suzu/Wallpapers/Landscape";
+            name = "DP-3";
+            wallpaper = "/home/suzu/Wallpapers/Landscape/xzu_05_landscape.png";
+          }
+          {
+            directory = "/home/suzu/Wallpapers/Portrait";
+            name = "HDMI-A-1";
+            wallpaper = "/home/suzu/Wallpapers/Portrait/guweiz_03_portrait.png";
+          }
+          {
+            directory = "/home/suzu/Wallpapers/Portrait";
+            name = "DP-2";
+            wallpaper = "/home/suzu/Wallpapers/Portrait/guweiz_29_portrait.png";
+          }
         ];
         panelPosition = "follow_bar";
       };
@@ -208,12 +212,12 @@
         position = "close_to_bar_button";
         shortcuts = {
           left = [
-#            {
-#              id = "WiFi";
-#            }
-#            {
-#              id = "Bluetooth";
-#            }
+            #            {
+            #              id = "WiFi";
+            #            }
+            #            {
+            #              id = "Bluetooth";
+            #            }
             {
               id = "ScreenRecorder";
             }
@@ -225,9 +229,9 @@
             {
               id = "Notifications";
             }
-#            {
-#              id = "PowerProfile";
-#            }
+            #            {
+            #              id = "PowerProfile";
+            #            }
             {
               id = "KeepAwake";
             }
@@ -270,9 +274,9 @@
         pinnedApps = [ ];
         colorizeIcons = false;
       };
-#      network = {
-#        wifiEnabled = true;
-#      };
+      #      network = {
+      #        wifiEnabled = true;
+      #      };
       notifications = {
         enabled = true;
         doNotDisturb = false;
@@ -352,9 +356,9 @@
         wallpaperChange = "";
         darkModeChange = "";
       };
- #     battery = {
- #       chargingMode = 0;
- #     };
+      #     battery = {
+      #       chargingMode = 0;
+      #     };
     };
   };
 }

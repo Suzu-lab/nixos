@@ -1,10 +1,9 @@
 { config, pkgs, ... }:
 {
-	programs.kitty = {
-		enable = true;
-		shellIntegration.enableFishIntegration = true;
+  programs.kitty = {
+    enable = true;
+    shellIntegration.enableFishIntegration = true;
 
-		font.name = "Noto Mono";
-	};
+    font.name = "Noto Mono";
+  };
 }
-

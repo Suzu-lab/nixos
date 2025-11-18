@@ -1,6 +1,12 @@
 # Base configuration file common to any system I use
 
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Use EFI systemd boot
@@ -11,7 +17,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Network options
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
@@ -29,16 +35,19 @@
     xkb.variant = "intl"; # enables US keyboard with dead keys
   };
 
-	# Home Manager config
-	home-manager.useGlobalPkgs = true;
-	home-manager.useUserPackages = true;
-	home-manager.backupFileExtension = "backup";
-	# Inheritance for Home Manager modules
-	home-manager.extraSpecialArgs = { inherit inputs; };
+  # Home Manager config
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "backup";
+  # Inheritance for Home Manager modules
+  home-manager.extraSpecialArgs = { inherit inputs; };
 
   # Nix flakes
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     warn-dirty = false;
     auto-optimise-store = true;
   };
@@ -52,11 +61,20 @@
 
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
-    coreutils curl git htop btop fastfetch tree wget zip
+    coreutils
+    curl
+    git
+    htop
+    btop
+    fastfetch
+    tree
+    wget
+    zip
+    nixfmt-rfc-style
   ];
 
   # Include fish in the environment shells
-  environment.shells = with pkgs; [fish];
+  environment.shells = with pkgs; [ fish ];
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -78,4 +96,3 @@
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }
-

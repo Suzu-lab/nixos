@@ -1,53 +1,62 @@
-  # fish shell configuration for NixOS
+# fish shell configuration for NixOS
+{ config, pkgs, ... }:
+{
+  # Enabling fish through home-manager
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+             set -gx EDITOR micro
+      	      set -gx VISUAL micro
+        	    set -gx PAGER less
+          	'';
+    shellAliases = {
+      ll = "ls -lh";
+      la = "ls -lha";
+      gs = "git status";
+      gl = "git log --oneline --graph --decorate";
+      edit = "micro";
+      neofetch = "fastfetch -c neofetch";
+    };
+  };
 
-  { config, pkgs, ... }:
-  {
-    # Enabling fish through home-manager
-   	programs.fish = {
-     	enable = true;
-     	interactiveShellInit = ''
-        set -gx EDITOR micro
- 	      set -gx VISUAL micro
-   	    set -gx PAGER less
-     	'';
-      shellAliases = {
- 	      ll = "ls -lh";
-   	    la = "ls -lha";
-     	  gs = "git status";
-       	gl = "git log --oneline --graph --decorate";
-       	edit = "micro";
-				neofetch = "fastfetch -c neofetch";
-     	};
-   	};
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+      character = {
+        success_symbol = ">";
+        error_symbol = ">";
+      };
+    };
+  };
 
-   	programs.starship = {
-     	enable = true;
-      settings = {
- 	      add_newline = false;
-   	    character = { success_symbol = ">"; error_symbol = ">"; };
-     	};
-   	};
+  # User CLI tools
+  home.packages = with pkgs; [
+    bat
+    btop
+    direnv
+    eza
+    fd
+    nh
+    nix-direnv
+    ripgrep
+  ];
 
-    	# User CLI tools
-   	home.packages = with pkgs; [
-     	bat btop direnv eza fd nh nix-direnv ripgrep
-   	];
+  # Define default user shell as Fish
+  home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
 
-   	# Define default user shell as Fish
-   	home.sessionVariables.SHELL = "${pkgs.fish}/bin/fish";
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
-   	programs.direnv.enable = true;
-   	programs.direnv.nix-direnv.enable = true;
-
-   	# Minimal micro editor config
-   	xdg.configFile."micro/settings.json".text = ''
-   	{
-     	"softwrap": true,
-     	"tabsize": 2,
-     	"autosu": true,
-     	"clipboard": "external",
-     	"mkparents": true,
-     	"rmtrailingws": true
-   	}
-   	'';
-  }
+  # Minimal micro editor config
+  xdg.configFile."micro/settings.json".text = ''
+    	{
+      	"softwrap": true,
+      	"tabsize": 2,
+      	"autosu": true,
+      	"clipboard": "external",
+      	"mkparents": true,
+      	"rmtrailingws": true
+    	}
+    	'';
+}

@@ -1,10 +1,10 @@
 { pkgs, ... }:
 {
-	programs.micro = {
-		enable = true;
-		settings = {
-#			colorscheme = "simple";
-			tabsize = 2;
-		};
-	};
+  programs.micro = {
+    enable = true;
+    settings = {
+      #			colorscheme = "simple";
+      tabsize = 2;
+    };
+  };
 }

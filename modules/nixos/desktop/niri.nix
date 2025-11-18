@@ -3,10 +3,10 @@
 {
 
   # Enables graphic server without X
-	services.xserver.enable = false;
+  services.xserver.enable = false;
 
   programs.niri.enable = true;
   nixpkgs.overlays = [ niri.overlays.niri ];
   programs.niri.package = pkgs.niri-stable;
-  
+
 }
