@@ -40,24 +40,24 @@
     };
 
     # Custom .desktop entry for OnlyOffice
-    #		"onlyoffice-desktopeditors" = {
-    #			name = "OnlyOffice";
-    #			exec = "onlyoffice-desktopeditors --system-title-bar %U";
-    #			categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
-    #		};
+    "onlyoffice-desktopeditors" = {
+      name = "OnlyOffice";
+      exec = "onlyoffice-desktopeditors --system-title-bar %U";
+      categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
+    };
 
     # Fixing electron apps rendering in Wayland
+    "chromium" = {
+      name = "Chromium";
+      exec = "chromium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
+    };
     "codium" = {
       name = "VSCodium";
-      #			exec = "codium --enable-wayland-ime --wayland-text-input-version=3 %F";
-      exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --wayland-text-input-version=3 %F";
+      exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 %F";
     };
     "ferdium" = {
       name = "Ferdium";
-      #			exec = "ferdium --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
       exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
-      #			exec = "ferdium --enable-features=WebRTCPipeWireCapturer %F";
-      #			exec = "ferdium %F";
     };
   };
 }

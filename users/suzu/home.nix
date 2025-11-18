@@ -31,6 +31,7 @@
         ../../modules/home-manager/desktop/noctalia.nix # module for configuring noctalia
 
         # Modules for specific programs and configurations
+        ../../modules/home-manager/apps/chromium.nix # ungoogled-chromium (communicator app)
         ../../modules/home-manager/apps/floorp.nix # floorp (browser)
         ../../modules/home-manager/apps/mpv.nix # mpv (video player)
         ../../modules/home-manager/apps/thunar.nix # Thunar

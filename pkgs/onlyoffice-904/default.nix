@@ -25,6 +25,7 @@
   libpulseaudio,
   libudev0-shim,
   libdrm,
+  libnotify,
   makeWrapper,
   libgbm,
   noto-fonts-cjk-sans,
@@ -66,11 +67,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.0.4";
+    version = "9.1.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-wO4t9lE7gHmu41/Q2lYHVZu/oFwaBLY2BndomaFdYho=";
+      hash = "sha256:0f7e84ee16024c9f4bc3d5e707c9f13063090c946133e2be6ef8ae33dbaece19";
     };
 
     nativeBuildInputs = [
@@ -95,6 +96,7 @@ let
       gst_all_1.gstreamer
       gtk2
       gtk3
+      libnotify
       libpulseaudio
       libdrm
       nspr
