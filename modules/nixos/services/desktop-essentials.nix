@@ -23,13 +23,13 @@
     enable = true;
     settings = {
       initial_session = {
-        #					command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
+#        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd hyprland";
         user = "suzu";
       };
       default_session = {
-        #  				command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
+#        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd hyprland";
         user = "suzu";
       };
     };
@@ -41,29 +41,29 @@
   # Desktop integration portals (required for file pickers, screenshots, etc)
   xdg.portal = {
     enable = true;
-    xdgOpenUsePortal = true;
+#    xdgOpenUsePortal = true;
     extraPortals = with pkgs; [
-      #				xdg-desktop-portal-gnome
-      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gnome
+#      xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
       xdg-desktop-portal-wlr
       xdg-desktop-portal
       #  			kdePackages.xdg-desktop-portal-kde
     ];
-    /*
+    
       config = {
       			common = {
               		default = [
       					"gtk"
-      					"hyprland"
-      #					"gnome"
+      #					"hyprland"
+      					"gnome"
       				];
-      				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
-      				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
-      				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
-      #				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
-      #				"org.freedesktop.impl.portal.Screenshot" = "gnome";
-      #				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
+      #				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
+      #				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
+      #				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
+      				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
+      				"org.freedesktop.impl.portal.Screenshot" = "gnome";
+      				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
             };
       			niri ={
       				default = [
@@ -74,16 +74,16 @@
       				];
       			};
       		};
-    */
+    
   };
 
   # Trying to add GNOME required shit for the xdg portal do work
-  #	environment.systemPackages = with pkgs; [
-  #  		nautilus
-  #	];
+  	environment.systemPackages = with pkgs; [
+    		nautilus
+  	];
 
-  #	systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
-  #	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
+  	systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
+  	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
 
   # Polkit and essential services for hot plug USB
   security.polkit.enable = true;

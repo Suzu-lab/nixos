@@ -36,13 +36,14 @@
   nixowos.enable = true;
 
   # Configure cursor style. Using catppuccin cursor right now, so no use for it.
-  #	home.pointerCursor = {
-  #		enable = true;
-  #		x11.enable = true;
-  #		gtk.enable = true;
-  #		package = pkgs.bibata-cursors;
-  #		name = "Bibata-Modern-Amber";
-  #	};
+  home.pointerCursor = {
+  	enable = true;
+  	x11.enable = true;
+  	gtk.enable = true;
+    size = 24;
+#  	package = pkgs.bibata-cursors;
+#  	name = "Bibata-Modern-Amber";
+  };
 
   # Setting gtk theme
   gtk = {

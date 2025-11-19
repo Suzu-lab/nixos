@@ -29,8 +29,8 @@
     ../../modules/nixos/services/gayming.nix # module for setting up Steam and other gaming options
 
     # Modules needed for desktop usage
-    #      ../../modules/nixos/desktop/niri.nix
-    ../../modules/nixos/desktop/hyprland.nix
+    ../../modules/nixos/desktop/niri.nix
+#    ../../modules/nixos/desktop/hyprland.nix
     ../../modules/nixos/desktop/noctalia.nix
     ../../modules/nixos/theme.nix
 
