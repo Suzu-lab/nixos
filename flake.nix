@@ -14,9 +14,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Old Nix-stable packages
-    nixpkgs-stable.url = "nixpkgs/nixos-25.05";
-
     # Home Manager flake
     home-manager = {
       url = "github:nix-community/home-manager/";
@@ -79,12 +76,10 @@
       nixowos,
       noctalia-shell,
       niri,
-      nixpkgs-stable,
       ...
     }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      pkgs-stable = nixpkgs-stable.legacyPackages.x86_64-linux;
       mypkgs = import ./pkgs { inherit pkgs; };
     in
     {
@@ -106,7 +101,6 @@
               nixowos
               noctalia-shell
               niri
-              pkgs-stable
               ;
           };
           modules = [

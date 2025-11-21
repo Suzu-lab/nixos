@@ -4,7 +4,6 @@
   pkgs,
   config,
   inputs,
-  pkgs-stable,
   ...
 }:
 {
@@ -52,10 +51,8 @@
       wl-clipboard
       pavucontrol
       pamixer
-    ])
-    ++ (with pkgs-stable; [
-      kdePackages.xwaylandvideobridge
-    ]);
+    ]
+  );
 
   # Declarative config files for the desktop environment
   wayland.windowManager.hyprland =

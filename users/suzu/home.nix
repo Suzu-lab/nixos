@@ -56,10 +56,8 @@
         nexusmods-app
         lutris
 
-        # Customized derivation for OnlyOffice 9.0.4
-        mypkgs.onlyoffice-904
-        # Customized derivation for Ferdium 7.1.1 (newer Electron)
-        mypkgs.ferdium-711
+        # Customized derivation for newest version of OnlyOffice
+        mypkgs.onlyoffice-update
 
         #################################################################
         # Utilities and backends
