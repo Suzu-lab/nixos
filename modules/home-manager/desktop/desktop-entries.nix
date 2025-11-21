@@ -44,20 +44,19 @@
       name = "OnlyOffice";
       exec = "onlyoffice-desktopeditors --system-title-bar %U";
       categories = [ "Office" "WordProcessor" "Spreadsheet" "Presentation" ];
+      icon = "onlyoffice-desktopeditors";
     };
 
     # Fixing electron apps rendering in Wayland
-    "chromium" = {
+    "chromium-browser" = {
       name = "Chromium";
       exec = "chromium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
+      icon = "chromium";
     };
     "codium" = {
       name = "VSCodium";
       exec = "codium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 %F";
-    };
-    "ferdium" = {
-      name = "Ferdium";
-      exec = "ferdium --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 --enable-features=WebRTCPipeWireCapturer %F";
+      icon = "vscodium";
     };
   };
 }

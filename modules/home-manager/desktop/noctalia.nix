@@ -31,6 +31,7 @@
           left = [
             {
               id = "ControlCenter";
+              colorizeDistroLogo = true;
               useDistroLogo = true;
               icon = "noctalia";
               customIconPath = "";
@@ -64,11 +65,17 @@
             }
           ];
           center = [
+#            {
+#              id = "Workspace";
+#              labelMode = "none";
+#              hideUnoccupied = true;
+#              characterCount = 2;
+#            }
             {
-              id = "Workspace";
+              id = "TaskbarGrouped";
               labelMode = "none";
               hideUnoccupied = true;
-              characterCount = 2;
+              colorizeIcons = true;
             }
           ];
           right = [
@@ -319,12 +326,15 @@
         matugenSchemeType = "scheme-fruit-salad";
         generateTemplatesForPredefined = true;
       };
+      network = {
+        wifiEnabled = false;
+      };
       templates = {
-        gtk = true;
-        qt = true;
+        gtk = false;
+        qt = false;
         kcolorscheme = false;
         alacritty = false;
-        kitty = true;
+        kitty = false;
         ghostty = false;
         foot = false;
         wezterm = false;
