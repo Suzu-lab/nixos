@@ -45,6 +45,12 @@
 #  	name = "Bibata-Modern-Amber";
   };
 
+  # Telling apps that the system theme is actually dark
+  dconf.settings = {
+      "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+        };
+  };
   # Setting gtk theme
   gtk = {
     enable = true;

@@ -17,7 +17,7 @@
       settingsVersion = 20;
       setupCompleted = true;
       bar = {
-        position = "left";
+        position = "top";
         backgroundOpacity = 0;
         monitors = [ "DP-1" ];
         density = "comfortable";
@@ -110,7 +110,7 @@
         };
       };
       general = {
-        avatarImage = "~/Images/Profile Pics/Cereal Experiments Lain.png";
+        avatarImage = "~/Pictures/Profile Pics/Cereal Experiments Lain.png";
         dimDesktop = true;
         showScreenCorners = false;
         forceBlackScreenCorners = false;
@@ -320,11 +320,11 @@
         generateTemplatesForPredefined = true;
       };
       templates = {
-        gtk = false;
-        qt = false;
+        gtk = true;
+        qt = true;
         kcolorscheme = false;
         alacritty = false;
-        kitty = false;
+        kitty = true;
         ghostty = false;
         foot = false;
         wezterm = false;
