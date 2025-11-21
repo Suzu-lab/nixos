@@ -32,24 +32,6 @@
   programs.swappy.enable = true;
   programs.wlogout.enable = true;
 
-  systemd.user.services = {
-    # Enables Polkit GNOME authentication agent at system level
-    polkit-gnome-authentication-agent-1 = {
-      Unit = {
-        Description = "Polkit GNOME Authentication Agent";
-      };
-      Service = {
-        ExecStart = "{pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-      Install = {
-        Wantedby = [ "graphical-session.target" ];
-      };
-    };
-  };
-
   home.packages = with pkgs; [
     wl-clipboard
     wayland-utils
@@ -75,6 +57,9 @@
         warp-mouse-to-focus.enable = true; # makes cursor move to the newly focused window
         focus-follows-mouse.enable = true; # makes so the window focus automatically follows the mouse cursor;
       };
+      spawn-at-startup = [ 
+        { argv = ["niriswitcher"]; }
+      ];
 
       # Monitor config
       outputs = {

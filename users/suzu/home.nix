@@ -29,6 +29,7 @@
         ../../modules/home-manager/desktop/fonts.nix
         ../../modules/home-manager/desktop/desktop-entries.nix # module for custom desktop entries
         ../../modules/home-manager/desktop/noctalia.nix # module for configuring noctalia
+        ../../modules/home-manager/desktop/xdg.nix
 
         # Modules for specific programs and configurations
         ../../modules/home-manager/apps/chromium.nix # ungoogled-chromium (communicator app)
@@ -52,6 +53,8 @@
         # User programs
         #################################################################
         imv
+        nexusmods-app
+        lutris
 
         # Customized derivation for OnlyOffice 9.0.4
         mypkgs.onlyoffice-904
@@ -61,6 +64,7 @@
         #################################################################
         # Utilities and backends
         #################################################################
+        xarchiver
         unzip
         p7zip
         unrar

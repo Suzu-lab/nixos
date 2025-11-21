@@ -36,25 +36,7 @@
   services.cliphist.enable = true;
   programs.swappy.enable = true;
   programs.wlogout.enable = true;
-
-  systemd.user.services = {
-    # Enables Polkit GNOME authentication agent at system level
-    polkit-gnome-authentication-agent-1 = {
-      Unit = {
-        Description = "Polkit GNOME Authentication Agent";
-      };
-      Service = {
-        ExecStart = "{pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-      Install = {
-        Wantedby = [ "graphical-session.target" ];
-      };
-    };
-  };
-
+  
   # Base apps required for Hyprland
   home.packages =
     (with pkgs; [

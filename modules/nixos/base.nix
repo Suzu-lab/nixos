@@ -9,6 +9,17 @@
 }:
 
 {
+  # Set zram - swap file inside the ram. - https://www.kernel.org/doc/Documentation/blockdev/zram.txt
+  zramSwap = {
+    enable = true;
+    # alorithm for memory compression - "lzo", "lz4", "zstd"
+    algorithm = "zstd";
+    # Priority of the zram swap devices. - should be higher than any disk swap devices
+    priority = 5;
+    # Maximum total amount of memory that can be stored in the zram swap devices (as a percentage of your total memory).
+    memoryPercent = 50;
+  };
+
   # Use EFI systemd boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -36,11 +47,13 @@
   };
 
   # Home Manager config
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.backupFileExtension = "backup";
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
   # Inheritance for Home Manager modules
-  home-manager.extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs; };
+  };
 
   # Nix flakes
   nix.settings = {

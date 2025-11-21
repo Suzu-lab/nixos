@@ -51,44 +51,68 @@
       #  			kdePackages.xdg-desktop-portal-kde
     ];
     
-      config = {
-      			common = {
-              		default = [
-      					"gtk"
-      #					"hyprland"
-      					"gnome"
-      				];
-      #				"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
-      #				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
-      #				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
-      				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
-      				"org.freedesktop.impl.portal.Screenshot" = "gnome";
-      				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
-            };
-      			niri ={
-      				default = [
-      					"gtk"
-      #					"hyprland"
-      					"gnome"
-      					"wlr"
-      				];
-      			};
-      		};
-    
+    config = {
+    	common = {
+     		default = [
+    			"gtk"
+#    			"hyprland"
+#					"gnome"
+ 				];
+#  			"org.freedesktop.impl.portal.ScreenCast" = "hyprland";
+#				"org.freedesktop.impl.portal.Screenshot" = "hyprland";
+#				"org.freedesktop.impl.portal.RemoteDesktop" = "hyprland";
+ 				"org.freedesktop.impl.portal.ScreenCast" = "gnome";
+ 				"org.freedesktop.impl.portal.Screenshot" = "gnome";
+ 				"org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
+      };
+ 			niri ={
+ 				default = [
+ 					"gtk"
+#					"hyprland"
+ 					"gnome"
+# 					"wlr"
+ 				];
+ 			};
+    };    
   };
 
-  # Trying to add GNOME required shit for the xdg portal do work
-  	environment.systemPackages = with pkgs; [
-    		nautilus
-  	];
+  # Enable dconf configuration system
+  programs.dconf.enable = true;
 
-  	systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
-  	systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
+  # Disables the default KDE polkit agent that the niri flake try to use
+  systemd.user.services.niri-flake-polkit.enable = false;
+
+  # Delays the xdg desktop portals until after the niri services start to avoid conflicts
+  systemd.user.services.xdg-desktop-portal.after = ["niri.service"];
+  systemd.user.services.xdg-desktop-portal-gtk.after = ["niri.service"];
+  systemd.user.services.xdg-desktop-portal-gnome.after = ["niri.service"];
 
   # Polkit and essential services for hot plug USB
   security.polkit.enable = true;
-  services.dbus.enable = true;
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
-  services.udisks2.enable = true;
+  
+  systemd = {
+    user.services.polkit-gnome-authentication-agent-1 = {
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+    };
+  };
+
+  services = {
+    dbus.enable = true;
+    gvfs.enable = true;
+    tumbler.enable = true;
+    udisks2.enable = true;
+    udev.packages = with pkgs; [
+      gnome-settings-daemon
+    ];
+  };
 }

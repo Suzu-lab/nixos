@@ -17,7 +17,7 @@
       settingsVersion = 20;
       setupCompleted = true;
       bar = {
-        position = "top";
+        position = "left";
         backgroundOpacity = 0;
         monitors = [ "DP-1" ];
         density = "comfortable";
@@ -66,7 +66,7 @@
           center = [
             {
               id = "Workspace";
-              labelMode = "index";
+              labelMode = "none";
               hideUnoccupied = true;
               characterCount = 2;
             }
