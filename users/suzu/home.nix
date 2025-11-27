@@ -12,7 +12,7 @@
 {
   home-manager = {
 
-    extraSpecialArgs = { inherit pkgs-stable; };
+    extraSpecialArgs = { inherit pkgs-stable mypkgs; };
 
     users.suzu = {
       imports = [

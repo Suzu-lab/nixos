@@ -1,5 +1,5 @@
 # GUI fonts
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home.packages = with pkgs; [
     noto-fonts
@@ -31,5 +31,4 @@
       chmod 444 ~/.local/share/fonts/*
     '';
   };
-  } 
-}
+} 
