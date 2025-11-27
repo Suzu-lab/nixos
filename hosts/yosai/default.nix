@@ -34,6 +34,9 @@
     ../../modules/nixos/desktop/noctalia.nix
     ../../modules/nixos/theme.nix
 
+    # Thunar file manager
+    ../../modules/nixos/desktop/thunar.nix
+
     # Importing system flakes modules
     inputs.nurpkgs.modules.nixos.default
 

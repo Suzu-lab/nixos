@@ -19,4 +19,17 @@
       serif = [ "Noto Serif" ];
     };
   };
+
+  # Script for fixing fonts in OnlyOffice
+  home.activation = {
+    copy-fonts-local-share = lib.hm.dag.entryAfter ["writeBoundary"]
+    ''
+      rm -rf ~/.local/share/fonts
+      mkdir -p ~/.local/share/fonts
+      cp ${pkgs.noto-fonts}/share/fonts/noto/* ~/.local/share/fonts/
+      chmod 544 ~/.local/share/fonts
+      chmod 444 ~/.local/share/fonts/*
+    '';
+  };
+  } 
 }

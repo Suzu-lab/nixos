@@ -35,7 +35,8 @@
         ../../modules/home-manager/apps/chromium.nix # ungoogled-chromium (communicator app)
         ../../modules/home-manager/apps/floorp.nix # floorp (browser)
         ../../modules/home-manager/apps/mpv.nix # mpv (video player)
-        ../../modules/home-manager/apps/thunar.nix # Thunar
+        ../../modules/home-manager/apps/onlyoffice.nix # OnlyOffice (using updated package)
+#        ../../modules/home-manager/apps/thunar.nix # Thunar
         ../../modules/home-manager/apps/vscodium.nix # VS Codium
         ../../modules/home-manager/apps/zen.nix # Zen browser (flake)
       ];
@@ -56,13 +57,13 @@
         nexusmods-app
         lutris
 
-        # Customized derivation for newest version of OnlyOffice
-        mypkgs.onlyoffice-update
+        # Shell for running python
+        conda
 
         #################################################################
         # Utilities and backends
         #################################################################
-        xarchiver
+        file-roller
         unzip
         p7zip
         unrar
