@@ -32,12 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # NixOwOs mainly as a joke (changes system name and fetch logos)
-    nixowos = {
-      url = "github:yunfachi/nixowos";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Noctalia-shell (Quickshell based shell to turn Hyprland/Niri/etc into full desktops - replaces stuff like waybar/mako/wofi
     noctalia-shell = {
       url = "github:noctalia-dev/noctalia-shell";
@@ -72,54 +66,31 @@
     {
       self,
       nixpkgs,
-      catppuccin,
-      nixowos,
-      noctalia-shell,
-      niri,
+      home-manager,
       ...
     }@inputs:
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       mypkgs = import ./pkgs { inherit pkgs; };
+      username = "suzu";
     in
     {
       nixosConfigurations = {
-        vm = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/vm/default.nix
-          ];
-        };
         yosai = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          inherit system;
+
           specialArgs = {
             inherit
               inputs
               mypkgs
-              catppuccin
-              nixowos
-              noctalia-shell
-              niri
-              ;
+              username;
           };
           modules = [
-            ./hosts/yosai/default.nix
-
-            {
-              # Allows the users below to add extra cache servers through the flake file
-              nix.settings.trusted-users = [ "suzu" ];
-              # Enable cache server to download binaries without needing to compile everything
-              nix.settings = {
-                substituters = [
-                  "https://cache.nixos.org"
-                ];
-
-                trusted-public-keys = [
-                  "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-                ];
-              };
-            }
+            ./hosts/yosai/configuration.nix
+            ./users/home.nix
+            
+            home-manager.nixosModules.home-manager
           ];
         };
       };

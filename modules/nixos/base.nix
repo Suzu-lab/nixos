@@ -5,10 +5,27 @@
   config,
   lib,
   pkgs,
+  username,
   ...
 }:
 
 {
+  # Enable nonfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # Create the nur overlay inside nixpkgs
+  nixpkgs.overlays = [
+    inputs.nurpkgs.overlays.default
+     (final: prev: {
+    floorp-bin-unwrapped = prev.floorp-bin-unwrapped.overrideAttrs (old: {
+      src = final.fetchurl {
+        url = "https://github.com/Floorp-Projects/Floorp/releases/download/v12.7.0/floorp-linux-x86_64.tar.xz";
+        hash = "sha256-feIRCZuyB8xwUoI1FMWJQ6yupgC2aAavADQ9mrk0zMM=";
+      };
+    });
+  })
+  ];
+
   # Set zram - swap file inside the ram. - https://www.kernel.org/doc/Documentation/blockdev/zram.txt
   zramSwap = {
     enable = true;
@@ -27,9 +44,6 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Network options
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
-
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
 
@@ -46,13 +60,22 @@
     xkb.variant = "intl"; # enables US keyboard with dead keys
   };
 
-  # Home Manager config
+  # Home manager config
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    backupFileExtension = "backup";
-  # Inheritance for Home Manager modules
-    extraSpecialArgs = { inherit inputs; };
+  };
+  
+  # Enable cache server to download binaries without needing to compile everything
+  nix.settings = {
+    trusted-users = [ username ];
+    substituters = [
+      "https://cache.nixos.org"
+    ];
+
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
   };
 
   # Nix flakes
@@ -71,20 +94,6 @@
     enableZshIntegration = false;
     enableFishIntegration = true;
   };
-
-  # Base packages used at system level
-  environment.systemPackages = with pkgs; [
-    coreutils
-    curl
-    git
-    htop
-    btop
-    fastfetch
-    tree
-    wget
-    zip
-    nixfmt-rfc-style
-  ];
 
   # Include fish in the environment shells
   environment.shells = with pkgs; [ fish ];
