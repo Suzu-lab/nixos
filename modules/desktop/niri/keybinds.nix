@@ -9,13 +9,14 @@
     hm.programs.niri.settings.binds = with config.lib.niri.actions; {
       "Mod+T".action.spawn = "kitty";
       "Mod+Shift+Slash".action.show-hotkey-overlay = [ ]; # Shows the hotkey overlay when pressing Super+?
+      # Uses the Noctalia-shell launcher
       "Mod+R".action.spawn = [
         "noctalia-shell"
         "ipc"
         "call"
         "launcher"
         "toggle"
-      ]; # Uses the Noctalia-shell launcher
+      ]; 
       "Mod+Q" = {
         repeat = false;
         action.close-window = [ ];

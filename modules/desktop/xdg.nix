@@ -35,11 +35,8 @@
         in 
         { 
           # Default file associations
-          #"application/doc" = office;
-          #"application/docx" = office;
           "application/json" = browser;
           "application/msword" = office;
-          #"application/ppt" = office;
           "application/pdf" = office;
           "application/rdf+xml" = browser;
           "application/rss+xml" = browser;

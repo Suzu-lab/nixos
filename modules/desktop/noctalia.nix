@@ -79,12 +79,6 @@ in
                 }
               ];
               center = [
-    #            {
-    #              id = "Workspace";
-    #              labelMode = "none";
-    #              hideUnoccupied = true;
-    #              characterCount = 2;
-    #            }
                 {
                   id = "TaskbarGrouped";
                   labelMode = "none";
@@ -106,19 +100,10 @@ in
                   showUnreadBadge = true;
                   hideWhenZero = true;
                 }
-                #            {
-                #              id = "Battery";
-                #              displayMode = "onhover";
-                #              warningThreshold = 30;
-                #            }
                 {
                   id = "Volume";
                   displayMode = "onhover";
                 }
-                #            {
-                #              id = "Brightness";
-                #              displayMode = "onhover";
-                #            }
                 {
                   id = "Clock";
                   usePrimaryColor = true;
@@ -233,12 +218,6 @@ in
             position = "close_to_bar_button";
             shortcuts = {
               left = [
-                #            {
-                #              id = "WiFi";
-                #            }
-                #            {
-                #              id = "Bluetooth";
-                #            }
                 {
                   id = "ScreenRecorder";
                 }
@@ -250,9 +229,6 @@ in
                 {
                   id = "Notifications";
                 }
-                #            {
-                #              id = "PowerProfile";
-                #            }
                 {
                   id = "KeepAwake";
                 }
@@ -295,9 +271,6 @@ in
             pinnedApps = [ ];
             colorizeIcons = false;
           };
-          #      network = {
-          #        wifiEnabled = true;
-          #      };
           notifications = {
             enabled = true;
             doNotDisturb = false;
@@ -380,9 +353,6 @@ in
             wallpaperChange = "";
             darkModeChange = "";
           };
-          #     battery = {
-          #       chargingMode = 0;
-          #     };
         };
       };
     };

@@ -1,5 +1,8 @@
-{ config, lib, ... }:
-
+{ 
+  config,
+  lib, 
+  ... 
+}:
 let
   cfg = config.suzu.themes.catppuccin;
 
@@ -20,6 +23,12 @@ in
   config = lib.mkIf cfg.enable {
     hm.programs.niri.settings = {
       layout = {
+        empty-workspace-above-first = true; # Makes it so workspaces can be created up and down
+        always-center-single-column = true; # Makes it so if there's only one column it will be in the centro of the screen
+        gaps = 10; # gapes between windows in pixels
+
+        border.enable = false; # The border is set inside the windows, what is set outside is the focus-ring. Setting the border to inactive.
+
         focus-ring = {
           width = 3;
 

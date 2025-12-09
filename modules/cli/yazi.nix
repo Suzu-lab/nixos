@@ -1,8 +1,6 @@
 # module for setting up yazi (file explorer)
 { pkgs, ... }:
 {
-  # Installs the unfree version of _7zz with rar support
-  #	pkgs.yazy.override {_7zz = pkgs._7zz-rar; }
   hm.programs.yazi = {
     enable = true;
     enableFishIntegration = true;

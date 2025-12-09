@@ -67,14 +67,12 @@ in
         };
       };
 
-      # Configure cursor style. Using catppuccin cursor right now, so no use for it.
+      # Configure cursor size.
       home.pointerCursor = {
         enable = true;
         x11.enable = true;
         gtk.enable = true;
         size = 24;
-    #  	package = pkgs.bibata-cursors;
-    #  	name = "Bibata-Modern-Amber";
       };
 
       # Telling apps that the system theme is actually dark

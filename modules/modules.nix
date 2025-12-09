@@ -50,8 +50,4 @@
     ./programs/zathura.nix  # Light and fast document viewer
     ./programs/zen.nix  # Backup browser
   ];
-#  config.networking = {
-#      networkmanager = {
-#        enable = true;
-#      };};
 }
