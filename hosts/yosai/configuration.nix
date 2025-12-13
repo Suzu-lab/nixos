@@ -1,6 +1,7 @@
 # Configuration file specific for this machine
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -14,6 +15,11 @@
   ];
 
   networking.hostName = "yosai";
+
+  # Increase timeout of home-manager-suzu service to 15 minutes so it can actually finish the download of the pytorch and other thing for comfyui.
+  systemd.services."home-manager-suzu".serviceConfig = {
+    TimeoutStartSec = lib.mkForce "20min";
+  };
 
   suzu.desktop = {
     # Window managers
@@ -41,4 +47,28 @@
       icons = "rosewater";
     };
   };
+
+  # Options for AI stuff
+  suzu.ai = {
+    # LLM service
+    ollama = {
+      enable = true;
+      backend = "rocm";
+      models = [ "llama3.2:3b" "llama3.1:8b-instruct-q4_0" ];
+    };
+    # Web service for LLM
+    webui = {
+      enable = true;
+      openFirewall = false;
+    };
+    # Stable diffusion with PyTorch+ROCm and ComfyUI
+    comfyui = {
+      enable = true;
+      envDir = "/home/suzu/.local/share/comfy-env";
+      workspaceDir = "/home/suzu/ai/comfyui";
+      port = 8188;  # Port of service for web access (local or remote)
+      openFirewall = false;
+    };
+  };
+  
 }

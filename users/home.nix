@@ -12,6 +12,8 @@
     extraGroups = [
       "wheel"
       "networkmanager"
+      "render"
+      "video"
     ];
     ignoreShellProgramCheck = true;
     shell = pkgs.fish; # Defines fish as default user shell

@@ -15,34 +15,34 @@ let
     variant = cfg.flavor;
     tweaks = [ "black" ];
   };
+  inherit (lib) mkEnableOption mkIf mkOption types;
 in
 {
   # Documentation at https://nix.catppuccin.com/
   imports = [
     inputs.catppuccin.nixosModules.catppuccin
-#    inputs.nixowos.nixosModules.default
   ];
 
   options.suzu.themes.catppuccin = {
-    enable = lib.mkEnableOption "Catppuccin Theme";
-    flavor = lib.mkOption {
-      type = lib.types.enum ["latte" "frappe" "macchiato" "mocha"];
+    enable = mkEnableOption "Catppuccin Theme";
+    flavor = mkOption {
+      type = types.enum ["latte" "frappe" "macchiato" "mocha"];
       default = "mocha";
       description = "Base color of the theme";
     };
-    accent = lib.mkOption {
-      type = lib.types.enum ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"];
+    accent = mkOption {
+      type = types.enum ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"];
       default = "flamingo";
       description = "Accent color of the theme";
     };
-    icons = lib.mkOption {
-      type = lib.types.enum ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"];
+    icons = mkOption {
+      type = types.enum ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"];
       default = "flamingo";
       description = "Icon color of the theme";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     # Enables catppuccin theme globally
     catppuccin = {
       enable = true;

@@ -14,6 +14,7 @@
     ./nixos/fonts.nix
     ./nixos/gayming.nix
     ./nixos/gui-essentials.nix
+    ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
     ./nixos/networking.nix
 
     # Window managers
@@ -49,5 +50,10 @@
     ./programs/vscodium.nix
     ./programs/zathura.nix  # Light and fast document viewer
     ./programs/zen.nix  # Backup browser
+
+    # AI stuff
+    ./ai/comfyui.nix  # Stable diffusion with PyTorch and ComfyUI
+    ./ai/ollama.nix   # LLM service running locally
+    ./ai/webui.nix    # Web interface for use with ollama
   ];
 }

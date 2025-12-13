@@ -8,6 +8,7 @@
 }:
 let
   cfg = config.suzu.desktop.niri;
+  inherit (lib) mkEnableOption mkIf mkOption types;
 in
 {
   # Imports needed modules
@@ -19,10 +20,10 @@ in
   ];
   
   options.suzu.desktop.niri = {
-    enable = lib.mkEnableOption "Niri Desktop";
+    enable = mkEnableOption "Niri Desktop";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     # Enables graphic server without X
     services.xserver.enable = false;

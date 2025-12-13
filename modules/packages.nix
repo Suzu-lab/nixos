@@ -13,9 +13,14 @@
     btop
     fastfetch
     tree
+    usbutils
     wget
     zip
     nixfmt-rfc-style
+    # AI stuff
+    rocmPackages.amdsmi
+    rocmPackages.rocminfo
+    clinfo
   ];
 
   hm = {
