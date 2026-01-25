@@ -10,6 +10,7 @@
     # System modules
     ./nixos/audio.nix
     ./nixos/base.nix # Basic system module
+    ./nixos/deepcool-digital.nix  # Module for enabling the display of the DeepCool Digital air cooler
     ./nixos/firewall.nix
     ./nixos/fonts.nix
     ./nixos/gayming.nix
@@ -52,8 +53,8 @@
     ./programs/zen.nix  # Backup browser
 
     # AI stuff
-    ./ai/comfyui.nix  # Stable diffusion with PyTorch and ComfyUI
-    ./ai/ollama.nix   # LLM service running locally
-    ./ai/webui.nix    # Web interface for use with ollama
+#    ./ai/comfyui.nix  # Stable diffusion with PyTorch and ComfyUI
+#    ./ai/ollama.nix   # LLM service running locally
+#    ./ai/webui.nix    # Web interface for use with ollama
   ];
 }

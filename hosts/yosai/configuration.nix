@@ -14,6 +14,8 @@
     ../../modules/packages.nix
   ];
 
+  _module.args.mypkgs = import ../../pkgs { inherit pkgs; };
+
   networking.hostName = "yosai";
 
   # Increase timeout of home-manager-suzu service to 15 minutes so it can actually finish the download of the pytorch and other thing for comfyui.
@@ -49,7 +51,7 @@
   };
 
   # Options for AI stuff
-  suzu.ai = {
+/*  suzu.ai = {
     # LLM service
     ollama = {
       enable = true;
@@ -69,6 +71,6 @@
       port = 8188;  # Port of service for web access (local or remote)
       openFirewall = false;
     };
-  };
-  
+  }; 
+*/  
 }

@@ -1,6 +1,7 @@
 # All the packages and configs required for some hardcore gayming
-{ config, pkgs, ... }:
+{ config, pkgs, modulesPath, ... }:
 {
+  
   config = {
     programs.gamemode.enable = true;
 
@@ -14,7 +15,10 @@
     };
 
     environment.systemPackages = with pkgs; [
+      lutris
       protonup-qt
+      wine
+      winetricks
     ];
 
     programs.gamescope = {
@@ -25,5 +29,7 @@
         "--expose-wayland"
       ];
     };
+    # Enables 32 bit drivers for Wine
+    hardware.graphics.enable32Bit = true;
   };
 }

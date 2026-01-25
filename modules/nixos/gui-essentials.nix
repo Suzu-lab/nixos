@@ -1,5 +1,7 @@
 # Enables essential services for a desktop environment
-{ pkgs, ... }:
+{ pkgs,
+  lib,
+  ... }:
 {
   # Enables graphic server without X
   services.xserver.enable = false;
@@ -7,9 +9,26 @@
   # Enables real time priority
   security.rtkit.enable = true;
 
+  # Forces QT to use qt6ct theme instead of gtk2 (avoids quickshell crashes)
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct";
+    style = "adwaita-dark";
+  };
+
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Electron apps/Steam
     QT_QPA_PLATFORM = "wayland"; # Qt apps
+    QT_QPA_PLATFORMTHEME = "qt5ct";
+    SDL_VIDEODRIVER = "wayland";
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    OZONE_PLATFORM = "wayland";
+  };
+
+  hm.systemd.user.sessionVariables = {
+    NIXOS_OZONE_WL = "1"; # Electron apps/Steam
+    QT_QPA_PLATFORM = "wayland"; # Qt apps
+    QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
     SDL_VIDEODRIVER = "wayland";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
     OZONE_PLATFORM = "wayland";

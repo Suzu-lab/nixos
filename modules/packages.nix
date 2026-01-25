@@ -16,11 +16,14 @@
     usbutils
     wget
     zip
-    nixfmt-rfc-style
+    qt6Packages.qt6ct
+    nixfmt
+    logiops # Software for managing the Logitech mouse
+    gpu-screen-recorder # For screen recording using the Noctalia-shell plugin
     # AI stuff
-    rocmPackages.amdsmi
-    rocmPackages.rocminfo
-    clinfo
+    #rocmPackages.amdsmi
+    #rocmPackages.rocminfo
+    #clinfo
   ];
 
   hm = {
@@ -30,8 +33,6 @@
       # User programs
       #################################################################
       imv
-      nexusmods-app
-#      lutris
       octave # math plotting program for uni work
       qbittorrent # torrent client
 

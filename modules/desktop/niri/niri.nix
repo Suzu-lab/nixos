@@ -30,7 +30,7 @@ in
 
     programs.niri.enable = true;
     nixpkgs.overlays = [ inputs.niri.overlays.niri ];
-    programs.niri.package = pkgs.niri-stable;
+    programs.niri.package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-stable;
 
     hm = {
       # Global variables for forcing wayland wherever possible

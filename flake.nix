@@ -60,6 +60,9 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+
+    # Flake for the Deepcool cooler digital display
+    ddl.url = "github:mzonski/deepcool-digital-linux";
   };
 
   outputs =
@@ -67,12 +70,22 @@
       self,
       nixpkgs,
       home-manager,
+      nur,
+      niri,
       ...
     }@inputs:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      mypkgs = import ./pkgs { inherit pkgs; };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ 
+          nur.overlays.default
+          niri.overlays.niri
+        ];
+        config.allowUnfree = true;
+        rocmSupport = false;
+      };
+      
       username = "suzu";
     in
     {
@@ -80,10 +93,11 @@
         yosai = nixpkgs.lib.nixosSystem {
           inherit system;
 
+          pkgs = pkgs;
+
           specialArgs = {
             inherit
               inputs
-              mypkgs
               username;
           };
           modules = [
