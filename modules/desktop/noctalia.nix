@@ -265,8 +265,29 @@ in
           wallpaper = {
             enabled = true;
             overviewEnabled = true;
-            directory = "/home/suzu/Pictures/Wallpapers";
-            monitorDirectories = [];
+            directory = "/home/suzu/Wallpapers";
+            monitorDirectories = [
+              {
+                directory = "/home/suzu/Wallpapers/Landscape";
+                name = "DP-1";
+                wallpaper = "";
+              }
+              {
+                directory = "/home/suzu/Wallpapers/Portrait";
+                name = "DP-2";
+                wallpaper = "";
+              }
+              {
+                directory = "/home/suzu/Wallpapers/Landscape";
+                name = "HDMI-A-1";
+                wallpaper = "";
+              }
+              {
+                directory = "/home/suzu/Wallpapers/Portrait";
+                name = "DP-3";
+                wallpaper = "";
+              }
+            ];
             enableMultiMonitorDirectories = true;
             showHiddenFiles = false;
             viewMode = "single";
@@ -570,7 +591,7 @@ in
                     y = 6;
                   }
                   {
-                    clockStyle = "binary";
+                    clockStyle = "digital";
                     customFont = "";
                     format = "HH:mm\\nd MMMM yyyy";
                     id = "Clock";
