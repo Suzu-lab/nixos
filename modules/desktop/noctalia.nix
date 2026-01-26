@@ -278,12 +278,12 @@ in
                 wallpaper = "";
               }
               {
-                directory = "/home/suzu/Wallpapers/Landscape";
+                directory = "/home/suzu/Wallpapers/Portrait";
                 name = "HDMI-A-1";
                 wallpaper = "";
               }
               {
-                directory = "/home/suzu/Wallpapers/Portrait";
+                directory = "/home/suzu/Wallpapers/Landscape";
                 name = "DP-3";
                 wallpaper = "";
               }

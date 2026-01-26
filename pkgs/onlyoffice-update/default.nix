@@ -67,11 +67,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.1.0";
+    version = "9.2.1";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256:0f7e84ee16024c9f4bc3d5e707c9f13063090c946133e2be6ef8ae33dbaece19";
+      hash = "sha256:ae453f124249e5dfa99601b71d5e00f655adc890158130d439467d7741e3969e";
     };
 
     nativeBuildInputs = [

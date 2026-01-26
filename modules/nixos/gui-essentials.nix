@@ -9,7 +9,7 @@
   # Enables real time priority
   security.rtkit.enable = true;
 
-  # Forces QT to use qt6ct theme instead of gtk2 (avoids quickshell crashes)
+  # Forces QT to use qt5ct theme instead of gtk2 (avoids quickshell crashes)
   qt = {
     enable = true;
     platformTheme = "qt5ct";
