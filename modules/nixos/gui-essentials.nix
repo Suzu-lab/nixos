@@ -121,4 +121,5 @@
       gnome-settings-daemon
     ];
   };
+
 }

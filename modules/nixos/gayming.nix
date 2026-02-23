@@ -15,7 +15,9 @@
     };
 
     environment.systemPackages = with pkgs; [
+      itch # Client for itch.io games
       lutris
+      mangohud
       protonup-qt
       wine
       winetricks

@@ -20,6 +20,7 @@
     nixfmt
     logiops # Software for managing the Logitech mouse
     gpu-screen-recorder # For screen recording using the Noctalia-shell plugin
+    cliphist
     # AI stuff
     #rocmPackages.amdsmi
     #rocmPackages.rocminfo

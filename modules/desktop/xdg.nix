@@ -83,7 +83,7 @@
         enable = true;
         createDirectories = true;
         extraConfig = {
-          XDG_SCREENSHOTS_DIR = "/home/${username}/Screenshots";
+          SCREENSHOTS = "/home/${username}/Screenshots";
         };
       };
     };

@@ -4,6 +4,7 @@
   hm.programs.yazi = {
     enable = true;
     enableFishIntegration = true;
+    shellWrapperName = "yy";
 
     # Extra settings and definitions can be found in https://yazi-rs.github.io/docs/configuration/yazi/
     settings = {
