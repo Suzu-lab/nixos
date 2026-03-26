@@ -86,7 +86,7 @@
   programs.dconf.enable = true;
 
   # Disables the default KDE polkit agent that the niri flake try to use
-  systemd.user.services.niri-flake-polkit.enable = false;
+#  systemd.user.services.niri-flake-polkit.enable = false;
 
   # Delays the xdg desktop portals until after the niri services start to avoid conflicts
   systemd.user.services.xdg-desktop-portal.after = [ "niri.service" ];
@@ -120,6 +120,6 @@
     udev.packages = with pkgs; [
       gnome-settings-daemon
     ];
+    gnome.gnome-keyring.enable = true;   # GNOME-keyring for storing passwords
   };
-
 }

@@ -5,22 +5,26 @@
 {
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
+    btop
+    cliphist
     coreutils
+    cpu-x
     curl
+    fastfetch
     file
     git
+    gpu-screen-recorder # For screen recording using the Noctalia-shell plugin
     htop
-    btop
-    fastfetch
+    logiops # Software for managing the Logitech mouse
+    nixfmt
+    polkit
+    polkit_gnome
+    qt6Packages.qt6ct
     tree
     usbutils
     wget
     zip
-    qt6Packages.qt6ct
-    nixfmt
-    logiops # Software for managing the Logitech mouse
-    gpu-screen-recorder # For screen recording using the Noctalia-shell plugin
-    cliphist
+
     # AI stuff
     #rocmPackages.amdsmi
     #rocmPackages.rocminfo

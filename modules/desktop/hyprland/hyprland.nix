@@ -60,7 +60,6 @@ in
           hyprlock
           hyprpaper
           hyprpicker
-          polkit_gnome
           slurp
           wl-clipboard
           pavucontrol
