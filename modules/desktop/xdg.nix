@@ -85,6 +85,7 @@
         extraConfig = {
           SCREENSHOTS = "/home/${username}/Screenshots";
         };
+        setSessionVariables = true;
       };
     };
   };

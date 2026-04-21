@@ -57,9 +57,9 @@ in
       ];
 
       # Set up niriswitcher (fancy alt+tab for Niri)
-      programs.niriswitcher = {
-        enable = true;
-      };
+#      programs.niriswitcher = {
+#        enable = true;
+#      };
 
       # Declarative settings for Niri
       programs.niri = {
