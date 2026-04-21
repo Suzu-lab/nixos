@@ -83,7 +83,7 @@
   };
 
   # Default value of gtk theme for the builder to stop annoying me
-  gtk.gtk4.theme = null;
+  # gtk.gtk4.theme = null;
 
   # Enable dconf configuration system
   programs.dconf.enable = true;

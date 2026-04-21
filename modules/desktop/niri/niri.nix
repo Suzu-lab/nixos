@@ -74,9 +74,10 @@ in
             focus-follows-mouse.enable = true; # makes so the window focus automatically follows the mouse cursor;
           };
           spawn-at-startup = [ 
-            { argv = ["niriswitcher"]; }
+            { 
+              command = ["noctalia-shell"];
+            }
           ];
-
           # Window rules recommended by Noctalia-shell
           window-rules = [
             {

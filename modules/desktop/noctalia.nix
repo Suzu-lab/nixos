@@ -26,8 +26,15 @@ in
       ];
       programs.noctalia-shell = {
         enable = true;
-        systemd.enable = true; # Autostarts the shell as a systemd service.
+        #systemd.enable = true; # Autostarts the shell as a systemd service.
         settings = {
+          spawn-at-startup = [
+            {
+              command = [
+                "noctalia-shell"
+              ];
+            }
+          ];
           setupCompleted = true;
           bar = {
             position = "top";
