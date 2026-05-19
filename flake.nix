@@ -81,7 +81,7 @@
         overlays = [ 
           nur.overlays.default
           niri.overlays.niri
-        ];
+        ] ++ (import ./overlays/default.nix);
         config.allowUnfree = true;
         rocmSupport = false;
       };
