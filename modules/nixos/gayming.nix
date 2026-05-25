@@ -25,7 +25,7 @@
 
     programs.gamescope = {
       enable = true;
-      capSysNice = true;
+      capSysNice = false;
       args = [
         "--rt"
         "--expose-wayland"

@@ -9,7 +9,7 @@
     # Declarative extensions
     profiles.default.extensions = with pkgs.vscode-extensions; [
       # Languages and tools
-      ms-python.python
+#      ms-python.python
       rust-lang.rust-analyzer
       ms-azuretools.vscode-docker
       tamasfe.even-better-toml
