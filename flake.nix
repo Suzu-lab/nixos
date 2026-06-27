@@ -14,8 +14,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    jedi-fix.url = "github:NixOS/nixpkgs?ref=pull/522705/head";
-
     # Home Manager flake
     home-manager = {
       url = "github:nix-community/home-manager/";

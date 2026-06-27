@@ -15,6 +15,7 @@
     ./nixos/fonts.nix
     ./nixos/gayming.nix
     ./nixos/gui-essentials.nix
+    ./nixos/hdd-raid # Mount point for the btrfs raid of the WD Red HDDs
     ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
     ./nixos/networking.nix
 
@@ -43,7 +44,6 @@
     # Programs
     ./programs/celluloid.nix  # GUI wrapper for mpv
     ./programs/chromium.nix # Web browser for communication webapps
-    ./programs/floorp.nix # Web browser
     ./programs/gthumb.nix # Image viewer
     ./programs/kitty.nix  # Terminal
     ./programs/onlyoffice.nix

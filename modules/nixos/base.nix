@@ -10,18 +10,6 @@
 }:
 
 {
-  # Create the nur overlay inside nixpkgs
-  nixpkgs.overlays = [
-    inputs.nurpkgs.overlays.default
-     (final: prev: {
-      floorp-bin-unwrapped = prev.floorp-bin-unwrapped.overrideAttrs (old: {
-        src = final.fetchurl {
-          url = "https://github.com/Floorp-Projects/Floorp/releases/download/v12.7.0/floorp-linux-x86_64.tar.xz";
-          hash = "sha256-feIRCZuyB8xwUoI1FMWJQ6yupgC2aAavADQ9mrk0zMM=";
-        };
-      });
-    })
-  ];
 
   # Set zram - swap file inside the ram. - https://www.kernel.org/doc/Documentation/blockdev/zram.txt
   zramSwap = {
@@ -40,6 +28,9 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Set btrfs support at boot
+  boot.supportedFilesystems = [ "btrfs" ];
 
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";

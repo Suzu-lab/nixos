@@ -6,6 +6,7 @@
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
     btop
+    btrfs-progs
     cliphist
     coreutils
     cpu-x
@@ -15,6 +16,7 @@
     git
     gpu-screen-recorder # For screen recording using the Noctalia-shell plugin
     htop
+    inetutils
     logiops # Software for managing the Logitech mouse
     nixfmt
     polkit
@@ -40,6 +42,7 @@
       imv
       octave # math plotting program for uni work
       qbittorrent # torrent client
+      pinta # simple image editor
 
       # Shell for running python
       conda
