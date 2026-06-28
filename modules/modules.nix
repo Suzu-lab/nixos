@@ -15,8 +15,9 @@
     ./nixos/fonts.nix
     ./nixos/gayming.nix
     ./nixos/gui-essentials.nix
-    ./nixos/hdd-raid # Mount point for the btrfs raid of the WD Red HDDs
+    ./nixos/hdd-raid.nix # Mount point for the btrfs raid of the WD Red HDDs
     ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
+    ./nixos/netdata.nix # Metrics tool with web interface accessible through port 19999
     ./nixos/networking.nix
 
     # Window managers

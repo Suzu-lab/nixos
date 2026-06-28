@@ -67,5 +67,10 @@
         transform.rotation = 90;
       };
     };
+
+    # Map touch inputs to the Hyte Y70 screen
+    hm.programs.niri.settings.input.touch = {
+      map-to-output = "DP-2";
+    };
   };
 }
