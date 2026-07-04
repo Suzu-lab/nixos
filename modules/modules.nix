@@ -11,11 +11,11 @@
     ./nixos/audio.nix
     ./nixos/base.nix # Basic system module
     ./nixos/deepcool-digital.nix  # Module for enabling the display of the DeepCool Digital air cooler
+    ./nixos/disks.nix # Configuration for mounting the extra disks
     ./nixos/firewall.nix
     ./nixos/fonts.nix
     ./nixos/gayming.nix
     ./nixos/gui-essentials.nix
-    ./nixos/hdd-raid.nix # Mount point for the btrfs raid of the WD Red HDDs
     ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
     ./nixos/netdata.nix # Metrics tool with web interface accessible through port 19999
     ./nixos/networking.nix

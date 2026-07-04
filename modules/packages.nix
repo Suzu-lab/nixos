@@ -27,6 +27,10 @@
     wget
     zip
 
+    # Terminal apps for debloating android phones
+    android-tools
+    universal-android-debloater
+
     # AI stuff
     #rocmPackages.amdsmi
     #rocmPackages.rocminfo

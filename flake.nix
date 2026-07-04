@@ -63,6 +63,7 @@
 
     # Flake for the Deepcool cooler digital display
     ddl.url = "github:mzonski/deepcool-digital-linux";
+
   };
 
   outputs =
