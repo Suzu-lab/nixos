@@ -3,3 +3,4 @@ result
 *.swp
 .direnv/
 *.qcow2
+.claude

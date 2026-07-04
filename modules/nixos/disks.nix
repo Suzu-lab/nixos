@@ -14,8 +14,9 @@
 
   # 512GB NVMe mount (dedicated to AI models)
   fileSystems."/home/suzu/ai-models" = {
-    device = "/dev/disk/by-uuid/d79ece30-1c57-4635-b33f-86294b82be17";
+    device = "/dev/disk/by-uuid/2f40d288-dedf-4a87-8558-107809100e47";
     fsType = "ext4";
+    options = [ "noatime" "nofail" "x-systemd.automount" ];
   };
 
   # Acivate weekly TRIM

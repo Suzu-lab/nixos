@@ -7,6 +7,7 @@
   environment.systemPackages = with pkgs; [
     btop
     btrfs-progs
+    claude-code
     cliphist
     coreutils
     cpu-x

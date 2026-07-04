@@ -1,15 +1,16 @@
 # Config for VS Codium
 { pkgs, ... }:
 {
-  # Config done in home-manager
-  hm.programs.vscode = {
+  # Config done in home-manager. Using programs.vscodium (instead of
+  # programs.vscode with a vscodium package) so config is written to VSCodium's
+  # own paths (~/.vscode-oss, "VSCodium/User") rather than VS Code's.
+  hm.programs.vscodium = {
     enable = true;
-    package = pkgs.vscodium;
 
     # Declarative extensions
     profiles.default.extensions = with pkgs.vscode-extensions; [
       # Languages and tools
-#      ms-python.python
+#  -9      ms-python.python
       rust-lang.rust-analyzer
       ms-azuretools.vscode-docker
       tamasfe.even-better-toml

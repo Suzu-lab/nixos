@@ -19,9 +19,11 @@
     programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      # `settings` replaces the deprecated `matchBlocks`. Attribute names are
+      # `Host` patterns and values use ssh_config directive casing (AddKeysToAgent).
+      settings = {
         "sou.suzumi@gmail.com" = {
-          addKeysToAgent = "yes";
+          AddKeysToAgent = "yes";
         };
       };
     };

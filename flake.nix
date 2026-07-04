@@ -21,8 +21,8 @@
     };
 
     # Nix user repo (NUR) - has extensions for Firefox/Zen Browser already packaged
-    nurpkgs = {
-      url = "github:/nix-community/NUR";
+    nur = {
+      url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -99,6 +99,7 @@
           specialArgs = {
             inherit
               inputs
+              system
               username;
           };
           modules = [

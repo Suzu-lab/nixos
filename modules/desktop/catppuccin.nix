@@ -46,6 +46,9 @@ in
     # Enables catppuccin theme globally
     catppuccin = {
       enable = true;
+      # Explicitly opt in to auto-enrolling ports (current default behavior),
+      # silencing the upcoming-change warning from catppuccin/nix.
+      autoEnable = true;
       flavor = cfg.flavor;
       accent = cfg.accent;
     };
@@ -55,8 +58,13 @@ in
       catppuccin = {
         # Enable it for all programs
         enable = true;
+        autoEnable = true;
         flavor = cfg.flavor;
         accent = cfg.accent;
+        # The gemini-cli port still sets `programs.gemini-cli.settings`, which
+        # home-manager renamed to `programs.antigravity-cli.settings`, producing
+        # a deprecation warning. We don't use it, so disable this port.
+        gemini-cli.enable = false;
         # Set icon theme
         gtk.icon.accent = cfg.icons;
         # Set cursors through catppuccin
@@ -91,6 +99,10 @@ in
           package = themePackage;
           name = themeName;
         };
+        # Adopt the HM 26.05 default (null) instead of the legacy "inherit
+        # gtk.theme" behavior. GTK4 styling is applied manually below via the
+        # xdg.configFile symlinks, so this only silences the migration warning.
+        gtk4.theme = null;
       };
 
       # Tweak to apply theme to gtk4
