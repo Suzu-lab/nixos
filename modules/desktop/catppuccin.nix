@@ -61,10 +61,6 @@ in
         autoEnable = true;
         flavor = cfg.flavor;
         accent = cfg.accent;
-        # The gemini-cli port still sets `programs.gemini-cli.settings`, which
-        # home-manager renamed to `programs.antigravity-cli.settings`, producing
-        # a deprecation warning. We don't use it, so disable this port.
-        gemini-cli.enable = false;
         # Set icon theme
         gtk.icon.accent = cfg.icons;
         # Set cursors through catppuccin
@@ -119,7 +115,8 @@ in
       qt = {
         enable = true;
         style.name = "kvantum";
-        platformTheme.name = "gtk";
+        # "gtk" was deprecated; "gtk3" uses the modern native Qt GTK3 plugin.
+        platformTheme.name = "gtk3";
       };
     };
   };

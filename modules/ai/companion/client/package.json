@@ -1,0 +1,15 @@
+{
+  "name": "companion-client",
+  "version": "0.1.0",
+  "description": "Custom multi-surface Electron client for the local AI companion (renders OLV backend)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "@pixiv/three-vrm": "3.4.2",
+    "@pixiv/three-vrm-animation": "^3.4.2",
+    "three": "0.169.0",
+    "ws": "8.18.0"
+  }
+}

@@ -1,0 +1,32 @@
+# llama-swap config — an OpenAI-compatible proxy that loads/unloads llama-server on demand by
+# the request's `model` field. Mounted into the container at /app/config.yaml.
+#
+#   chat      = daily driver: the VL MoE (brain + eyes) on the GPU.
+#   chat-cpu  = gaming mode: the text-only abliterated MoE on CPU only, so the whole 16GB GPU
+#               is free for a game (she keeps talking, just without vision, at ~8-15 t/s).
+#
+# OLV (conf.yaml), ask-screen, and consolidate.py all select `chat`. Switch to `chat-cpu` for
+# gaming via `companion-ctl gaming on` (see companion-ctl.sh). Manual unload (free VRAM, she
+# sleeps): POST /api/models/unload.
+
+healthCheckTimeout: 600   # a 30B MoE (+ mmproj) loading from NVMe can take a while
+
+models:
+  "chat":                 # daily driver — VL MoE on the GPU (our tuned flags)
+    cmd: >
+      /app/llama-server
+      -m /models/qwen3-vl-30b-a3b-abliterated/Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated.i1-Q4_K_M.gguf
+      --mmproj /models/qwen3-vl-30b-a3b-abliterated/Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated.mmproj-f16.gguf
+      --image-min-tokens 1024
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 999 --n-cpu-moe 30 --no-mmap -c 32768 -fa on -ctk q8_0 -ctv q8_0
+      --threads 16 -b 2048 -ub 2048 --jinja
+    ttl: 0                # never auto-unload the daily driver
+
+  "chat-cpu":             # gaming mode — text-only MoE on CPU, GPU fully freed (no vision)
+    cmd: >
+      /app/llama-server
+      -m /models/qwen3-30b-a3b-abliterated/Huihui-Qwen3-30B-A3B-Instruct-2507-abliterated.i1-Q4_K_M.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 0 -c 16384 -fa on --threads 8 --jinja
+    ttl: 0

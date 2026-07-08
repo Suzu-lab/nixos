@@ -1,15 +1,22 @@
 # mpv - TUI video player
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.suzu.cli.mpv;
+in
 {
-  hm.programs.mpv = {
-    enable = true;
-    # Extra configs
-    config = {
-      ytdl = "yes";
-      ytdl-format = "bestvideo+bestaudio/best";
-      vo = "gpu-next";
-      hwdec = "auto";
+  options.suzu.cli.mpv.enable = lib.mkEnableOption "mpv video player";
+
+  config = lib.mkIf cfg.enable {
+    hm.programs.mpv = {
+      enable = true;
+      # Extra configs
+      config = {
+        ytdl = "yes";
+        ytdl-format = "bestvideo+bestaudio/best";
+        vo = "gpu-next";
+        hwdec = "auto";
+      };
+      package = pkgs.mpv;
     };
-    package = pkgs.mpv;
   };
 }

@@ -14,8 +14,6 @@
     ../../modules/packages.nix
   ];
 
-  _module.args.mypkgs = import ../../pkgs { inherit pkgs; };
-
   networking.hostName = "yosai";
 
   # Increase timeout of home-manager-suzu service to 15 minutes so it can actually finish the download of the pytorch and other thing for comfyui.
@@ -30,6 +28,47 @@
 
     # Shells/bars
     noctalia.enable = true;
+
+    # Desktop integration
+    desktopEntries.enable = true;
+    fcitx5.enable = true;
+    xdg.enable = true;
+  };
+
+  # System-level modules (hardware, services, essentials)
+  suzu.system = {
+    audio.enable = true;
+    deepcool.enable = true;
+    disks.enable = true;
+    firewall.enable = true;
+    fonts.enable = true;
+    gaming.enable = true;
+    guiEssentials.enable = true;
+    keychron.enable = true;
+    netdata.enable = true;
+    openrgb.enable = true;
+  };
+
+  # Terminal applications
+  suzu.cli = {
+    fish.enable = true;
+    git.enable = true;
+    micro.enable = true;
+    mpv.enable = true;
+    yazi.enable = true;
+  };
+
+  # GUI programs
+  suzu.programs = {
+    celluloid.enable = true;
+    chromium.enable = true;
+    gthumb.enable = true;
+    kitty.enable = true;
+    nemo.enable = true;
+    onlyoffice.enable = true;
+    vscodium.enable = true;
+    zathura.enable = true;
+    zen.enable = true;
   };
 
   # Network options
@@ -51,6 +90,13 @@
   };
 
   # Options for AI stuff
+  # Phase 0 host prep for the containerized AI companion (Docker + GPU firmware
+  # + NVMe data dirs). The container stack itself lives on the NVMe and is run
+  # imperatively via `docker compose`.
+  suzu.ai.companionHost.enable = true;
+
+  # Legacy native-ROCm AI stack (Ollama/OpenWebUI/ComfyUI). Kept for reference;
+  # superseded by the containerized companion above.
 /*  suzu.ai = {
     # LLM service
     ollama = {

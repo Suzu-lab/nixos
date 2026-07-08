@@ -40,7 +40,8 @@
 
     # Niri window compositor - a scrolling Wayland compositor to use instead of Hyprland
     niri = {
-      url = "github:sodiboo/niri-flake";
+#      url = "github:sodiboo/niri-flake"; # Original flake repository, doesn't have newer features
+      url = "github:epireyn/niri-flake";  # Fork with support for the blur options from the newest Niri
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -84,7 +85,7 @@
           niri.overlays.niri
         ] ++ (import ./overlays/default.nix);
         config.allowUnfree = true;
-        rocmSupport = false;
+        config.rocmSupport = false;
       };
       
       username = "suzu";

@@ -1,24 +1,31 @@
 # Config for the Celluloid video viewer
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.suzu.programs.celluloid;
+in
 {
-  hm = {
-    # Installation through Home-Manager
-    home.packages = with pkgs; [
-      celluloid
-    ];
+  options.suzu.programs.celluloid.enable = lib.mkEnableOption "Celluloid video player";
 
-    # Declarative config through dconf
-    dconf.settings = {
-      "io/github/celluloid-player/celluloid" = {
-        # Toggle for keeping window always on top
-        always-on-top = false;
-        # Show playlist by default
-        playlist-visible = true;
-        # Use dark theme by default
-        dark-theme = true;
+  config = lib.mkIf cfg.enable {
+    hm = {
+      # Installation through Home-Manager
+      home.packages = with pkgs; [
+        celluloid
+      ];
 
-        # Extra mpv options - Can pass command line options for mpv
-        extra-mpv-options = "--hwdec=auto --vo-gpu";
+      # Declarative config through dconf
+      dconf.settings = {
+        "io/github/celluloid-player/celluloid" = {
+          # Toggle for keeping window always on top
+          always-on-top = false;
+          # Show playlist by default
+          playlist-visible = true;
+          # Use dark theme by default
+          dark-theme = true;
+
+          # Extra mpv options - Can pass command line options for mpv
+          extra-mpv-options = "--hwdec=auto --vo-gpu";
+        };
       };
     };
   };

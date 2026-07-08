@@ -94,8 +94,8 @@ in
             #  				"$menu" = "pkill wofi ; wofi --show drun --allow-images";
             #  				"$cliphist" = "pkill wofi ; cliphist list | wofi --dmenu | cliphist decode | wl-copy";
             #				"$printscreen" = "bash -c 'grim -g \"$(slurp -w 0)\" - | swappy -f -'";
-            "$menu" = "noctalia-shell ipc call launcher toggle";
-            "$cliphist" = "noctalia-shell ipc call launcher wl-clipboard";
+            "$menu" = "noctalia msg panel-toggle launcher";
+            "$cliphist" = "noctalia msg panel-toggle clipboard";
 
             # Autostart
             exec-once = [

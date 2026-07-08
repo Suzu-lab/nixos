@@ -1,0 +1,86 @@
+# Local AI companion stack — persistent, reboot-surviving definition.
+# Consolidates everything we wired up by hand: the shared network, the tuned
+# llama-server flags, OLV's mounts + OMP threads, and restart policies so the
+# whole stack comes back on its own after a reboot or crash.
+#
+#   Start:   docker compose -f ~/nixos/modules/ai/companion/docker-compose.yml up -d
+#   Stop:    docker compose -f ~/nixos/modules/ai/companion/docker-compose.yml down
+#   Logs:    docker compose -f ~/nixos/modules/ai/companion/docker-compose.yml logs -f
+#
+# This compose file and conf.yaml live in the nixos repo (backed up on GitHub) and ARE
+# the live files — conf.yaml is mounted into OLV from here, so edit it here + restart.
+# Big data (models, TTS voices, whisper models, OLV source clone) stays on the NVMe.
+#
+# restart: unless-stopped => Docker auto-starts these when the daemon starts on boot
+# (NixOS enables docker.service), and restarts them if they crash — unless you ran
+# `down`/`stop` explicitly. Services reach each other by name on the default network,
+# so OLV's conf.yaml uses http://llama:8080/v1 (service name = hostname).
+
+name: companion
+
+services:
+  # llama-swap (Phase 7): OpenAI-compatible proxy that loads/unloads llama-server on demand by
+  # the request's `model` field. Profiles live in llama-swap.yaml (mounted at /app/config.yaml):
+  #   chat = VL MoE on GPU (daily driver) · chat-cpu = text-only on CPU for gaming (frees the GPU).
+  # Enables gaming mode (unload / CPU-fallback) + a future big "smart" model, without restart.
+  llama-swap:
+    image: ghcr.io/mostlygeek/llama-swap:vulkan   # bundles /app/llama-server (llama.cpp) + libs
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri              # RADV Vulkan GPU access (no ROCm on host)
+    volumes:
+      - /home/suzu/ai-models/models:/models
+      - /home/suzu/nixos/modules/ai/companion/llama-swap.yaml:/app/config.yaml
+    ports:
+      - "127.0.0.1:8080:8080"          # host access for ask-screen / tuning; llama-swap proxies to the model
+
+  # Natural local TTS (Phase 4). Kokoro (82M) via an OpenAI-compatible server; OLV's
+  # openai_tts backend points at http://kokoro:8880/v1. CPU image — fast + no torch/AMD pain.
+  kokoro:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:v0.2.2
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8880:8880"   # host access for the ask-screen hotkey's TTS (OLV uses the internal name)
+
+  # Self-hosted metasearch (Phase 5). The mcp-searxng tool (run inside OLV) queries this
+  # instance's JSON API by service name; SearXNG fans out to public engines. See
+  # searxng-settings.yml (json format on, limiter off).
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    volumes:
+      - /home/suzu/nixos/modules/ai/companion/searxng-settings.yml:/etc/searxng/settings.yml
+    ports:
+      - "127.0.0.1:8888:8080"          # host access for debugging; MCP uses the internal name
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8888/
+
+  olv:
+    image: open-llm-vtuber:local
+    restart: unless-stopped
+    command: ["python3", "run_server.py"]
+    environment:
+      OMP_NUM_THREADS: "16"            # CTranslate2 (faster-whisper) thread count
+    ports:
+      - "127.0.0.1:12393:12393"
+    volumes:
+      - /home/suzu/nixos/modules/ai/companion/conf.yaml:/app/conf.yaml
+      - /home/suzu/nixos/modules/ai/companion/mcp_servers.json:/app/mcp_servers.json
+      - /home/suzu/nixos/modules/ai/companion/searxng_mcp.py:/app/searxng_mcp.py
+      - /home/suzu/nixos/modules/ai/companion/memory_mcp.py:/app/memory_mcp.py
+      # Patched OLV source: normalize the server-VAD (raw-audio-data) audio to [-1,1] before ASR
+      # (upstream feeds int16-scaled floats -> Whisper detects wrong language + decodes slowly).
+      # Overrides the baked file without an image rebuild; the edit also lives in the build clone.
+      - /home/suzu/ai-models/olv/app/src/open_llm_vtuber/websocket_handler.py:/app/src/open_llm_vtuber/websocket_handler.py:ro
+      # Patched OLV source: retain image_url in conversation memory so follow-up questions
+      # about a picture still see it (upstream drops the image, flattening to text).
+      - /home/suzu/ai-models/olv/app/src/open_llm_vtuber/agent/agents/basic_memory_agent.py:/app/src/open_llm_vtuber/agent/agents/basic_memory_agent.py:ro
+      - /home/suzu/ai-models/tts:/app/tts_models
+      - /home/suzu/ai-models/olv/models:/app/models
+      - /home/suzu/ai-models/olv/uv-cache:/root/.cache/uv   # persist uvx-downloaded MCP tools
+      - /home/suzu/ai-models/memory:/app/memory             # long-term memory SQLite store (shared w/ consolidation)
+      - /home/suzu/ai-models/olv/chat_history:/app/chat_history  # persist chat logs (survives recreate + read by consolidation)
+    depends_on:
+      - llama-swap                     # start ordering only; OLV tolerates it not-yet-ready
+      - kokoro
+      - searxng

@@ -9,14 +9,13 @@
     hm.programs.niri.settings.binds = with config.lib.niri.actions; {
       "Mod+T".action.spawn = "kitty";
       "Mod+Shift+Slash".action.show-hotkey-overlay = [ ]; # Shows the hotkey overlay when pressing Super+?
-      # Uses the Noctalia-shell launcher
+      # Uses the Noctalia launcher (5.0.0: `noctalia msg panel-toggle <id>`)
       "Mod+R".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
+        "noctalia"
+        "msg"
+        "panel-toggle"
         "launcher"
-        "toggle"
-      ]; 
+      ];
       "Mod+Q" = {
         repeat = false;
         action.close-window = [ ];
@@ -26,7 +25,7 @@
         repeat = false;
         action.toggle-overview = [ ];
       };
-      "Mod+E".action.spawn = "thunar";
+      "Mod+E".action.spawn = "nemo";
 
       # Binds for Niriswitcher
       "Alt+Tab" = {
@@ -116,6 +115,26 @@
 
       # Toggle tabbed column display mode. Displays the windows in a column as tabs instead of stacked
       "Mod+W".action.toggle-column-tabbed-display = [ ];
+
+      # AI companion vision: retarget niri's Dynamic Cast Target on the fly (share it once
+      # to her screen-share, then point her eyes with these). See modules/ai/companion.
+      "Mod+Shift+C".action.set-dynamic-cast-window = [ ];   # "look at this window"
+      "Mod+Shift+M".action.set-dynamic-cast-monitor = [ ];  # "watch this screen"
+      "Mod+Shift+X".action.clear-dynamic-cast-target = [ ]; # blank her view
+
+      # "Aria, look at my screen" — captured straight INTO the conversation (via the app's
+      # control channel), so she answers in her voice/persona and follow-ups keep the image.
+      # Mod+A = whole screen, Mod+Shift+A = drag-select a region. (companion-ctl; app must be running.)
+      # The standalone `ask-screen` command still exists for a quick one-shot outside the app.
+      "Mod+A".action.spawn = [ "companion-ctl" "look" ];
+      "Mod+Shift+A".action.spawn = [ "companion-ctl" "look-region" ];
+
+      # Summon / hide the companion's text prompt (replaces the Wayland-blocked Super+G).
+      "Mod+G".action.spawn = [ "companion-ctl" "toggle-prompt" ];
+
+      # Launch / relaunch the companion Electron app (dev launcher; idempotent — restarts her).
+      # M4 replaces this with a packaged binary + autostart on the Y70.
+      "Mod+Shift+G".action.spawn = [ "bash" "/home/suzu/nixos/modules/ai/companion/client/run.sh" ];
 
       # Enables you to escape from applications that may force Niri to stop processing shortcuts (like remote desktop and KVM)
       "Mod+Escape" = {

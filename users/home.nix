@@ -7,13 +7,14 @@
 }:
 {
 
-  users.users.suzu = {
+  users.users.${username} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
       "networkmanager"
       "render"
       "video"
+      "i2c" # DDC/CI monitor brightness via ddcutil (hardware.i2c.enable adds the group + udev)
     ];
     ignoreShellProgramCheck = true;
     shell = pkgs.fish; # Defines fish as default user shell
@@ -33,5 +34,9 @@
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  # If an unmanaged file (e.g. a runtime-written settings.json) collides with a
+  # Home Manager-managed one, rename it to <file>.hm-bak instead of aborting the
+  # activation. Keeps rebuilds from failing on first-time takeovers.
+  home-manager.backupFileExtension = "hm-bak";
   
 }

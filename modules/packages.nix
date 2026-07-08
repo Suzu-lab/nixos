@@ -3,6 +3,11 @@
   ...
 }:
 {
+  # DDC/CI monitor brightness (Noctalia's brightness slider uses ddcutil): load the i2c-dev
+  # kernel module and create /dev/i2c-* owned by GROUP="i2c" (suzu is added to i2c in
+  # users/home.nix). Installing the ddcutil package alone does nothing without this.
+  hardware.i2c.enable = true;
+
   # Base packages used at system level
   environment.systemPackages = with pkgs; [
     btop
@@ -12,6 +17,7 @@
     coreutils
     cpu-x
     curl
+    ddcutil # Utility for adjusting monitor settings through the system
     fastfetch
     file
     git
@@ -33,6 +39,7 @@
     universal-android-debloater
 
     # AI stuff
+    amdgpu_top # GPU/VRAM monitor (reads amdgpu driver directly; has a --gui mode). Used for --n-cpu-moe tuning and the case-screen dashboard.
     #rocmPackages.amdsmi
     #rocmPackages.rocminfo
     #clinfo
@@ -44,10 +51,10 @@
       #################################################################
       # User programs
       #################################################################
-      imv
       octave # math plotting program for uni work
       qbittorrent # torrent client
       pinta # simple image editor
+      pkgsRocm.blender
 
       # Shell for running python
       conda

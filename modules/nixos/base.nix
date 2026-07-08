@@ -1,9 +1,6 @@
 # Base configuration file common to any system I use
 
 {
-  inputs,
-  config,
-  lib,
   pkgs,
   username,
   ...
@@ -65,20 +62,10 @@
     useUserPackages = true;
   };
   
-  # Enable cache server to download binaries without needing to compile everything
+  # Nix daemon settings. cache.nixos.org and its key are on by default, so we
+  # only need to add ourselves as a trusted user, enable flakes, and tidy up.
   nix.settings = {
     trusted-users = [ username ];
-    substituters = [
-      "https://cache.nixos.org"
-    ];
-
-    trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    ];
-  };
-
-  # Nix flakes
-  nix.settings = {
     experimental-features = [
       "nix-command"
       "flakes"

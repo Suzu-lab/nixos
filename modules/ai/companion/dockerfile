@@ -1,0 +1,90 @@
+# Base image
+FROM nvidia/cuda:12.6.0-cudnn-runtime-ubuntu22.04 AS base
+
+# Set noninteractive mode for apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update and install dependencies
+# NOTE (local patches — AMD/NixOS host, non-macOS, Python version mismatch):
+#  - base image ships no python3/curl/git; add them.
+#  - upstream requirements.txt is pinned against Python >=3.11 (e.g. sherpa-onnx==1.11.3
+#    has no cp310 wheel), but ubuntu22.04 defaults to python3.10. Install python3.11 from
+#    deadsnakes and make it the default python3 so the pinned wheels resolve.
+RUN apt-get -o Acquire::AllowInsecureRepositories=true update && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common curl git ca-certificates build-essential && \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3.11 python3.11-dev python3.11-venv && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
+    update-alternatives --set python3 /usr/bin/python3.11 && \
+    apt-get install -y libxcb-xfixes0 libxcb-shape0 || true && \
+    apt-get install -y --no-install-recommends ffmpeg || true && \
+    apt --fix-broken install -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install common dependencies
+COPY requirements.txt /tmp/
+
+# Install pip
+# NOTE (local patch): strip macOS-only pyobjc lines (the lockfile has no platform markers),
+# pin setuptools<80 so pkg_resources still exists for sdist builds, install via python3
+# (=3.11) using -m pip, and drop py3-tts (unused pyttsx3 fork that also drags in pyobjc).
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3 - && \
+    python3 -m pip install --root-user-action=ignore --no-cache-dir "setuptools<80" wheel && \
+    sed -i '/^pyobjc/d; s/^sherpa-onnx==.*/sherpa-onnx==1.10.46/' /tmp/requirements.txt && \
+    python3 -m pip install --root-user-action=ignore --no-cache-dir -r /tmp/requirements.txt && \
+    python3 -m pip install --root-user-action=ignore --no-cache-dir funasr modelscope huggingface_hub pywhispercpp torch torchaudio edge-tts azure-cognitiveservices-speech
+
+# NOTE (local patch): OLV imports `mcp` unconditionally at startup (mcpp/mcp_client.py),
+# but the upstream requirements.txt lockfile omits it. Install it explicitly, then pin
+# starlette/uvicorn/anyio back to the lockfile versions — mcp pulls a newer starlette
+# (>=0.47) that drops Router's `on_startup`, which breaks fastapi 0.115.12 at startup.
+RUN python3 -m pip install --root-user-action=ignore --no-cache-dir mcp && \
+    python3 -m pip install --root-user-action=ignore --no-cache-dir \
+        "starlette==0.46.1" "uvicorn==0.34.0" "anyio==4.9.0"
+
+# NOTE (local patch): faster-whisper (CTranslate2) ASR backend. Much lower latency than
+# whisper.cpp for short multilingual utterances: uses all CPU cores, int8, and processes
+# the real audio length instead of padding to 30s. OLV ships the backend; just add the pkg.
+RUN python3 -m pip install --root-user-action=ignore --no-cache-dir faster-whisper
+
+# NOTE (local patch): uv/uvx runtime for MCP tool servers (Phase 5 web search).
+# OLV's mcp_servers.json launches MCP servers via `uvx <pkg>` (e.g. uvx mcp-searxng);
+# the base image has no uv. uvx fetches the tool from PyPI on first run (cache it via a
+# mounted /root/.cache/uv volume so it isn't re-downloaded on every container recreate).
+RUN python3 -m pip install --root-user-action=ignore --no-cache-dir uv
+
+# MeloTTS: intentionally NOT installed here. Its `pip install -e .` clobbers OLV's pinned
+# deps (fastapi 0.115 -> 0.139, transformers, etc.) and breaks the server. Phase 2 uses
+# edge_tts; local TTS (MeloTTS/sherpa_onnx_tts/GPT-SoVITS) is handled in Phase 3, isolated.
+
+# Whisper variant
+FROM base AS whisper
+ARG INSTALL_ORIGINAL_WHISPER=false
+RUN if [ "$INSTALL_WHISPER" = "true" ]; then \
+        python3 -m pip install --root-user-action=ignore --no-cache-dir openai-whisper; \
+    fi
+
+# Bark variant
+FROM whisper AS bark
+ARG INSTALL_BARK=false
+RUN if [ "$INSTALL_BARK" = "true" ]; then \
+        python3 -m pip install --root-user-action=ignore --no-cache-dir git+https://github.com/suno-ai/bark.git; \
+    fi
+
+# Final image
+FROM bark AS final
+
+# Copy application code to the container
+COPY . /app
+
+# Set working directory
+WORKDIR /app
+
+# Expose port 12393 (the new default port)
+EXPOSE 12393
+
+# NOTE (local patch): v1.2.1's entry script is run_server.py, not server.py.
+CMD ["python3", "run_server.py"]

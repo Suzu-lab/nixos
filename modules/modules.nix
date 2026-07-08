@@ -19,17 +19,19 @@
     ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
     ./nixos/netdata.nix # Metrics tool with web interface accessible through port 19999
     ./nixos/networking.nix
+    ./nixos/openrgb.nix # RGB control for the motherboard, RAM and GPU
 
     # Window managers
     ./desktop/hyprland/hyprland.nix
     ./desktop/niri/niri.nix
 
     # Shells/bars
-    ./desktop/noctalia.nix
+    ./desktop/noctalia/noctalia.nix
 
     # Desktop configs
     ./desktop/desktop-entries.nix # Customized .desktop entries
     ./desktop/fcitx5.nix # Input method for language support
+    ./desktop/opendeck.nix # OpenDeck (Ajazz AKP03E stream deck) + udev rule
     ./desktop/xdg.nix # Configuration for file associations
 
     # Themes
@@ -47,13 +49,14 @@
     ./programs/chromium.nix # Web browser for communication webapps
     ./programs/gthumb.nix # Image viewer
     ./programs/kitty.nix  # Terminal
+    ./programs/nemo.nix # File manager
     ./programs/onlyoffice.nix
-    ./programs/thunar.nix # File manager
     ./programs/vscodium.nix
     ./programs/zathura.nix  # Light and fast document viewer
     ./programs/zen.nix  # Backup browser
 
     # AI stuff
+    ./ai/companion-host.nix # Docker host prep for the containerized AI companion stack
 #    ./ai/comfyui.nix  # Stable diffusion with PyTorch and ComfyUI
 #    ./ai/ollama.nix   # LLM service running locally
 #    ./ai/webui.nix    # Web interface for use with ollama

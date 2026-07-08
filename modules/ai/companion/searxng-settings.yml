@@ -1,0 +1,20 @@
+# SearXNG config for the local AI companion (Phase 5 web search).
+# Mounted at /etc/searxng/settings.yml in the searxng container. use_default_settings
+# inherits all upstream defaults; we only override what the MCP search tool needs.
+use_default_settings: true
+
+server:
+  # Random per-install secret (required by SearXNG). Regenerate with:
+  #   head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n'
+  secret_key: "484a12a619adccc8149fbe40c1c358ada6b948316581daf95d2e61986aa79939"
+  # Disable the bot/rate limiter: the MCP tool queries the JSON API server-to-server,
+  # which the limiter would otherwise reject (HTTP 403). Safe here — bound to localhost
+  # / the internal docker network only, never exposed to the internet.
+  limiter: false
+  image_proxy: false
+
+search:
+  # The MCP search tool needs the JSON API; the default only enables 'html'.
+  formats:
+    - html
+    - json

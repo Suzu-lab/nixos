@@ -1,15 +1,21 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
   ...
 }:
+let
+  cfg = config.suzu.programs.zathura;
+in
 {
-  hm.programs.zathura = {
-    enable = true;
+  options.suzu.programs.zathura.enable = lib.mkEnableOption "Zathura document viewer";
 
-    package = (pkgs.zathura.override { plugins = with pkgs.zathuraPkgs; [ zathura_pdf_mupdf ]; });
+  config = lib.mkIf cfg.enable {
+    hm.programs.zathura = {
+      enable = true;
 
+      package = (pkgs.zathura.override { plugins = with pkgs.zathuraPkgs; [ zathura_pdf_mupdf ]; });
+
+    };
   };
 }

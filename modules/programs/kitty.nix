@@ -1,9 +1,16 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
+let
+  cfg = config.suzu.programs.kitty;
+in
 {
-  hm.programs.kitty = {
-    enable = true;
-    shellIntegration.enableFishIntegration = true;
+  options.suzu.programs.kitty.enable = lib.mkEnableOption "Kitty terminal";
 
-    font.name = "Noto Mono";
+  config = lib.mkIf cfg.enable {
+    hm.programs.kitty = {
+      enable = true;
+      shellIntegration.enableFishIntegration = true;
+
+      font.name = "Noto Mono";
+    };
   };
 }

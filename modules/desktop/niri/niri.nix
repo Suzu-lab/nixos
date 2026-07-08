@@ -30,7 +30,7 @@ in
 
     programs.niri.enable = true;
     nixpkgs.overlays = [ inputs.niri.overlays.niri ];
-    programs.niri.package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-stable;
+    programs.niri.package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
 
     hm = {
       # Global variables for forcing wayland wherever possible
@@ -73,10 +73,15 @@ in
             warp-mouse-to-focus.enable = true; # makes cursor move to the newly focused window
             focus-follows-mouse.enable = true; # makes so the window focus automatically follows the mouse cursor;
           };
-          spawn-at-startup = [ 
-            { 
-              command = ["noctalia-shell"];
+          spawn-at-startup = [
+            {
+              # Noctalia 5.0.0 renamed the binary from "noctalia-shell" to "noctalia".
+              command = ["noctalia"];
             }
+          ] ++ lib.optionals config.suzu.ai.companionHost.enable [
+            # Autostart the AI companion. The window rule below pins her avatar fullscreen on
+            # the Hyte Y70 (DP-2); the app retries the backend WS until the docker stack is up.
+            { command = [ "companion" ]; }
           ];
           # Window rules recommended by Noctalia-shell
           window-rules = [
@@ -93,10 +98,45 @@ in
               clip-to-geometry = true;
             }
             {
+              background-effect = {
+                blur = true;
+                xray = false;
+              };
+            }
+            {
               matches = [ { app-id = "kitty"; } ];
               opacity = 0.9;
             }
+            {
+              # Float Nemo's Properties dialog (glance-and-close) instead of
+              # letting Niri tile it as a new column. The dialog shares Nemo's
+              # app-id, so we also match its title, which contains "Properties"
+              # (the main window's title is the folder name).
+              matches = [ { app-id = "^nemo$"; title = "Properties"; } ];
+              open-floating = true;
+            }
+            {
+              # Privacy for the AI companion's screen vision (Phase 7): render these
+              # windows as black rectangles in screen-captures/screenshots only, so the
+              # vision model structurally cannot see secrets even mid screen-share.
+              matches = [ { app-id = "(?i)keepassxc|bitwarden|1password|proton.?pass|signal"; } ];
+              block-out-from = "screen-capture";
+            }
+            {
+              # AI companion avatar: pin it fullscreen on the Hyte Y70 touchscreen (DP-2).
+              matches = [ { app-id = "^companion-client$"; title = "Avatar$"; } ];
+              open-on-output = "DP-2";
+              open-fullscreen = true;
+            }
+            {
+              # AI companion text prompt: floating panel on the main screen (summon: Mod+G).
+              matches = [ { app-id = "^companion-client$"; title = "Prompt$"; } ];
+              open-floating = true;
+            }
           ];
+
+          # Adds correct xwayland satellite path
+          xwayland-satellite.path = "${lib.getExe pkgs.xwayland-satellite-unstable}";
 
           debug = {
             # Allows notification actions and window activation from Noctalia
@@ -106,8 +146,15 @@ in
           # Sets up blurred wallpapers in Overview
           layer-rules = [
             {
-              matches = [ { namespace = "^noctalia-overview*"; } ];
+              matches = [ { namespace = "^noctalia-backdrop*"; } ];
               place-within-backdrop = true;
+            }
+            {
+              matches = [ { namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"; } ];
+              background-effect = {
+                xray = false;
+                # blur = false;
+              };
             }
           ];
         };

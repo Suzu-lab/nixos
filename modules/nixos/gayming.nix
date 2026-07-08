@@ -1,8 +1,13 @@
 # All the packages and configs required for some hardcore gayming
-{ config, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.suzu.system.gaming;
+in
 {
-  
-  config = {
+  options.suzu.system.gaming.enable =
+    lib.mkEnableOption "Steam, gamescope, gamemode and friends";
+
+  config = lib.mkIf cfg.enable {
     programs.gamemode.enable = true;
 
     # Install Steam and open firewall rules for it

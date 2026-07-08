@@ -1,0 +1,18 @@
+{
+  "mcp_servers": {
+    "searxng": {
+      "command": "python3",
+      "args": ["/app/searxng_mcp.py"],
+      "env": {
+        "SEARXNG_URL": "http://searxng:8080"
+      }
+    },
+    "memory": {
+      "command": "python3",
+      "args": ["/app/memory_mcp.py"],
+      "env": {
+        "MEMORY_DB": "/app/memory/memory.db"
+      }
+    }
+  }
+}
