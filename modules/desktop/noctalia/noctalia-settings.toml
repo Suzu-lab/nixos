@@ -10,7 +10,7 @@ enabled = false
 end = [ "tray", "notifications", "clipboard", "network", "volume", "brightness", "clock", "session" ]
 margin_edge = 2
 margin_ends = 7
-start = [ "launcher", "media", "control-center" ]
+start = [ "launcher", "media", "control-center", "sysmon" ]
 thickness = 30
 
     [bar.widgets.monitor.DP-1]
@@ -142,6 +142,9 @@ screen_time_enabled = true
     confirm_region = true
     directory = "~/Pictures/Screenshots"
 
+[system.monitor]
+gpu_poll_seconds = 2.0
+
 [theme]
 builtin = "Catppuccin"
 community_palette = "Oxocarbon"
@@ -190,6 +193,9 @@ transition_on_startup = true
 [widget.cat]
 scale = 2.5
 type = "noctalia/bongocat:cat"
+
+[widget.sysmon]
+stat = "gpu_vram"
 
 [widget.workspaces]
 display = "none"
