@@ -20,9 +20,11 @@ name: companion
 
 services:
   # llama-swap (Phase 7): OpenAI-compatible proxy that loads/unloads llama-server on demand by
-  # the request's `model` field. Profiles live in llama-swap.yaml (mounted at /app/config.yaml):
-  #   chat = VL MoE on GPU (daily driver) · chat-cpu = text-only on CPU for gaming (frees the GPU).
-  # Enables gaming mode (unload / CPU-fallback) + a future big "smart" model, without restart.
+  # the request's `model` field. OLV always requests model `chat`; which config `chat` resolves to
+  # is swapped by `companion-ctl gpu-free|gpu-back` via the active.yaml symlink (→ llama-swap.yaml
+  # GPU-VL, or llama-swap-cpu.yaml CPU-text). Swapping restarts ONLY llama-swap, so OLV keeps its
+  # conversation. The symlink lives on the NVMe and resets to GPU on nixos activation (tmpfiles L+
+  # in companion-host.nix).
   llama-swap:
     image: ghcr.io/mostlygeek/llama-swap:vulkan   # bundles /app/llama-server (llama.cpp) + libs
     restart: unless-stopped
@@ -30,7 +32,7 @@ services:
       - /dev/dri:/dev/dri              # RADV Vulkan GPU access (no ROCm on host)
     volumes:
       - /home/suzu/ai-models/models:/models
-      - /home/suzu/nixos/modules/ai/companion/llama-swap.yaml:/app/config.yaml
+      - /home/suzu/ai-models/llama-swap/active.yaml:/app/config.yaml   # symlink → GPU or CPU config
     ports:
       - "127.0.0.1:8080:8080"          # host access for ask-screen / tuning; llama-swap proxies to the model
 
@@ -49,7 +51,9 @@ services:
     image: searxng/searxng:latest
     restart: unless-stopped
     volumes:
-      - /home/suzu/nixos/modules/ai/companion/searxng-settings.yml:/etc/searxng/settings.yml
+      # sops-nix renders settings.yml with the secret injected (repo file is a @SECRET_KEY@ template);
+      # see modules/nixos/secrets.nix. Needs `nixos-rebuild switch` to produce this path.
+      - /run/secrets/rendered/searxng-settings.yml:/etc/searxng/settings.yml
     ports:
       - "127.0.0.1:8888:8080"          # host access for debugging; MCP uses the internal name
     environment:

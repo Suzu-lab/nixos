@@ -147,7 +147,7 @@ character_config:
         llm_api_key: 'local'
         organization_id: null
         project_id: null
-        model: 'chat-cpu' # llama-swap routes by model name: 'chat' = VL GPU profile (see llama-swap.yaml)
+        model: 'chat' # ALWAYS 'chat' — gaming swaps what `chat` runs (GPU/CPU) at the llama-swap layer, not here
         temperature: 0.85 # value between 0 to 2
         interrupt_method: 'user'
         # This is the method to use for prompting the interruption signal. 

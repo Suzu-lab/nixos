@@ -81,6 +81,12 @@ in
       "src"
       "avatar"             # the companion's VRM model (model.vrm) — read by the Electron client
       "avatar/animations"  # optional authored .vrma clips (idle.vrma, <emotion>.vrma) the client plays
+    ]
+    # The llama-swap active config is a symlink the gaming toggle repoints (GPU ↔ CPU). `L+` forces
+    # it back to the GPU config on every activation, so a nixos-rebuild / reboot defaults to the
+    # daily driver (vision) even if she was left in CPU/gaming mode. compose mounts this symlink.
+    ++ [
+      "L+ ${cfg.dataDir}/llama-swap/active.yaml - - - - /home/${username}/nixos/modules/ai/companion/llama-swap.yaml"
     ];
 
     # Sleep-time memory consolidation (see modules/ai/companion/consolidate.py):

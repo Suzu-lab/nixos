@@ -22,20 +22,23 @@
 set -euo pipefail
 base="http://127.0.0.1:12395"        # Electron client control channel
 llama="http://127.0.0.1:8080"        # llama-swap proxy
-conf="/home/suzu/nixos/modules/ai/companion/conf.yaml"
-olv="companion-olv-1"
 shot="${XDG_RUNTIME_DIR:-/tmp}/companion-screen.png"
 
-# Switch her LLM between the GPU (chat) and CPU (chat-cpu) profiles: flip OLV's configured model,
-# restart OLV to reload conf, then load the target in llama-swap (which evicts the other → frees
-# or reclaims the GPU). CPU mode keeps her talking with the whole GPU free for a game (no vision).
-set_model() { # $1 = chat | chat-cpu
-  local target="$1" from
-  if [ "$target" = "chat-cpu" ]; then from="chat"; else from="chat-cpu"; fi
-  sed -i "s/model: '$from'/model: '$target'/" "$conf"   # docker restart re-reads the mounted conf
-  docker restart "$olv" >/dev/null
+# GPU ↔ CPU WITHOUT restarting OLV (so her live conversation survives): OLV always requests model
+# `chat`; we swap which config that name resolves to by repointing the active.yaml symlink, then
+# restart ONLY llama-swap. OLV's process (and its in-memory conversation) is never touched; its next
+# request transparently hits the new backend. See llama-swap.yaml and docker-compose.yml.
+llamaswap="companion-llama-swap-1"
+active="/home/suzu/ai-models/llama-swap/active.yaml"
+cfg_gpu="/home/suzu/nixos/modules/ai/companion/llama-swap.yaml"       # chat = VL MoE on GPU
+cfg_cpu="/home/suzu/nixos/modules/ai/companion/llama-swap-cpu.yaml"   # chat = text MoE on CPU
+
+# Repoint the active config symlink, restart only llama-swap, warm `chat` so she's ready.
+swap_llama() { # $1 = target config file
+  ln -sfn "$1" "$active"
+  docker restart "$llamaswap" >/dev/null
   curl -sf -m300 "$llama/v1/chat/completions" -H 'Content-Type: application/json' \
-    -d "{\"model\":\"$target\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":1}" >/dev/null || true
+    -d '{"model":"chat","messages":[{"role":"user","content":"hi"}],"max_tokens":1}' >/dev/null || true
 }
 notify() { notify-send "$@" 2>/dev/null || true; }
 
@@ -70,11 +73,11 @@ case "${1:-}" in
                  f="${XDG_RUNTIME_DIR:-/tmp}/companion-displays-off"
                  if [ -e "$f" ]; then niri msg action power-on-monitors; rm -f "$f"
                  else niri msg action power-off-monitors; : > "$f"; fi ;;
-  gpu-free)      notify "🎮 Gaming mode" "Freeing the GPU — Reika moving to CPU…"
-                 set_model chat-cpu
-                 notify "🎮 Gaming mode ON" "GPU free. Reika is on CPU (no vision)." ;;
-  gpu-back)      notify "Reika" "Returning to the GPU model…"
-                 set_model chat
+  gpu-free)      notify "🎮 GPU freed" "Moving Reika to CPU (keeping her conversation)…"
+                 swap_llama "$cfg_cpu"
+                 notify "🎮 GPU freed" "Reika on CPU (no vision). GPU free for a game or image gen." ;;
+  gpu-back)      notify "Reika" "Bringing her back to the GPU…"
+                 swap_llama "$cfg_gpu"
                  notify "Reika" "Back on the GPU — vision restored." ;;
   *) echo "usage: companion-ctl {toggle-prompt|show-prompt|hide-prompt|look|look-region|toggle-mic|interrupt|gpu-free|gpu-back|volume <ticks>|mic-gain <ticks>|brightness <ticks>|displays-toggle}" >&2; exit 1 ;;
 esac

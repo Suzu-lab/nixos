@@ -1,13 +1,17 @@
-# llama-swap config — an OpenAI-compatible proxy that loads/unloads llama-server on demand by
-# the request's `model` field. Mounted into the container at /app/config.yaml.
+# llama-swap config — GPU variant (daily driver). An OpenAI-compatible proxy that loads/unloads
+# llama-server on demand by the request's `model` field. Mounted into the container at
+# /app/config.yaml (via the NVMe symlink /home/suzu/ai-models/llama-swap/active.yaml — see below).
 #
-#   chat      = daily driver: the VL MoE (brain + eyes) on the GPU.
-#   chat-cpu  = gaming mode: the text-only abliterated MoE on CPU only, so the whole 16GB GPU
-#               is free for a game (she keeps talking, just without vision, at ~8-15 t/s).
+#   chat = the VL MoE (brain + eyes) on the GPU.
 #
-# OLV (conf.yaml), ask-screen, and consolidate.py all select `chat`. Switch to `chat-cpu` for
-# gaming via `companion-ctl gaming on` (see companion-ctl.sh). Manual unload (free VRAM, she
-# sleeps): POST /api/models/unload.
+# GAMING / GPU-FREE without resetting her conversation: OLV *always* requests model `chat`. To move
+# her to CPU (freeing the GPU for a game or image generation) we DON'T touch OLV — we swap which
+# config the `chat` name resolves to. `companion-ctl gpu-free` repoints the active.yaml symlink to
+# llama-swap-cpu.yaml (where `chat` = a text-only MoE on CPU) and restarts ONLY llama-swap; OLV
+# keeps its process + in-memory conversation and its next request transparently hits the CPU model.
+# `companion-ctl gpu-back` repoints to this file. The symlink resets to GPU on nixos activation
+# (tmpfiles L+ in modules/ai/companion-host.nix). Manual full unload (she sleeps): POST
+# /api/models/unload.
 
 healthCheckTimeout: 600   # a 30B MoE (+ mmproj) loading from NVMe can take a while
 
@@ -22,11 +26,3 @@ models:
       -ngl 999 --n-cpu-moe 30 --no-mmap -c 32768 -fa on -ctk q8_0 -ctv q8_0
       --threads 16 -b 2048 -ub 2048 --jinja
     ttl: 0                # never auto-unload the daily driver
-
-  "chat-cpu":             # gaming mode — text-only MoE on CPU, GPU fully freed (no vision)
-    cmd: >
-      /app/llama-server
-      -m /models/qwen3-30b-a3b-abliterated/Huihui-Qwen3-30B-A3B-Instruct-2507-abliterated.i1-Q4_K_M.gguf
-      --host 127.0.0.1 --port ${PORT}
-      -ngl 0 -c 16384 -fa on --threads 8 --jinja
-    ttl: 0

@@ -1,0 +1,40 @@
+# Baked pip deps for custom-node packs. Workflow: clone a node into custom_nodes/ → add its
+# requirements.txt entries here → `docker compose build` → restart. Never rely on runtime
+# `pip install` (it dies with the container).
+#
+# NEVER add torch / torchvision / torchaudio here — the ROCm base image owns those. A node that
+# pins them gets neutralized the same way the Dockerfile grep-filters ComfyUI's own requirements.
+#
+# --- ComfyUI-Manager (the GUI gateway for installing every other node pack) ---
+# First clone it into the custom_nodes volume, then these deps let it start cleanly:
+#   git clone https://github.com/Comfy-Org/ComfyUI-Manager \
+#     /home/suzu/ai-models/imagegen/custom_nodes/ComfyUI-Manager
+# then `docker compose build && docker compose up -d`.
+GitPython
+PyGithub
+matrix-client==0.4.0
+transformers
+huggingface-hub>0.20
+typer
+rich
+typing-extensions
+toml
+uv
+chardet
+
+# --- ComfyUI-Impact-Pack (FaceDetailer = the ADetailer equivalent) ---
+# Easiest installed later via the ComfyUI-Manager GUI (it pulls its own subpack + deps correctly).
+# If you prefer baking it, clone it into custom_nodes/ and add its requirements here.
+
+# --- SwarmUI's ComfyUI nodes (required to drive this engine from SwarmUI) ---
+# SwarmComfyCommon (the "Swarm core nodes") + SwarmComfyExtra are copied into custom_nodes/ from the
+# SwarmUI repo. Common needs cv2 + imageio_ffmpeg (safetensors/transformers already present); these
+# are light and torch-safe (headless opencv = no libGL needed in the container).
+opencv-python-headless
+imageio-ffmpeg
+# SwarmComfyExtra (background removal, YOLO segmentation) additionally needs the following — heavier
+# (onnxruntime, scipy, etc.) and ultralytics pulls torch deps, so left commented as an opt-in. If you
+# enable them, rebuild and re-verify `torch.cuda.is_available()` is still True (ROCm not clobbered):
+# rembg
+# dill
+# ultralytics

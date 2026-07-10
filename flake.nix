@@ -65,6 +65,13 @@
     # Flake for the Deepcool cooler digital display
     ddl.url = "github:mzonski/deepcool-digital-linux";
 
+    # Declarative secret management — encrypted secrets committed to the repo, decrypted at
+    # activation into /run/secrets using an age key kept only on the machine.
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =

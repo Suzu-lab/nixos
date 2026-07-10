@@ -1,0 +1,11 @@
+# sops-nix configuration. Defines who can decrypt secrets (the recipients) and which files are
+# treated as secrets. The private key lives on the machine only, at ~/.config/sops/age/keys.txt
+# (and is read by NixOS at activation) — it is NEVER committed. To edit a secret:
+#   SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt nix shell nixpkgs#sops -c sops secrets/secrets.yaml
+keys:
+  - &yosai age1u4lw3slt6575fag4sg6en0uqlukycs5v2c3v6hu3yhnhfc7l5vkq84kkrh
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *yosai

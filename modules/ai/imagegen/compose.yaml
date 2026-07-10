@@ -1,0 +1,83 @@
+# Local image-generation stack — ComfyUI engine (SwarmUI frontend added in Phase D).
+#
+#   Build:  docker compose -f ~/nixos/modules/ai/imagegen/compose.yaml build
+#   Start:  docker compose -f ~/nixos/modules/ai/imagegen/compose.yaml up -d
+#   Logs:   docker compose -f ~/nixos/modules/ai/imagegen/compose.yaml logs -f comfyui
+#   Stop:   docker compose -f ~/nixos/modules/ai/imagegen/compose.yaml down
+#
+# Config lives here (git-backed); models + disposable volumes live on the AI NVMe (see .env).
+# Own compose project ("imagegen") → own default network; the flush reaches ComfyUI over the
+# published 127.0.0.1:8188 rather than a shared network. No coupling to the companion stack.
+name: imagegen
+
+services:
+  comfyui:
+    build: .
+    image: localhost/comfyui-rocm:latest
+    container_name: comfyui
+    # GPU passthrough. group_add uses the HOST's numeric GIDs for the device nodes (container
+    # group *names* won't match host GIDs): video=26 owns /dev/dri/card1, render=303 owns
+    # /dev/kfd + /dev/dri/renderD128. Re-check with: stat -c '%g %G' /dev/dri/card1 /dev/kfd
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    # Run as the host user (suzu) so generated images and the ComfyUI db/workflows are owned by you,
+    # not root. group_add still grants GPU device access by the HOST's numeric GIDs (container group
+    # *names* won't match): video=26 owns /dev/dri/card1, render=303 owns /dev/kfd + renderD128.
+    # Re-check with: stat -c '%g %G' /dev/dri/card1 /dev/kfd
+    user: "1000:100"
+    group_add:
+      - "26"    # video
+      - "303"   # render
+    ipc: host
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      # As a non-root user /root isn't writable, so point HOME at the writable cache mount below —
+      # MIOpen/Triton/comgr autotune caches land under /cache and persist (warm-start win).
+      - HOME=/cache
+      # NOTE: do NOT set HSA_OVERRIDE_GFX_VERSION. gfx1201 is native on ROCm ≥ 7, and setting it to an
+      # *empty string* (≠ unset) breaks HIP → "No HIP GPUs are available". Only set it (to 12.0.1) if a
+      # future base image fails to detect the GPU — unnecessary on rocm7.2.4/torch2.9.1.
+    ports:
+      - "127.0.0.1:8188:8188"
+    volumes:
+      - ${AI_MODELS_ROOT}/image:/ComfyUI/models          # checkpoints, loras, vae… (the model tree)
+      - ${AI_MODELS_ROOT}/imagegen/custom_nodes:/ComfyUI/custom_nodes
+      - ${AI_MODELS_ROOT}/imagegen/input:/ComfyUI/input
+      - ${IMAGEGEN_OUTPUT_ROOT}/output:/ComfyUI/output    # generations → HDD RAID1 (see .env)
+      - ${AI_MODELS_ROOT}/imagegen/user:/ComfyUI/user     # saved workflows — back this up
+      # Host-owned cache dir (HOME=/cache) — replaces a root-owned named volume so uid 1000 can write
+      # it. Holds MIOpen/Triton autotune (warm-start) + ComfyUI's --temp-directory (/cache/temp).
+      - ${AI_MODELS_ROOT}/imagegen/cache:/cache
+    restart: unless-stopped
+
+  # Optional A1111-style frontend (Phase D). GPU-less: it drives the comfyui engine over the API
+  # (http://comfyui:8188 on this project's network). Bring it up explicitly the first time to run
+  # the one-time wizard: `docker compose up -d swarmui` (see README).
+  swarmui:
+    build: ./swarmui
+    image: localhost/swarmui:latest
+    container_name: swarmui
+    depends_on: [comfyui]
+    # Run as the host user (suzu) so SwarmUI-generated images (swarm-output/local/) are owned by you,
+    # not root. Needs the app dir chowned in the image (see swarmui/Dockerfile) + a writable HOME
+    # (dotnet/git write there) + Data on a host-owned bind (below).
+    user: "1000:100"
+    environment:
+      - HOME=/swarmcache
+    # Enforce the model-folder paths declaratively from the repo before launch (SwarmUI rewrites
+    # Settings.fds on start and has no per-setting override — see swarmui/entrypoint.sh). Only the
+    # path lines are touched; SwarmUI still owns the rest of its settings.
+    command: bash /swarmui-entrypoint.sh
+    ports:
+      - "127.0.0.1:7801:7801"
+    volumes:
+      - ${AI_MODELS_ROOT}/imagegen/swarm-data:/SwarmUI/Data    # settings/backends persist (host-owned bind)
+      - ${AI_MODELS_ROOT}/imagegen/swarm-cache:/swarmcache     # HOME: dotnet/nuget/git caches (uid 1000)
+      - ./swarmui/entrypoint.sh:/swarmui-entrypoint.sh:ro      # declarative model-path enforcement
+      - ${AI_MODELS_ROOT}/image:/models                        # RW: SwarmUI creates its folder types +
+                                                               # writes model metadata/thumbnails here
+                                                               # (shared with the ComfyUI engine's tree)
+      - ${IMAGEGEN_OUTPUT_ROOT}/swarm-output:/SwarmUI/Output   # generations → HDD RAID1
+    restart: unless-stopped

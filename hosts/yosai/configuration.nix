@@ -95,6 +95,11 @@
   # imperatively via `docker compose`.
   suzu.ai.companionHost.enable = true;
 
+  # Data dirs + stream-deck control for the containerized image-generation stack
+  # (ComfyUI engine + SwarmUI frontend). The stack lives in modules/ai/imagegen/ and
+  # is run imperatively via `docker compose`, like the companion.
+  suzu.ai.imagegenHost.enable = true;
+
   # Legacy native-ROCm AI stack (Ollama/OpenWebUI/ComfyUI). Kept for reference;
   # superseded by the containerized companion above.
 /*  suzu.ai = {

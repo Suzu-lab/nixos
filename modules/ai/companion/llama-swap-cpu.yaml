@@ -1,0 +1,18 @@
+# llama-swap config — CPU variant (gaming / GPU-free mode). Selected by `companion-ctl gpu-free`,
+# which repoints the active.yaml symlink here and restarts ONLY llama-swap (OLV is untouched, so
+# her conversation survives — see llama-swap.yaml for the full explanation).
+#
+# The model is exposed under the SAME name `chat` OLV already requests, so no OLV conf change / no
+# OLV restart is needed. It's the text-only abliterated MoE on CPU (-ngl 0): the whole 16GB GPU is
+# free for a game or image generation, she keeps talking at ~8-15 t/s, just without vision.
+
+healthCheckTimeout: 600
+
+models:
+  "chat":                 # gaming mode — text-only MoE on CPU, GPU fully freed (no vision)
+    cmd: >
+      /app/llama-server
+      -m /models/qwen3-30b-a3b-abliterated/Huihui-Qwen3-30B-A3B-Instruct-2507-abliterated.i1-Q4_K_M.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 0 -c 16384 -fa on --threads 8 --jinja
+    ttl: 0

@@ -4,9 +4,10 @@
 use_default_settings: true
 
 server:
-  # Random per-install secret (required by SearXNG). Regenerate with:
-  #   head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n'
-  secret_key: "484a12a619adccc8149fbe40c1c358ada6b948316581daf95d2e61986aa79939"
+  # Secret injected by sops-nix at activation (see modules/nixos/secrets.nix → sops.templates).
+  # This file is a TEMPLATE: @SECRET_KEY@ is replaced with the decrypted searxng_secret_key and the
+  # rendered result is mounted into the container. No real secret lives in this git-tracked file.
+  secret_key: "@SECRET_KEY@"
   # Disable the bot/rate limiter: the MCP tool queries the JSON API server-to-server,
   # which the limiter would otherwise reject (HTTP 403). Safe here — bound to localhost
   # / the internal docker network only, never exposed to the internet.
