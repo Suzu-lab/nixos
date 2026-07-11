@@ -31,23 +31,35 @@ models:
       -fa on -ctk q8_0 -ctv q8_0
       --jinja
 
+  "magidonia-24b":
+    name: "Magidonia 24B v4.3 — RP (Magistral prose, Cydonia's sibling)"
+    ttl: 900
+    cmd: >
+      /app/llama-server
+      -m /models/rp/TheDrummer_Magidonia-24B-v4.3-IQ4_XS.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 99 --ctx-size 16384
+      -fa on -ctk q8_0 -ctv q8_0
+      --jinja
+
   "magmell-12b":
     name: "Mag-Mell 12B — fast RP / group chats"
     ttl: 900
     cmd: >
       /app/llama-server
-      -m /models/rp/MN-12B-Mag-Mell-R1.Q6_K.gguf
+      -m /models/rp/MN-12B-Mag-Mell-Q6_K.gguf
       --host 127.0.0.1 --port ${PORT}
       -ngl 99 --ctx-size 32768
       -fa on -ctk q8_0 -ctv q8_0
       --jinja
 
   "glm-air-rp":
-    name: "GLM Steam 106B-A12B — slow-burn big brain"
+    name: "GLM Steam v1 106B-A12B — slow-burn big brain"
     ttl: 1800               # 63 GB reload is the expensive one; keep it warm longer.
+    # bartowski ships the Q4_K_M split inside a subfolder; point -m at part 1, llama.cpp finds the rest.
     cmd: >
       /app/llama-server
-      -m /models/rp/GLM-Steam-106B-A12B-Q4_K_M-00001-of-00002.gguf
+      -m /models/rp/TheDrummer_GLM-Steam-106B-A12B-v1-Q4_K_M/TheDrummer_GLM-Steam-106B-A12B-v1-Q4_K_M-00001-of-00002.gguf
       --host 127.0.0.1 --port ${PORT}
       -ngl 99 --n-cpu-moe 99 --ctx-size 32768
       -fa on -ctk q8_0 -ctv q8_0

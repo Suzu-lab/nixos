@@ -28,11 +28,50 @@ else
     "$SF"
 fi
 
-# Enforce AllowIdle on the ComfyUI backend (if configured yet): on a reboot both containers start
-# together and ComfyUI is slower to accept connections (DB migration + node load), so SwarmUI's few
-# fast retries hit "Connection refused" and it gives up permanently. AllowIdle makes an unresponsive
-# backend go idle and AUTO-RECOVER when the API returns, instead of staying errored until a restart.
+# Enforce AllowIdle=FALSE on the ComfyUI backend. Counter-intuitively this is the FIX, not the cause:
+# with AllowIdle=true, SwarmUI drops the backend to an 'idle' state ~5s after every init, and THIS
+# SwarmUI version does NOT wake an idle backend on a generate request — it just answers "No backends
+# available!". (Verified live: AllowIdle=true → backend runs ~5s then sits idle forever, generate
+# fails; AllowIdle=false → backend stays 'running' indefinitely and generates fine.) A single always-on
+# local ComfyUI (restart: unless-stopped, reachable over the compose net) never needs the idle/auto-
+# recover dance; it just needs to stay running. The boot-race case (init hitting ComfyUI before its API
+# is up → 'errored') is handled by the self-heal re-init below, after which — with AllowIdle off — it
+# stays running permanently.
 BF=/SwarmUI/Data/Backends.fds
-[ -f "$BF" ] && sed -i -E 's|^([[:space:]]*AllowIdle:).*|\1 true|' "$BF"
+[ -f "$BF" ] && sed -i -E 's|^([[:space:]]*AllowIdle:).*|\1 false|' "$BF"
+
+# --- Backend self-heal (fixes "SwarmUI can't reach the backend after a PC restart") ----------------
+# On a host reboot Docker's daemon auto-restarts both containers IN PARALLEL with no ordering
+# (depends_on / healthchecks are only honored by `docker compose up`, NOT by boot auto-restart). If
+# SwarmUI inits the backend before ComfyUI's API is up (node-load + DB-migration), the backend lands
+# 'errored' and stays there until a manual restart. A disable→enable TOGGLE forces a clean re-init.
+# This background task waits for ComfyUI to actually answer + SwarmUI's own API to come up, then, if
+# the backend isn't already 'running', toggles it once — after which (AllowIdle=false) it stays
+# running. Detached so it never blocks launch; a no-op on a healthy boot. Self-contained (curl only —
+# no python) so it works however the container was started (compose up OR daemon auto-restart).
+API=http://127.0.0.1:7801
+newsess() { curl -fsS -m5 -X POST "$API/API/GetNewSession" -H 'Content-Type: application/json' -d '{}' 2>/dev/null \
+  | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p'; }
+(
+  # 1) wait until the ComfyUI engine's API genuinely answers (up to ~4 min)
+  for _ in $(seq 1 120); do curl -fsS -m3 http://comfyui:8188/system_stats >/dev/null 2>&1 && break; sleep 2; done
+  # 2) wait until SwarmUI's own API is serving (post-launch/.NET build)
+  for _ in $(seq 1 150); do [ -n "$(newsess)" ] && break; sleep 2; done
+  # give the backend a moment to reach its initial (possibly idle) state, then poke if not running
+  sleep 5
+  sess=$(newsess); [ -z "$sess" ] && exit 0
+  st=$(curl -fsS -m5 -X POST "$API/API/ListBackends" -H 'Content-Type: application/json' \
+        -d "{\"session_id\":\"$sess\",\"nonreal\":true,\"full_data\":true}" 2>/dev/null \
+        | grep -o '"status": *"[^"]*"' | head -1 | sed 's/.*"\([^"]*\)"$/\1/')
+  if [ "$st" != "running" ]; then
+    echo "[self-heal] backend status='$st' after boot — toggling backend 0 to force re-init"
+    curl -fsS -m15 -X POST "$API/API/ToggleBackend" -H 'Content-Type: application/json' \
+      -d "{\"session_id\":\"$sess\",\"backend_id\":\"0\",\"enabled\":false}" >/dev/null 2>&1
+    sleep 2
+    curl -fsS -m15 -X POST "$API/API/ToggleBackend" -H 'Content-Type: application/json' \
+      -d "{\"session_id\":\"$sess\",\"backend_id\":\"0\",\"enabled\":true}" >/dev/null 2>&1
+    echo "[self-heal] backend re-init requested"
+  fi
+) &
 
 exec bash launch-linux.sh --launch_mode none --host 0.0.0.0
