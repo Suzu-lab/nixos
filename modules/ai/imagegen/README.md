@@ -146,6 +146,7 @@ llama-swap's unload. Map it to a spare OpenDeck LCD key (OpenDeck "Run Command" 
 | First gen after start slow, then fast | MIOpen/Triton autotune warmup | Expected; the `miopen-cache` volume persists it — don't delete casually |
 | `ImportError` from a custom node after recreate | deps installed at runtime, died with the container | Add them to `extra-requirements.txt` → rebuild |
 | Model dropdown empty | volume path mismatch | Confirm `.env` `AI_MODELS_ROOT` and that files sit in `image/checkpoints/`, refresh browser |
+| SwarmUI "backend errored" after a **reboot** (ComfyUI itself is up) | Boot race: ComfyUI is slower to accept connections (DB + node load); SwarmUI's fast retries hit "Connection refused" and give up | Fixed by `AllowIdle: true` on the backend (enforced by `swarmui/entrypoint.sh` → auto-recovers when the API returns). If ever stuck: `docker compose restart swarmui`, or the backend's Restart button in the UI |
 
 ## Update procedure
 

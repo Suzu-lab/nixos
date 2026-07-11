@@ -26,6 +26,11 @@
     # which read it from /run/secrets/civitai_api_token. Owned by the user so no sudo is needed.
     secrets.civitai_api_token.owner = username;
 
+    # Hugging Face API token — for authenticated `hf` downloads (higher rate limits / faster). Read
+    # via HF_TOKEN_PATH pointing at this file (set in modules/ai/model-tools.nix); the value never
+    # enters the nix store. Owned by the user so `hf` needs no sudo.
+    secrets.hf_token.owner = username;
+
     # SearXNG's server.secret_key. Not read directly — it's injected into the SearXNG config by the
     # template below (a value-only secret embedded in a config file → needs templating).
     secrets.searxng_secret_key = { };

@@ -100,28 +100,17 @@
   # is run imperatively via `docker compose`, like the companion.
   suzu.ai.imagegenHost.enable = true;
 
-  # Legacy native-ROCm AI stack (Ollama/OpenWebUI/ComfyUI). Kept for reference;
-  # superseded by the containerized companion above.
-/*  suzu.ai = {
-    # LLM service
-    ollama = {
-      enable = true;
-      backend = "rocm";
-      models = [ "llama3.2:3b" "llama3.1:8b-instruct-q4_0" ];
-    };
-    # Web service for LLM
-    webui = {
-      enable = true;
-      openFirewall = false;
-    };
-    # Stable diffusion with PyTorch+ROCm and ComfyUI
-    comfyui = {
-      enable = true;
-      envDir = "/home/suzu/.local/share/comfy-env";
-      workspaceDir = "/home/suzu/ai/comfyui";
-      port = 8188;  # Port of service for web access (local or remote)
-      openFirewall = false;
-    };
-  }; 
-*/  
+  # Data dirs + rp-on/rp-off handoff scripts for the containerized SillyTavern roleplay stack
+  # (dedicated llama-swap on :8081). Lives in modules/ai/roleplay/, run imperatively via
+  # `docker compose`. Independent of the companion — see its README.
+  suzu.ai.roleplayHost.enable = true;
+
+  # Tailscale mesh VPN + phone access (serve) to SillyTavern, SwarmUI, the llama-swap dashboard and
+  # netdata stats — tailnet-only, never LAN/public. Needs a one-time `sudo tailscale up`; see the
+  # module header. This is what lets the phone drive/monitor the stacks from anywhere.
+  suzu.system.remoteAccess.enable = true;
+
+  # Shared model-download CLIs (hf/huggingface-cli + hf-transfer + aria2c) used by all three AI
+  # stacks. hf for Hugging Face weights; aria2c for CivitAI and other direct-URL downloads.
+  suzu.ai.modelTools.enable = true;
 }

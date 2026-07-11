@@ -1,0 +1,66 @@
+# llama-swap config — ROLEPLAY instance (SillyTavern backend). A SECOND, independent llama-swap
+# from the companion's: separate container, separate port (host :8081), separate config. The
+# companion stack (modules/ai/companion/) is never touched — that's the whole point of the split
+# (see the build guide, ~/Projects/local-rp-stack-build-guide.md).
+#
+# WHY NO `groups:` — the companion guide's Phase 1 assumes coexistence (companion + an RP model
+# both resident, evicting nothing). We don't want that: during RP the companion is fully killed
+# (rp-on) to free RAM/CPU for the 106B. So this instance only ever holds ONE model at a time, which
+# is exactly llama-swap's DEFAULT behavior — requesting a new model evicts the previous one. No
+# groups, no persistent/exclusive flags needed. SillyTavern picks the model via the request's
+# `model` field; the dropdown populates from /v1/models.
+#
+# GPU sharing with the companion is by DISCIPLINE, not config: two separate llama-swaps can't see
+# each other's VRAM, so the rp-on/rp-off scripts guarantee the companion is unloaded before an RP
+# model loads, and vice-versa. All handoffs are explicit.
+#
+# Models live under /home/suzu/ai-models/models/rp/ (mounted at /models/rp). Download them first —
+# see the README. Flags mirror the companion's tuned Vulkan setup: -fa on + q8 KV cache.
+
+healthCheckTimeout: 900   # GLM-Air Q4 is ~63 GB split across files; cold load from NVMe is slow.
+
+models:
+  "cydonia-24b":
+    name: "Cydonia 24B v4.3 — RP daily driver"
+    ttl: 900                # bed-reading pauses shouldn't thrash; reload from page cache is ~10-15s.
+    cmd: >
+      /app/llama-server
+      -m /models/rp/TheDrummer_Cydonia-24B-v4.3-IQ4_XS.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 99 --ctx-size 16384
+      -fa on -ctk q8_0 -ctv q8_0
+      --jinja
+
+  "magmell-12b":
+    name: "Mag-Mell 12B — fast RP / group chats"
+    ttl: 900
+    cmd: >
+      /app/llama-server
+      -m /models/rp/MN-12B-Mag-Mell-R1.Q6_K.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 99 --ctx-size 32768
+      -fa on -ctk q8_0 -ctv q8_0
+      --jinja
+
+  "glm-air-rp":
+    name: "GLM Steam 106B-A12B — slow-burn big brain"
+    ttl: 1800               # 63 GB reload is the expensive one; keep it warm longer.
+    cmd: >
+      /app/llama-server
+      -m /models/rp/GLM-Steam-106B-A12B-Q4_K_M-00001-of-00002.gguf
+      --host 127.0.0.1 --port ${PORT}
+      -ngl 99 --n-cpu-moe 99 --ctx-size 32768
+      -fa on -ctk q8_0 -ctv q8_0
+      --threads 12 --jinja
+
+  # Optional floor-reference model (what SpicyChat's cheapest tier runs). Uncomment after download.
+  # "stheno-8b":
+  #   name: "L3 Stheno 8B v3.2 — floor reference"
+  #   ttl: 900
+  #   cmd: >
+  #     /app/llama-server
+  #     -m /models/rp/L3-8B-Stheno-v3.2-Q8_0.gguf
+  #     --host 127.0.0.1 --port ${PORT}
+  #     -ngl 99 --ctx-size 16384
+  #     -fa on -ctk q8_0 -ctv q8_0
+  #     --jinja

@@ -21,6 +21,7 @@
     ./nixos/networking.nix
     ./nixos/openrgb.nix # RGB control for the motherboard, RAM and GPU
     ./nixos/secrets.nix # sops-nix declarative secret management (encrypted secrets in secrets/)
+    ./nixos/tailscale.nix # Tailscale VPN + phone access (serve) to the AI stacks and stats
 
     # Window managers
     ./desktop/hyprland/hyprland.nix
@@ -56,11 +57,10 @@
     ./programs/zathura.nix  # Light and fast document viewer
     ./programs/zen.nix  # Backup browser
 
-    # AI stuff
+    # AI stuff (all containerized — host stays ROCm-free; see each module + its README)
     ./ai/companion-host.nix # Docker host prep for the containerized AI companion stack
     ./ai/imagegen-host.nix  # Data dirs + control for the containerized ComfyUI/SwarmUI image stack
-#    ./ai/comfyui.nix  # Stable diffusion with PyTorch and ComfyUI
-#    ./ai/ollama.nix   # LLM service running locally
-#    ./ai/webui.nix    # Web interface for use with ollama
+    ./ai/roleplay-host.nix  # Data dirs + control + phone access for the containerized SillyTavern RP stack
+    ./ai/model-tools.nix    # Shared model-download CLIs (hf + hf-transfer + aria2) for all AI stacks
   ];
 }

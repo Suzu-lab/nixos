@@ -1,0 +1,51 @@
+# Local RP stack — SillyTavern + a dedicated llama-swap, persistent & reboot-surviving.
+# A SEPARATE compose project from the companion (name: companion) and the imagegen stack, so the
+# three are fully decoupled — they only share the host baseline (Docker, amdgpu firmware, /dev/dri)
+# and the AI NVMe. The companion never notices this stack exists.
+#
+#   Start:   docker compose -f ~/nixos/modules/ai/roleplay/docker-compose.yml up -d
+#   Stop:    docker compose -f ~/nixos/modules/ai/roleplay/docker-compose.yml down
+#   Logs:    docker compose -f ~/nixos/modules/ai/roleplay/docker-compose.yml logs -f
+#
+# This compose file + llama-swap-rp.yaml live in the nixos repo (backed up on GitHub) and ARE the
+# live files. Big data (models, SillyTavern characters/chats/lorebooks/extensions) stays on the
+# NVMe under ~/ai-models/. Services reach each other by name on the default project network, so
+# SillyTavern's backend URL is http://llama-swap:8080/v1 (service name = hostname) — NO
+# host.docker.internal, NO host-port rebind, NO firewall rule for the Docker subnet needed.
+
+name: roleplay
+
+services:
+  # Dedicated RP inference proxy. Same image as the companion's llama-swap (bundles llama.cpp +
+  # Vulkan), but its OWN instance/config/port. Requesting a model in llama-swap-rp.yaml cold-loads
+  # it and evicts the previous one (default single-model behavior — see that file for why no groups).
+  llama-swap:
+    image: ghcr.io/mostlygeek/llama-swap:vulkan
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri              # RADV Vulkan GPU access (no ROCm on host), like the companion
+    volumes:
+      - /home/suzu/ai-models/models:/models
+      - /home/suzu/nixos/modules/ai/roleplay/llama-swap-rp.yaml:/app/config.yaml:ro
+    ports:
+      # Bound to localhost only (like the companion/imagegen stacks). Phone access is via Tailscale
+      # serve (modules/nixos/tailscale.nix), which proxies this onto the tailnet with HTTPS — so the
+      # dashboard is NEVER reachable on the LAN or the public internet, only your own tailnet devices.
+      - "127.0.0.1:8081:8080"
+
+  # SillyTavern — CPU-only Node frontend (characters, lorebooks, group chat, the memory extensions).
+  # No GPU. Reaches the RP backend over the project network at http://llama-swap:8080/v1.
+  sillytavern:
+    image: ghcr.io/sillytavern/sillytavern:latest   # pin to a release tag after first pull (README §pins)
+    restart: unless-stopped
+    depends_on:
+      - llama-swap                     # start ordering only; ST tolerates the backend not-yet-ready
+    volumes:
+      - /home/suzu/ai-models/roleplay/sillytavern/config:/home/node/app/config
+      - /home/suzu/ai-models/roleplay/sillytavern/data:/home/node/app/data      # BACK THIS UP
+      - /home/suzu/ai-models/roleplay/sillytavern/plugins:/home/node/app/plugins
+    ports:
+      # Localhost only; exposed to the phone via Tailscale serve (HTTPS, tailnet-only) — not LAN, not
+      # public. Still set basicAuth in config.yaml after first run (listen: true, basicAuthMode: true)
+      # as defense-in-depth. First run populates ./config/config.yaml; edit it, then restart ST.
+      - "127.0.0.1:8000:8000"

@@ -28,4 +28,11 @@ else
     "$SF"
 fi
 
+# Enforce AllowIdle on the ComfyUI backend (if configured yet): on a reboot both containers start
+# together and ComfyUI is slower to accept connections (DB migration + node load), so SwarmUI's few
+# fast retries hit "Connection refused" and it gives up permanently. AllowIdle makes an unresponsive
+# backend go idle and AUTO-RECOVER when the API returns, instead of staying errored until a restart.
+BF=/SwarmUI/Data/Backends.fds
+[ -f "$BF" ] && sed -i -E 's|^([[:space:]]*AllowIdle:).*|\1 true|' "$BF"
+
 exec bash launch-linux.sh --launch_mode none --host 0.0.0.0

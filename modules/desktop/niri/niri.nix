@@ -82,6 +82,11 @@ in
             # Autostart the AI companion. The window rule below pins her avatar fullscreen on
             # the Hyte Y70 (DP-2); the app retries the backend WS until the docker stack is up.
             { command = [ "companion" ]; }
+          ] ++ lib.optionals config.suzu.system.remoteAccess.enable [
+            # Phone control panel (ai-cockpit): HTTP server on 127.0.0.1:8090, published to the
+            # tailnet by Tailscale serve (:443). Spawned here so it inherits the graphical session —
+            # docker + niri/noctalia — for its gpu/display actions. See modules/nixos/tailscale.nix.
+            { command = [ "ai-cockpit" ]; }
           ];
           # Window rules recommended by Noctalia-shell
           window-rules = [
