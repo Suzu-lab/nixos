@@ -138,6 +138,20 @@ in
               matches = [ { app-id = "^companion-client$"; title = "Prompt$"; } ];
               open-floating = true;
             }
+            {
+              # Steam/Proton games (XWayland via xwayland-satellite) present as
+              # borderless-windowed and otherwise tile *below* the Noctalia bar.
+              # Force real fullscreen so they cover the whole output, bar included.
+              # This makes the old gamescope launch-option workaround unnecessary
+              # (nested gamescope caused ~25min frame-pacing stalls). Window app-id
+              # is "steam_app_<id>", e.g. steam_app_2070270 (Cloudheim).
+              matches = [ { app-id = "^steam_app_[0-9]+$"; } ];
+              # Exclude idle/utility games that should stay a normal, resizable
+              # column (Mod+S/D/F) instead of being forced fullscreen.
+              #   steam_app_2763740 = Revolution Idle
+              excludes = [ { app-id = "^steam_app_2763740$"; } ];
+              open-fullscreen = true;
+            }
           ];
 
           # Adds correct xwayland satellite path

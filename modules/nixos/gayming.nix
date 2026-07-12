@@ -26,6 +26,16 @@ in
       protonup-qt
       wine
       winetricks
+
+      # ReShade injection into Proton games (GUI + per-game install/inject).
+      # STL downloads ReShade at runtime, so give it the CLI tools it shells out to.
+      steamtinkerlaunch
+      curl
+      wget
+      p7zip
+      unzip
+      git
+      xdotool # STL uses this to drive the in-game overlay/menus
     ];
 
     programs.gamescope = {

@@ -108,6 +108,10 @@
       "Mod+S".action.switch-preset-column-width-back = [ ];
       "Mod+D".action.switch-preset-column-width = [ ];
       "Mod+F".action.maximize-column = [ ];
+      # True fullscreen toggle — escape hatch for windows forced fullscreen by a
+      # window-rule (e.g. the steam_app_* open-fullscreen rule) since maximize-column
+      # above does not exit fullscreen.
+      "Mod+Shift+F".action.fullscreen-window = [ ];
 
       # Bind to toggle window into floating mode
       "Mod+V".action.toggle-window-floating = [ ];
