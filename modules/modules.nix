@@ -24,7 +24,6 @@
     ./nixos/tailscale.nix # Tailscale VPN + phone access (serve) to the AI stacks and stats
 
     # Window managers
-    ./desktop/hyprland/hyprland.nix
     ./desktop/niri/niri.nix
 
     # Shells/bars
@@ -37,7 +36,7 @@
     ./desktop/xdg.nix # Configuration for file associations
 
     # Themes
-    ./desktop/catppuccin.nix
+    ./desktop/themes # Palette-driven theming: colours, GTK, icons, cursor + runtime switching
 
     # Terminal applications and settings
     ./cli/fish.nix
@@ -47,17 +46,19 @@
     ./cli/yazi.nix  # Terminal file explorer
 
     # Programs
-    ./programs/celluloid.nix  # GUI wrapper for mpv
+    ./programs/celluloid.nix # GUI wrapper for mpv (mpv itself stays the audio/video MIME handler)
     ./programs/chromium.nix # Web browser for communication webapps
     ./programs/gthumb.nix # Image viewer
     ./programs/kitty.nix  # Terminal
-    ./programs/nemo.nix # File manager
+    ./programs/nemo.nix # GUI file manager, alongside yazi (kept for inline rename under Niri)
+    ./programs/obsidian.nix # Note-taking app (binary only; plugins live in the vault repo)
     ./programs/onlyoffice.nix
     ./programs/vscodium.nix
     ./programs/zathura.nix  # Light and fast document viewer
     ./programs/zen.nix  # Backup browser
 
     # AI stuff (all containerized — host stays ROCm-free; see each module + its README)
+    ./ai/common.nix         # Shared AI facts: the NVMe data root + the tmpfiles dir helper
     ./ai/companion-host.nix # Docker host prep for the containerized AI companion stack
     ./ai/imagegen-host.nix  # Data dirs + control for the containerized ComfyUI/SwarmUI image stack
     ./ai/roleplay-host.nix  # Data dirs + control + phone access for the containerized SillyTavern RP stack

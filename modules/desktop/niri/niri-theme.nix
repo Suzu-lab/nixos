@@ -1,31 +1,30 @@
-{ 
+# Niri layout + focus-ring colours.
+#
+# Colours come from the shared Catppuccin palette (`suzu.themes.colors`, resolved in
+# modules/desktop/themes/default.nix from the flavour/accent set on the host), so changing
+# `suzu.themes.accent` recolours the focus ring along with GTK, icons, cursor and VSCodium.
+#
+# WHY NOT NOCTALIA HERE: Noctalia has a `niri` template and writes ~/.config/niri/noctalia.kdl, and
+# niri itself DOES support `include` (verified with `niri validate`). The blocker is home-manager:
+# the niri HM module generates config.kdl wholesale from `programs.niri.settings`, with no way to
+# inject a raw `include` line alongside it. When niri's config leaves home-manager's hands (the
+# planned hjem/nix-maid migration) this becomes a one-liner and the colours below can go.
+{
   config,
-  lib, 
-  ... 
+  lib,
+  ...
 }:
 let
-  cfg = config.suzu.themes.catppuccin;
-
-  # Import catppuccin palette JSON
-  paletteJson =
-    lib.importJSON "${config.catppuccin.sources.palette}/palette.json";
-
-  # Picks the current flavor palette
-  flavorColors = paletteJson.${cfg.flavor}.colors;
-
-  # Chooses Niri colors. Accent for active, surface for inactive and red for urgent
-  accentColor   = flavorColors.${cfg.accent}.hex;
-  inactiveColor = flavorColors.surface0.hex;
-  urgentColor   = flavorColors.red.hex;
+  cfg = config.suzu.themes;
+  c = cfg.colors;
 in
 {
-  # Looks for Catppuccin to be enabled before applying
   config = lib.mkIf cfg.enable {
     hm.programs.niri.settings = {
       layout = {
         empty-workspace-above-first = true; # Makes it so workspaces can be created up and down
-        always-center-single-column = true; # Makes it so if there's only one column it will be in the centro of the screen
-        gaps = 10; # gapes between windows in pixels
+        always-center-single-column = true; # Makes it so if there's only one column it will be in the center of the screen
+        gaps = 10; # gaps between windows in pixels
         struts = {
           top = -7;
         };
@@ -35,9 +34,9 @@ in
         focus-ring = {
           width = 3;
 
-          active.color   = accentColor;
-          inactive.color = inactiveColor;
-          urgent.color   = urgentColor;
+          active.color = c.${cfg.accent};
+          inactive.color = c.surface0;
+          urgent.color = c.red;
         };
       };
     };

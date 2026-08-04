@@ -28,7 +28,8 @@
     nixfmt
     polkit
     polkit_gnome
-    qt6Packages.qt6ct
+    # qt6ct removed 2026-08-03: Qt now uses the qgtk3 platform theme and follows the GTK theme,
+    # so there is no separate Qt theme left to configure.
     tree
     usbutils
     wget
@@ -53,7 +54,11 @@
       #################################################################
       octave # math plotting program for uni work
       qbittorrent # torrent client
-      pinta # simple image editor
+      # Simple image editor (crops, paste, annotate). Briefly swapped for `drawing` on the grounds
+      # that Pinta is GTK4+libadwaita and so ignores the GTK theme — reverted 2026-08-04, because
+      # that trade was wrong: theming only matters where colour carries information, and an image
+      # editor's canvas is filled by the image's own colours. Pinta is simply the better tool.
+      pinta
       pkgsRocm.blender
 
       # Shell for running python
@@ -62,6 +67,9 @@
       #################################################################
       # Utilities and backends
       #################################################################
+      # Archive manager. Swapped to engrampa (the pre-libadwaita MATE fork) for theming reasons and
+      # reverted 2026-08-04 for the same reason as pinta above — file-roller is the better-maintained
+      # original and an archive dialog is not somewhere theme colours convey anything.
       file-roller
       unzip
       p7zip

@@ -2,6 +2,24 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.suzu.desktop.fcitx5;
+
+  # Route input through fcitx5. These MUST be applied in two scopes, because neither subsumes the
+  # other and apps reach the desktop by both paths:
+  #   home.sessionVariables        -> hm-session-vars.sh, read only by LOGIN SHELLS
+  #   systemd.user.sessionVariables -> the systemd --user manager
+  # Noctalia's launcher runs apps with `launch_apps_as_systemd_services = true`, i.e. as systemd
+  # scopes (app.slice/app-<name>-<pid>.scope) that never source a login shell. Setting only the
+  # first is why VSCodium/Chromium launched from the launcher had NO IME variables at all and fell
+  # back to Chromium's internal compose (which does not read ~/.XCompose), turning ' + c into ć,
+  # while Zen — launched via a shell — kept working. Same two-scope pattern as the Wayland vars in
+  # modules/nixos/gui-essentials.nix.
+  imeEnv = {
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+    SDL_IM_MODULE = "fcitx";
+    INPUT_METHOD = "fcitx";
+  };
 in
 {
   options.suzu.desktop.fcitx5.enable =
@@ -9,13 +27,8 @@ in
 
   config = lib.mkIf cfg.enable {
     hm = {
-      home.sessionVariables = {
-        GTK_IM_MODULE = "fcitx";
-        QT_IM_MODULE = "fcitx";
-        XMODIFIERS = "@im=fcitx";
-        SDL_IM_MODULE = "fcitx";
-        INPUT_METHOD = "fcitx";
-      };
+      home.sessionVariables = imeEnv;
+      systemd.user.sessionVariables = imeEnv;
 
       home.packages = with pkgs; [
         fcitx5 # package for solving special character problems

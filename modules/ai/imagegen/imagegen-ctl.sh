@@ -4,7 +4,10 @@
 # the published 127.0.0.1:8188 — the same localhost pattern companion-ctl uses for llama/kokoro.
 # Kept separate from companion-ctl so the two AI stacks stay decoupled.
 #
-#   imagegen-ctl free     # drop ComfyUI's cached checkpoint from VRAM (do this when done generating)
+#   imagegen-ctl free     # unload the cached checkpoint (fast — but the process keeps its VRAM pool)
+#   imagegen-ctl stop     # docker-stop comfyui+swarmui: fully returns VRAM, incl. the ROCm/PyTorch
+#                         #   allocator reservation that `free` can NOT reclaim (held for process life)
+#   imagegen-ctl start    # bring the engines back up
 #   imagegen-ctl status   # is the ComfyUI engine up?
 #
 # VRAM coexistence: the 16 GB card holds the LLM *or* an SDXL generation, not both. Typical flow:
@@ -28,11 +31,23 @@ case "${1:-}" in
       notify "🎨 ComfyUI" "Not running (nothing to free)."
       echo "comfyui: not running"
     fi ;;
+  stop)
+    # Full stop — returns ALL of ComfyUI/SwarmUI's VRAM, including the ROCm/PyTorch caching-allocator
+    # reservation that `free` can NOT reclaim (that pool is mapped for the process's lifetime; only
+    # killing the process releases it). Use when done generating and the GPU is needed elsewhere.
+    # `restart: unless-stopped` means they stay down until `start` (or a daemon/host restart).
+    docker stop comfyui swarmui >/dev/null
+    notify "🎨 Imagegen" "Engines stopped — VRAM fully released."
+    echo "imagegen: stopped (comfyui, swarmui)" ;;
+  start)
+    docker start comfyui swarmui >/dev/null
+    notify "🎨 Imagegen" "Engines starting…"
+    echo "imagegen: started (comfyui, swarmui)" ;;
   status)
     if curl -fsS -m5 "$comfy/system_stats" >/dev/null 2>&1; then
       echo "comfyui: up"
     else
       echo "comfyui: down"; exit 1
     fi ;;
-  *) echo "usage: imagegen-ctl {free|status}" >&2; exit 1 ;;
+  *) echo "usage: imagegen-ctl {free|stop|start|status}" >&2; exit 1 ;;
 esac

@@ -63,6 +63,20 @@ in
               install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
               installation_mode = "force_installed";
             };
+            # Stylus — per-site userstyles. This is the browser theming that actually matters:
+            # Noctalia can only colour the browser's own chrome, while the page content is what
+            # fills the screen. Catppuccin publishes userstyles for most major sites at
+            # https://userstyles.catppuccin.com (install them from there once Stylus is running).
+            # Complements Dark Reader above: Dark Reader inverts anything generically, Stylus
+            # applies a hand-made palette to sites that have one.
+            #
+            # NOTE: Stylus, NOT Stylish. Stylish was caught exfiltrating browsing history in 2018
+            # and pulled from the stores; Stylus is the clean open-source fork.
+            # GUID confirmed against the AMO API, not guessed.
+            "{7a7a4a92-a2a0-41d1-9fd7-1e92480d612d}" = {
+              install_url = "https://addons.mozilla.org/firefox/downloads/latest/styl-us/latest.xpi";
+              installation_mode = "force_installed";
+            };
           };
 
           Preferences = mkLockedAttrs {

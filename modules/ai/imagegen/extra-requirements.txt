@@ -32,9 +32,13 @@ chardet
 # are light and torch-safe (headless opencv = no libGL needed in the container).
 opencv-python-headless
 imageio-ffmpeg
-# SwarmComfyExtra (background removal, YOLO segmentation) additionally needs the following — heavier
-# (onnxruntime, scipy, etc.) and ultralytics pulls torch deps, so left commented as an opt-in. If you
-# enable them, rebuild and re-verify `torch.cuda.is_available()` is still True (ROCm not clobbered):
+# SwarmComfyExtra (YOLO segmentation) needs ultralytics — this is what powers the `<segment:>` hand/
+# face detailer (Phase 7 of the build guide: detect → crop → inpaint → paste). It declares torch as a
+# dependency, but pip leaves the ROCm base torch in place because it already satisfies the `>=`
+# constraint (it does NOT downgrade a satisfied requirement) — so ROCm is not clobbered. Still, after a
+# rebuild re-verify `torch.cuda.is_available()` is True (see README "verify" note).
+ultralytics
+# SwarmComfyExtra's background-removal nodes additionally want these — heavier (onnxruntime, scipy)
+# and unused by the hand/face detailer, so left commented as an opt-in:
 # rembg
 # dill
-# ultralytics

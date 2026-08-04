@@ -1,0 +1,34 @@
+{
+  "__note__": "mem0 OSS config for Hermes. VERIFY against what `hermes memory setup mem0 --mode oss --oss-llm openai` generates: the top-level keys (mode/user_id/agent_id) are from Hermes' mem0 docs; the nested `config` (llm/embedder/vector_store) follows mem0's own from_config format and may need reshaping to Hermes' wrapper. All three point at services on the `companion` docker network.",
+  "mode": "oss",
+  "user_id": "suzu",
+  "agent_id": "reika",
+  "config": {
+    "llm": {
+      "provider": "openai",
+      "config": {
+        "model": "chat",
+        "openai_base_url": "http://llama-swap:8080/v1",
+        "api_key": "local"
+      }
+    },
+    "embedder": {
+      "provider": "openai",
+      "config": {
+        "model": "intfloat/multilingual-e5-small",
+        "openai_base_url": "http://embeddings:7997/v1",
+        "api_key": "local",
+        "embedding_dims": 384
+      }
+    },
+    "vector_store": {
+      "provider": "qdrant",
+      "config": {
+        "host": "qdrant",
+        "port": 6333,
+        "collection_name": "reika_memory",
+        "embedding_model_dims": 384
+      }
+    }
+  }
+}

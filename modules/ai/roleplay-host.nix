@@ -15,7 +15,6 @@
   config,
   lib,
   pkgs,
-  username,
   ...
 }:
 let
@@ -28,9 +27,10 @@ in
 
     dataDir = mkOption {
       type = types.str;
-      default = "/home/${username}/ai-models";
+      default = config.suzu.ai.dataDir;
+      defaultText = "config.suzu.ai.dataDir";
       description = ''
-        Base directory on the dedicated AI NVMe (shared with the companion and imagegen stacks).
+        Base directory on the dedicated AI NVMe (the shared root from modules/ai/common.nix).
         RP model GGUFs live under $dataDir/models/rp; SillyTavern data under $dataDir/roleplay.
       '';
     };
@@ -39,7 +39,7 @@ in
   config = mkIf cfg.enable {
     # RP model tree + SillyTavern volumes on the NVMe, owned by the user so imperative docker/hf work
     # needs no sudo. `models` already exists (companion-host creates it); models/rp is this stack's.
-    systemd.tmpfiles.rules = map (d: "d ${cfg.dataDir}/${d} 0755 ${username} users -") [
+    systemd.tmpfiles.rules = config.suzu.ai.mkDirs cfg.dataDir [
       "models/rp"                        # RP GGUFs (Cydonia, Mag-Mell, GLM-Air, …) — download here
       "roleplay"                         # this stack's per-service volumes
       "roleplay/sillytavern"

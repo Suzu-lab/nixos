@@ -11,7 +11,7 @@
       "DP-1" = {
         enable = true;
         #        scale = 1;
-        #        focus-at-startup = true;
+        focus-at-startup = true; # main 4K always focused at login, never the Virtual-1 stream head
         mode = {
           width = 3840;
           height = 2160;

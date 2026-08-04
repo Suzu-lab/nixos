@@ -1,7 +1,29 @@
 # module for setting up yazi (file explorer)
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.suzu.cli.yazi;
+
+  # base16.yazi — a flavor written against the terminal's ANSI slots ("magenta", "green",
+  # "lightblue"…) instead of hardcoded hex.
+  #
+  # WHY THIS INSTEAD OF NOCTALIA'S yazi TEMPLATE: Noctalia's flavor paints EVERY icon with the
+  # accent colour (measured: 724 occurrences of one hex in its [icon] section), so all file types
+  # render identically — the colour stops carrying information, which is the whole point of it in a
+  # file manager. base16 defines per-filetype colours AND, by referring to ANSI slots, inherits
+  # whatever kitty is currently showing. Since kitty already follows Noctalia, yazi tracks the theme
+  # automatically with no template and no wiring. `yazi` is therefore removed from Noctalia's
+  # community_ids in modules/desktop/noctalia/noctalia-settings.toml.
+  base16-yazi = pkgs.fetchFromGitHub {
+    owner = "matt-dong-123";
+    repo = "base16.yazi";
+    rev = "ed793528890e2b37595c76b70c212ccfdc81d9ae";
+    hash = "sha256-1WhixzYE1zsXg9o6T/YKWJgzfRZnzsmpiUIfi+j4H9Q=";
+  };
 in
 {
   options.suzu.cli.yazi.enable = lib.mkEnableOption "Yazi terminal file explorer";
@@ -11,6 +33,12 @@ in
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "yy";
+
+      flavors."base16" = base16-yazi;
+      theme.flavor = {
+        dark = "base16";
+        light = "base16";
+      };
 
       # Extra settings and definitions can be found in https://yazi-rs.github.io/docs/configuration/yazi/
       settings = {

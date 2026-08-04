@@ -6,9 +6,9 @@ companion: **all ROCm userspace is inside the container**, the NixOS host stays 
 ROCm release is fixed by editing one `FROM` line, never a `nixos-rebuild`.
 
 - **Config (git-backed):** this directory — `Dockerfile`, `compose.yaml`, `extra-requirements.txt`,
-  `.env`, `swarmui/`, `imagegen-ctl.sh`.
+  `.env`, `swarmui/`, `trainer/` (Anima LoRA trainer), `imagegen-ctl.sh`.
 - **Data (on the AI NVMe):** models at `$AI_MODELS_ROOT/image/`, disposable volumes
-  (`custom_nodes`, `input`, `user`) at `$AI_MODELS_ROOT/imagegen/`.
+  (`custom_nodes`, `input`, `user`, `training/{dataset,output}`) at `$AI_MODELS_ROOT/imagegen/`.
 - **Generated images (on the 12TB HDD RAID1):** `$IMAGEGEN_OUTPUT_ROOT/{output,swarm-output}` —
   mirrored + roomy, since outputs grow unbounded. All dirs created declaratively by
   `modules/ai/imagegen-host.nix`.
@@ -29,7 +29,7 @@ ROCm release is fixed by editing one `FROM` line, never a `nixos-rebuild`.
 cd ~/nixos/modules/ai/imagegen
 
 # One-time: ComfyUI's expected model subfolders on the NVMe (the data roots are made by Nix).
-mkdir -p "$HOME"/ai-models/image/{checkpoints,loras/{illustrious,noobai,pony,sdxl},vae,embeddings,controlnet,upscale_models,clip,clip_vision,diffusion_models,text_encoders}
+mkdir -p "$HOME"/ai-models/image/{checkpoints,loras/{illustrious,noobai,pony,sdxl,anima},vae,embeddings,controlnet,upscale_models,clip,clip_vision,diffusion_models,text_encoders,yolov8}
 
 docker compose build
 docker compose up -d
@@ -120,6 +120,59 @@ One-time UI setup at <http://127.0.0.1:7801>:
    (`/models` is mounted read-WRITE: SwarmUI insists on creating its own folder types under ModelRoot and
    writes model thumbnails/metadata there — a read-only mount makes it abort with "Read-only file system".)
 4. Generate tab → pick a checkpoint → test. Outputs land in `$IMAGEGEN_OUTPUT_ROOT/swarm-output` (HDD).
+
+## Quality pipeline — hand/face detailer (Phase F)
+
+The `<segment:>` detailer (detect → crop → inpaint → paste, the ADetailer equivalent) is enabled:
+`ultralytics` is baked into `extra-requirements.txt` and the YOLO detectors live in `image/yolov8/`
+(`hand_yolov8s.pt`, `face_yolov8m.pt`, from the `Bingsu/adetailer` HF collection). After a rebuild
+that first pulls `ultralytics`, **re-verify ROCm torch survived** (ultralytics declares torch as a
+dep; pip should keep the ROCm build since it satisfies the constraint):
+
+```bash
+docker compose build comfyui && docker compose up -d comfyui
+docker compose exec comfyui python3 -c "import torch; print(torch.cuda.is_available())"   # must be True
+```
+
+Then in SwarmUI append segment tags to the prompt (quality tags only — leave the artist blend OUT of
+the patch, it's what mangles hands): `… <segment:yolo-hand_yolov8s.pt,0.4,0.25> perfect hand, detailed fingers`.
+
+## LoRA training — Anima style LoRA (Phase G)
+
+Distil the WAI-Illustrious artist blend into a LoRA trained **for Anima** (a DiT anime model:
+Qwen-image VAE + Qwen3-0.6B text encoder — not SDXL). The trainer is **diffusion-pipe** (the model
+author's own trainer, the only one with `type = 'anima'`), running in its own on-demand container
+(compose profile `train`, so it never starts with `up -d`).
+
+**Config lives in the repo:** [`trainer/`](trainer/) — `Dockerfile`, `config/anima-lora.toml`
+(rank, epochs, optimizer, `llm_adapter_lr = 0`), `config/anima-dataset.toml` (resolutions, AR buckets).
+
+**One-time — download Anima's three weight files** into the shared model tree (used by both inference
+and training); confirm the filenames match the `[model]` paths in `config/anima-lora.toml`:
+
+```bash
+#   image/diffusion_models/anima-preview.safetensors   ← the DiT transformer
+#   image/vae/qwen_image_vae.safetensors               ← VAE
+#   image/text_encoders/qwen_3_06b_base.safetensors    ← Qwen3-0.6B text encoder
+```
+
+**Dataset:** curate 50–150 images into `$AI_MODELS_ROOT/imagegen/training/dataset/`, each with a
+same-basename `.txt` caption. Captioning rule: prune every *style* tag (it gets baked into the LoRA);
+keep all *content* tags (characters, `2girls` counts, poses, clothing, background) so they stay
+promptable. See the build guide's Phase 8 for dataset generation + curation criteria.
+
+**Run** (training wants the whole 16 GB card, so flush everything first):
+
+```bash
+companion-ctl gpu-free && imagegen-ctl free            # LLM + ComfyUI → off the GPU
+docker compose --profile train build trainer           # first time / after a DIFFUSION_PIPE_REF bump
+docker compose --profile train run --rm trainer        # runs deepspeed; saves one LoRA per epoch → training/output/
+```
+
+Sample images render every epoch — pick the epoch *before* the style overcooks (oversaturated colors
+/ repeated compositions are the tell), then copy that `.safetensors` into `image/loras/anima/` to use
+it. RDNA4 training stacks are younger than inference; if a build/run fights back, the rollback base
+tag is in `trainer/Dockerfile` and CivitAI's on-site trainer is the escape hatch.
 
 ## VRAM coexistence with the companion (Phase E)
 

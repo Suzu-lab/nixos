@@ -3,3 +3,10 @@ result
 *.swp
 .direnv/
 *.qcow2
+
+# Python bytecode (modules/nixos/cockpit/, modules/ai/*/*.py)
+__pycache__/
+*.py[cod]
+
+# Node deps for the companion Electron client (also ignored locally in that dir)
+node_modules/

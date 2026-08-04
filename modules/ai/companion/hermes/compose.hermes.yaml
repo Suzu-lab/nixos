@@ -1,0 +1,67 @@
+# Hermes "agent mode" overlay for the companion stack.
+#
+# Merge it INTO the companion project so everything shares one docker network (services reach each
+# other by name). Run both files together:
+#
+#   docker compose \
+#     -f ~/nixos/modules/ai/companion/docker-compose.yml \
+#     -f ~/nixos/modules/ai/companion/hermes/compose.hermes.yaml up -d
+#
+# Adds three services:
+#   qdrant      — vector store for mem0
+#   embeddings  — OpenAI-compatible embeddings server (multilingual, EN + pt-BR) for mem0
+#   hermes      — the agent (same local model + same mem0 memory as OLV; SOUL.md = Reika)
+#
+# Big data (qdrant storage, HF cache, hermes skills/sessions) lives on the NVMe, like the rest.
+name: companion
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: unless-stopped
+    volumes:
+      - /home/suzu/ai-models/mem0/qdrant:/qdrant/storage
+    ports:
+      - "127.0.0.1:6333:6333"   # host access for debugging; mem0 uses the internal name
+
+  # OpenAI-compatible embeddings (Infinity). multilingual-e5-small = solid EN + pt-BR, 384-dim,
+  # CPU-friendly. Must match embedding_dims / embedding_model_dims in mem0.json.
+  embeddings:
+    image: michaelf34/infinity:latest
+    restart: unless-stopped
+    command: ["v2", "--model-id", "intfloat/multilingual-e5-small", "--port", "7997"]
+    volumes:
+      - /home/suzu/ai-models/mem0/hf-cache:/app/.cache
+    ports:
+      - "127.0.0.1:7997:7997"
+
+  hermes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hermes-agent:local
+    restart: unless-stopped
+    stdin_open: true          # so `docker exec -it ... hermes --tui` still works for setup/debug
+    tty: true
+    # Plan B: run the headless API server; the VRM client (../client) talks to it over HTTP+SSE.
+    command: ["hermes", "gateway"]
+    environment:
+      API_SERVER_ENABLED: "true"
+      API_SERVER_HOST: "0.0.0.0"
+      API_SERVER_PORT: "8642"
+      # API_SERVER_KEY: set a real bearer token via ~/.hermes/.env or sops — do NOT hardcode here.
+    ports:
+      - "127.0.0.1:8642:8642"   # client reaches Hermes here (localhost/tailnet only)
+    volumes:
+      # Repo-tracked config, read-only (edit here, restart hermes):
+      - ./config.yaml:/root/.hermes/config.yaml:ro
+      - ./mem0.json:/root/.hermes/mem0.json:ro
+      - ./SOUL.md:/root/.hermes/SOUL.md:ro
+      # Persist what Hermes generates (skills, session/memory md). Confirm exact subpaths with
+      # `hermes doctor` / by inspecting ~/.hermes after first run, then pin them here.
+      - /home/suzu/ai-models/hermes/skills:/root/.hermes/skills
+      - /home/suzu/ai-models/hermes/data:/root/.hermes/data
+    depends_on:
+      - llama-swap
+      - qdrant
+      - embeddings

@@ -56,12 +56,9 @@
     xkb.variant = "intl"; # enables US keyboard with dead keys
   };
 
-  # Home manager config
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-  };
-  
+  # NOTE: home-manager's useGlobalPkgs/useUserPackages/backupFileExtension are set in
+  # users/home.nix, which owns the HM wiring. They used to be duplicated here.
+
   # Nix daemon settings. cache.nixos.org and its key are on by default, so we
   # only need to add ourselves as a trusted user, enable flakes, and tidy up.
   nix.settings = {

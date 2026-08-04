@@ -1,0 +1,79 @@
+# Anima style-LoRA training config (diffusion-pipe). Phase 8 of the build guide: distill the
+# WAI-Illustrious artist blend into a LoRA trained *for Anima* — the blend's look, Anima's anatomy.
+#
+# Paths below are CONTAINER paths (see compose.yaml `trainer` mounts):
+#   /models   = $AI_MODELS_ROOT/image        (read-only base weights, shared with the ComfyUI engine)
+#   /dataset  = $AI_MODELS_ROOT/imagegen/training/dataset   (your curated images + .txt captions)
+#   /output   = $AI_MODELS_ROOT/imagegen/training/output    (LoRA checkpoints land here, one per epoch)
+#   /config   = ./trainer/config             (this file + anima-dataset.toml, git-backed)
+#
+# Run (after flushing the GPU — training wants the whole card):
+#   companion-ctl gpu-free && imagegen-ctl free
+#   docker compose --profile train run --rm trainer
+# then copy the chosen epoch's .safetensors into $AI_MODELS_ROOT/image/loras/anima/ to use it.
+
+output_dir = '/output/anima-style-v1'
+dataset = '/config/anima-dataset.toml'
+
+# --- Schedule -------------------------------------------------------------------------------------
+# Save EVERY epoch and sample so you can pick the epoch *before* the style overcooks (oversaturated
+# colors / repeated compositions are the tell). 50 is a ceiling, not a target — for a 50–150 image
+# style set the keeper is usually an early-to-mid epoch.
+epochs = 50
+micro_batch_size_per_gpu = 1
+pipeline_stages = 1
+gradient_accumulation_steps = 4      # effective batch = micro_batch * grad_accum * num_gpus
+gradient_clipping = 1.0
+warmup_steps = 100
+
+save_every_n_epochs = 1
+checkpoint_every_n_minutes = 60      # resumable full-state checkpoint (separate from the per-epoch LoRA)
+save_dtype = 'bfloat16'
+
+# --- Sampling (eval) — renders preview images each epoch so you can watch the style land ----------
+eval_every_n_epochs = 1
+eval_before_first_step = true
+eval_micro_batch_size_per_gpu = 1
+eval_gradient_accumulation_steps = 1
+
+activation_checkpointing = true      # trades compute for VRAM — keep on, 16 GB is plenty for Anima LoRA
+partition_method = 'parameters'
+caching_batch_size = 1
+steps_per_print = 1
+
+[model]
+type = 'anima'
+# Anima ships as three files (DiT transformer + Qwen-image VAE + Qwen3-0.6B text encoder). Download
+# them into the ComfyUI model tree so BOTH inference and training use the same weights, then confirm
+# the exact filenames match what you downloaded:
+transformer_path = '/models/diffusion_models/anima-preview.safetensors'
+vae_path = '/models/vae/qwen_image_vae.safetensors'
+llm_path = '/models/text_encoders/qwen_3_06b_base.safetensors'
+dtype = 'bfloat16'
+# llm_adapter_lr = 0 → freeze Anima's LLM adapter (only the LoRA trains). The model author's guidance:
+# keep this 0 for small style datasets — it makes training more stable. Comment out (or set >0) only
+# for large datasets where you deliberately want to adapt the text encoder.
+llm_adapter_lr = 0
+
+[adapter]
+type = 'lora'
+# Start conservative (guide: dim 16–32). rank 32 has headroom for a rich artist blend; drop to 16 if
+# the LoRA overfits to characters instead of style. Output is ~200 MB at rank 64, less here.
+rank = 32
+dtype = 'bfloat16'
+
+[optimizer]
+# Start at the trainer's defaults and only tune after a baseline run. 1e-4 is a common DiT-LoRA
+# starting point; lower it (→ 5e-5) if the style overcooks within a few epochs, raise it if nothing
+# is learning by epoch ~10.
+type = 'adamw_optimi'
+lr = 1e-4
+betas = [0.9, 0.99]
+weight_decay = 0.01
+eps = 1e-8
+
+[monitoring]
+enable_wandb = false
+wandb_api_key = ''
+wandb_tracker_name = ''
+wandb_run_name = ''

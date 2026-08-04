@@ -24,11 +24,20 @@ let
   cfg = config.suzu.system.remoteAccess;
   ts = "${config.services.tailscale.package}/bin/tailscale";
 
+  # Phone control panel binary (the server itself is cockpit/cockpit.py). Referenced twice below:
+  # installed on PATH for manual/debug runs, and as the ExecStart of the systemd user service.
+  ai-cockpit = pkgs.writeShellApplication {
+    name = "ai-cockpit";
+    runtimeInputs = [ pkgs.python3 ];
+    text = "exec python3 ${./cockpit/cockpit.py}";
+  };
+
   # service → tailnet HTTPS port. Distinct ports (not path prefixes) because SwarmUI, netdata and
   # the llama-swap dashboards all use absolute asset paths, which a path-prefix proxy would break.
   # On the phone you bookmark https://<host>.<tailnet>.ts.net[:port] per service (MagicDNS name).
   serves = [
     { port = 443;  target = "http://127.0.0.1:8090";  desc = "ai-cockpit (control panel — landing page)"; }
+    { port = 5443; target = "http://127.0.0.1:8091";  desc = "Filebrowser (home file access)"; }
     { port = 6443; target = "http://127.0.0.1:8000";  desc = "SillyTavern (roleplay)"; }
     { port = 8443; target = "http://127.0.0.1:8081";  desc = "llama-swap dashboard (RP backend)"; }
     { port = 7443; target = "http://127.0.0.1:7801";  desc = "SwarmUI (image generation)"; }
@@ -51,16 +60,53 @@ in
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = map (s: s.port) serves;
 
     # The phone control panel (served on :443 above). A tiny HTTP server on 127.0.0.1:8090; the
-    # actual command execution and stats-reading live in cockpit/cockpit.py. It's spawned in the
-    # niri session (modules/desktop/niri/niri.nix, gated on this same option) so it inherits docker
-    # + niri/noctalia access for its actions — installing the binary here, autostarting it there.
-    environment.systemPackages = [
-      (pkgs.writeShellApplication {
-        name = "ai-cockpit";
-        runtimeInputs = [ pkgs.python3 ];
-        text = "exec python3 ${./cockpit/cockpit.py}";
-      })
-    ];
+    # actual command execution and stats-reading live in cockpit/cockpit.py. Installed on PATH here
+    # (handy for manual runs), and autostarted as the systemd user service below.
+    environment.systemPackages = [ ai-cockpit ];
+
+    # Autostart as a systemd USER service bound to the niri graphical session (replaces the old niri
+    # spawn-at-startup in modules/desktop/niri/niri.nix). graphical-session.target is only reached
+    # AFTER niri-session imports WAYLAND_DISPLAY + NIRI_SOCKET + DBUS into the --user environment, so
+    # this inherits exactly the session env the spawn had — docker + niri/noctalia for its gpu/display
+    # actions. Wins over the spawn: `nixos-rebuild switch` restarts it on every cockpit.py change, and
+    # you get `systemctl --user restart ai-cockpit` + journal logs instead of a bare orphan process.
+    systemd.user.services.ai-cockpit = {
+      description = "ai-cockpit phone control panel (127.0.0.1:8090)";
+      partOf = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      # The action buttons shell out to the same CLIs the stream deck uses (companion-ctl, rp-on/off,
+      # imagegen-ctl), which live in the system profile. As a niri spawn the cockpit inherited the
+      # session PATH; a systemd user service gets only the minimal systemd-user PATH, so hand it the
+      # system profile explicitly — otherwise `subprocess.run(["companion-ctl", …])` is FileNotFound.
+      path = [ "/run/current-system/sw" ];
+      serviceConfig = {
+        ExecStart = lib.getExe ai-cockpit;
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+    };
+
+    # Filebrowser — web file manager for phone access to my files (served on :5443 above, linked from
+    # the cockpit). Bound to 127.0.0.1 like everything else; only the tailnet serve reaches it.
+    #   - Runs as `suzu` (NOT the default system user): home is 0700, so a dedicated user couldn't
+    #     read it. As suzu it reads/writes with correct ownership and uploads land owned by me.
+    #   - noauth: no login, matching the rest of the panel. The tailnet IS the security boundary here
+    #     (only my own devices, WireGuard-encrypted). Tradeoff accepted: any tailnet device can then
+    #     read everything under root, INCLUDING ~/.ssh and the sops age key — fine because the tailnet
+    #     is 100% mine. `--noauth` only takes effect on the first-run quick setup (fresh DB); the DB
+    #     itself lives in the module's StateDirectory (/var/lib/filebrowser), so a clean deploy applies it.
+    services.filebrowser = {
+      enable = true;
+      user = "suzu";
+      group = "users";
+      settings = {
+        address = "127.0.0.1";
+        port = 8091;
+        root = "/home/suzu";
+        noauth = true;
+      };
+    };
 
     # Apply the serve mappings once the node is authenticated & up. `serve reset` first so this unit
     # is the single source of truth (drops any stale mappings); RemainAfterExit keeps it "active".

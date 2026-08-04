@@ -23,7 +23,6 @@
 
   suzu.desktop = {
     # Window managers
-    hyprland.enable = false;
     niri.enable = true;
 
     # Shells/bars
@@ -65,6 +64,7 @@
     gthumb.enable = true;
     kitty.enable = true;
     nemo.enable = true;
+    obsidian.enable = true;
     onlyoffice.enable = true;
     vscodium.enable = true;
     zathura.enable = true;
@@ -77,16 +77,16 @@
     doh.enable = true;  # Enables DNS over HTTPS (using cloudflared)
   };
 
+  # Catppuccin for everything graphical — GTK (incl. libadwaita), icons, cursor, VSCodium and
+  # niri's focus ring all derive from these two lines. Qt follows GTK automatically via qgtk3.
+  # Noctalia themes only what lives in the terminal (kitty, btop, bat, zathura); yazi follows
+  # kitty's ANSI colours through its base16 flavor.
   suzu.themes = {
-    catppuccin = {
-      enable = true;
-      # Define the base color scheme. From lightest to darkest: "latte", "frappe", "macchiato", "mocha"
-      flavor = "mocha";
-      # Define accent color. "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
-      accent = "mauve";
-      # Define icon color. "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
-      icons = "rosewater";
-    };
+    enable = true;
+    # "latte" | "frappe" | "macchiato" | "mocha"  (lightest to darkest)
+    flavor = "mocha";
+    # rosewater flamingo pink mauve red maroon peach yellow green teal sky sapphire blue lavender
+    accent = "mauve";
   };
 
   # Options for AI stuff

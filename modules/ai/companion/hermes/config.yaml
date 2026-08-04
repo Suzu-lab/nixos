@@ -1,0 +1,33 @@
+# Hermes Agent — non-secret config.
+# Baked to $HERMES_HOME/config.yaml (=/root/.hermes/config.yaml in the container).
+# The API key is a SECRET and does NOT go here — it lives in ~/.hermes/.env. Set it once with:
+#   docker exec -it companion-hermes-1 hermes config set CUSTOM_API_KEY local
+#
+# LLM: our local llama-swap, reached by service name on the shared `companion` docker network
+# (same trick OLV uses — container->container by name bypasses the NixOS host firewall).
+# `chat` resolves, at the llama-swap layer, to Qwen3.6-35B-A3B (VL, abliterated): 262k context,
+# agentic-tuned — clears Hermes' 64k-context minimum with room to spare.
+provider: custom
+base_url: "http://llama-swap:8080/v1"
+model: "chat"
+
+# --- VERIFY ON FIRST RUN (`hermes doctor`) ---
+# The keys below are best-effort from the public docs; confirm names against the version the
+# install script pulls. Skills live in $HERMES_HOME/skills (managed via `hermes skills ...`).
+# Memory is mem0 in OSS mode — see mem0.json. Enable once with:
+#   hermes memory setup mem0 --mode oss --oss-llm openai
+# then diff the generated ~/.hermes/mem0.json against the one in this folder.
+
+# API SERVER — this is how the VRM client (../client) reaches Hermes (Plan B). Enable it and set a
+# real bearer token in ~/.hermes/.env (secret, not here): API_SERVER_ENABLED=true, API_SERVER_KEY=...
+# Non-secret bits can live here under gateway.api_server. VERIFY key names with `hermes doctor`.
+gateway:
+  api_server:
+    enabled: true
+    host: "0.0.0.0"        # bind so the published container port is reachable (localhost/tailnet only)
+    port: 8642
+    # cors_origins: ["app://."]   # only if a browser (not Electron) calls it directly
+
+# Optionally sandbox Hermes' own shell execution (tighten later; we're already in a container):
+# terminal:
+#   backend: local

@@ -1,0 +1,23 @@
+# Dataset config for the Anima style LoRA (referenced by anima-lora.toml → `dataset =`).
+#
+# Layout: put curated images in $AI_MODELS_ROOT/imagegen/training/dataset/ (mounted at /dataset),
+# each with a sidecar caption of the SAME basename + `.txt` (e.g. img_0001.png + img_0001.txt).
+#
+# Captioning rule (guide Phase 8.2): whatever is captioned stays PROMPTABLE; whatever is left
+# uncaptioned gets BAKED into the LoRA. So prune every style-describing tag, keep all content tags
+# (characters, `2girls`-type counts, poses, clothing, background). Optionally prepend a trigger token
+# to every caption for on/off control.
+
+# Keep the whole set at 1024-class resolutions (matches how the dataset was generated).
+resolutions = [1024]
+
+# Aspect-ratio bucketing so 896x1152 / 832x1216 / etc. train without center-cropping away content.
+enable_ar_bucket = true
+min_ar = 0.5
+max_ar = 2.0
+num_ar_buckets = 7
+
+[[directory]]
+path = '/dataset'
+# Bump if the curated set is small (e.g. 2–3 for a ~50-image set) so each epoch sees more steps.
+num_repeats = 1

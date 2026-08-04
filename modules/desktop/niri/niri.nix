@@ -25,11 +25,13 @@ in
 
   config = mkIf cfg.enable {
 
-    # Enables graphic server without X
-    services.xserver.enable = false;
-
+    # NOTE: `services.xserver.enable = false` lives in modules/nixos/gui-essentials.nix (it's the
+    # box-wide Wayland-only statement, not a niri detail) — and it's the NixOS default anyway.
+    #
+    # NOTE: the niri overlay is applied in flake.nix, where the nixpkgs instance is built. Setting
+    # `nixpkgs.overlays` here would be silently IGNORED: the flake passes a pre-built `pkgs` via
+    # `nixpkgs.pkgs`, which disables the overlay option entirely. Add overlays in flake.nix only.
     programs.niri.enable = true;
-    nixpkgs.overlays = [ inputs.niri.overlays.niri ];
     programs.niri.package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
 
     hm = {
@@ -82,12 +84,10 @@ in
             # Autostart the AI companion. The window rule below pins her avatar fullscreen on
             # the Hyte Y70 (DP-2); the app retries the backend WS until the docker stack is up.
             { command = [ "companion" ]; }
-          ] ++ lib.optionals config.suzu.system.remoteAccess.enable [
-            # Phone control panel (ai-cockpit): HTTP server on 127.0.0.1:8090, published to the
-            # tailnet by Tailscale serve (:443). Spawned here so it inherits the graphical session —
-            # docker + niri/noctalia — for its gpu/display actions. See modules/nixos/tailscale.nix.
-            { command = [ "ai-cockpit" ]; }
           ];
+          # NOTE: the phone control panel (ai-cockpit) used to be spawned here. It's now a systemd
+          # USER service bound to graphical-session.target — see modules/nixos/tailscale.nix — so it
+          # restarts on rebuild and gets journal/systemctl control, while still inheriting this session.
           # Window rules recommended by Noctalia-shell
           window-rules = [
             {

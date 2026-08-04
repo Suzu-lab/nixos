@@ -14,6 +14,12 @@
 #      consolidation, or you fat-fingering the mic) lazy-loads her text model into RAM only — never
 #      the GPU the RP model is holding. It has a TTL and vanishes again.
 #
+#   3. Stop the image-generation engines outright. `imagegen-ctl free` only unloads the model — the
+#      ComfyUI/SwarmUI ROCm/PyTorch allocator keeps ~2 GB mapped for the process's life, which the
+#      tight 24B VRAM budget can't spare. `stop` docker-stops comfyui+swarmui (restart:unless-stopped
+#      keeps them down until you Start them again). rp-off deliberately does NOT restart them — after
+#      RP the GPU goes back to the companion, not the image stack; start imagegen manually when needed.
+#
 # OLV's process stays alive the whole time, so the conversation/session is untouched (it lives in
 # OLV's chat log, not the llama-server process — same guarantee the gaming toggle relies on).
 set -euo pipefail
@@ -33,5 +39,11 @@ curl -sf -X POST "$RP/api/models/unload" >/dev/null || true
 ln -sfn "$cfg_cpu" "$active"
 docker restart "$companion_swap" >/dev/null
 
-notify "🎭 RP mode ON" "GPU clear, companion unloaded. Open SillyTavern."
+# Fully stop the image-gen engines to reclaim their held VRAM (see header §3). Same effect as
+# `imagegen-ctl stop`, but inlined with raw docker — mirrors how this script already handles the
+# companion (docker restart above), and docker is in rp-on's runtimeInputs so it can't silently
+# no-op on a headless PATH. Best-effort: RP still starts if they're already down or absent.
+docker stop comfyui swarmui >/dev/null 2>&1 || true
+
+notify "🎭 RP mode ON" "GPU clear, companion + imagegen stopped. Open SillyTavern."
 echo "RP mode ON — GPU is clear. RP backend: $(curl -s "$RP/running" 2>/dev/null || echo unreachable)"

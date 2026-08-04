@@ -33,4 +33,11 @@ RUN pip install --no-cache-dir -r /tmp/extra-requirements.txt
 EXPOSE 8188
 # --temp-directory lives under the writable cache mount so ComfyUI can run as a non-root user
 # (the image's /ComfyUI/temp is root-owned). See compose.yaml (user: 1000:100, HOME=/cache).
-CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--temp-directory", "/cache/temp"]
+#
+# --reserve-vram 3: GUARDRAIL. This is ONE 16GB GPU shared with the Niri compositor. Without a
+# reserve, a big upscale (esp. 4x-AnimeSharp / ESRGAN on large images) eats all VRAM; the compositor
+# then can't pin its scanout framebuffer (amdgpu "-12 ENOMEM" → "Not enough memory for command
+# submission") and niri ABRTs, killing the whole graphical session. Reserving 3GB leaves headroom for
+# the desktop + browsers so torch tiles/offloads instead of starving the compositor. Dial down to 2 if
+# large gens tile too aggressively; up if the session still drops.
+CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--temp-directory", "/cache/temp", "--reserve-vram", "3"]

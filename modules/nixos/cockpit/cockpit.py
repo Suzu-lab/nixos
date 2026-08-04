@@ -17,6 +17,7 @@
 #   - Stdlib only (like consolidate.py), runs on a bare python3.
 import glob
 import json
+import os
 import subprocess
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -30,7 +31,9 @@ ACTIONS = {
     "gpu-free":         ("cmd", ["companion-ctl", "gpu-free"]),
     "gpu-back":         ("cmd", ["companion-ctl", "gpu-back"]),
     "displays-toggle":  ("cmd", ["companion-ctl", "displays-toggle"]),
-    "imagegen-free":    ("cmd", ["imagegen-ctl", "free"]),
+    "imagegen-free":    ("cmd", ["imagegen-ctl", "free"]),   # unload model, keep engines up
+    "imagegen-stop":    ("cmd", ["imagegen-ctl", "stop"]),   # docker stop → full VRAM reclaim
+    "imagegen-start":   ("cmd", ["imagegen-ctl", "start"]),  # bring the engines back up
     "companion-unload": ("post", "http://127.0.0.1:8080/api/models/unload"),  # full sleep (she unloads)
     "rp-unload":        ("post", "http://127.0.0.1:8081/api/models/unload"),  # drop the RP model
 }
@@ -38,6 +41,7 @@ ACTIONS = {
 # Services the cockpit links to, published by Tailscale serve on these tailnet HTTPS ports. The page
 # builds the URLs from the phone's own location.hostname, so they work under any tailnet name.
 LINKS = [
+    ("Files",         5443),
     ("SillyTavern",   6443),
     ("SwarmUI",       7443),
     ("RP dashboard",  8443),
@@ -92,12 +96,21 @@ def comfy_up():
         return False
 
 
+def displays_on():
+    """True if monitors are powered on, False if off. Reads the SAME flag file the displays-toggle
+    action uses (companion-ctl: $XDG_RUNTIME_DIR/companion-displays-off exists ⇒ powered off), so this
+    readout can never disagree with what the button last did."""
+    rt = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+    return not os.path.exists(os.path.join(rt, "companion-displays-off"))
+
+
 def stats():
     return {
         "gpu": gpu_stats(),
         "companion": loaded_models(8080),
         "rp": loaded_models(8081),
         "imagegen": comfy_up(),
+        "displays": displays_on(),
     }
 
 
@@ -159,6 +172,12 @@ background:#181b22;color:var(--acc);text-decoration:none;margin-bottom:8px;font-
 <button class="danger wide" onclick="act('companion-unload',this)">💤 Unload companion (sleep)</button>
 </div>
 
+<h2>Imagegen engines</h2>
+<div class=grid>
+<button onclick="act('imagegen-stop',this)">⏹ Stop (free VRAM)</button>
+<button onclick="act('imagegen-start',this)">▶︎ Start</button>
+</div>
+
 <h2>System</h2>
 <div class=grid>
 <button class=wide onclick="act('displays-toggle',this)">🌙 Displays off / on</button>
@@ -182,6 +201,7 @@ async function refresh(){
   h+=`<div class=row><span class=k>companion</span><span>${ml(s.companion)}</span></div>`;
   h+=`<div class=row><span class=k>roleplay</span><span>${ml(s.rp)}</span></div>`;
   h+=`<div class=row><span class=k>imagegen</span><span>${s.imagegen?'up':'<span style=color:var(--dim)>down</span>'}</span></div>`;
+  h+=`<div class=row><span class=k>displays</span><span>${s.displays?'<span style=color:var(--ok)>● on</span>':'<span style=color:var(--dim)>○ off</span>'}</span></div>`;
   $('#stats').innerHTML=h;
  }catch(e){$('#stats').textContent='stats unavailable'}
 }

@@ -152,8 +152,13 @@ mode = "dark"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "kitty", "niri" ]
-    community_ids = [ "zen-browser", "obsidian", "steam", "yazi" ]
+    # The two enable_* flags are REQUIRED — listing ids alone does nothing, which is why yazi never
+    # followed the Noctalia theme. See https://docs.noctalia.dev/v5/theming/app-theming/
+    # Discover valid ids with: noctalia theme --list-templates
+    enable_builtin_templates = true
+    enable_community_templates = true
+    builtin_ids = [ "kitty", "niri", "btop" ]
+    community_ids = [ "bat", "zathura" ]
 
 [wallpaper]
 directory = "~/Wallpapers/"

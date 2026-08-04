@@ -19,7 +19,10 @@
     ignoreShellProgramCheck = true;
     shell = pkgs.fish; # Defines fish as default user shell
   };
-  security.sudo.wheelNeedsPassword = true;
+  # Passwordless sudo for wheel — chosen for hands-off remote admin (phone/SSH over Tailscale) while
+  # away. Tradeoff: with greetd autologin on, physical access to this box = instant root. Accepted
+  # for a home server. Revert to `true` when back if you want the physical-access guard back.
+  security.sudo.wheelNeedsPassword = false;
 
   imports = [
     (lib.mkAliasOptionModule ["hm"] ["home-manager" "users" username])

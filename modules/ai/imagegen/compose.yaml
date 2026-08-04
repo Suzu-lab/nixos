@@ -39,6 +39,11 @@ services:
       # NOTE: do NOT set HSA_OVERRIDE_GFX_VERSION. gfx1201 is native on ROCm ≥ 7, and setting it to an
       # *empty string* (≠ unset) breaks HIP → "No HIP GPUs are available". Only set it (to 12.0.1) if a
       # future base image fails to detect the GPU — unnecessary on rocm7.2.4/torch2.9.1.
+      #
+      # expandable_segments:True — reduces VRAM fragmentation so torch can actually use the memory
+      # inside its budget instead of failing to allocate with free-but-fragmented VRAM. Complements
+      # --reserve-vram (see Dockerfile): together they keep the shared GPU from starving the compositor.
+      - PYTORCH_ALLOC_CONF=expandable_segments:True
     ports:
       - "127.0.0.1:8188:8188"
     volumes:
@@ -81,3 +86,42 @@ services:
                                                                # (shared with the ComfyUI engine's tree)
       - ${IMAGEGEN_OUTPUT_ROOT}/swarm-output:/SwarmUI/Output   # generations → HDD RAID1
     restart: unless-stopped
+
+  # Anima LoRA trainer (Phase 8). ON-DEMAND, not a daemon: the `train` profile keeps it out of
+  # `docker compose up -d`; you invoke it explicitly and it exits when the run finishes:
+  #   companion-ctl gpu-free && imagegen-ctl free        # training wants the WHOLE 16 GB card
+  #   docker compose --profile train build trainer       # first time (or after a ref bump)
+  #   docker compose --profile train run --rm trainer    # runs the deepspeed command below
+  # Copy the chosen epoch from training/output/ into image/loras/anima/ to use the LoRA.
+  trainer:
+    build: ./trainer
+    image: localhost/anima-trainer:latest
+    container_name: anima-trainer
+    profiles: [train]        # excluded from `up -d`; only starts via `--profile train run`
+    # Same GPU passthrough as the engine (host numeric GIDs: video=26, render=303).
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    user: "1000:100"         # LoRA checkpoints owned by you, not root
+    group_add:
+      - "26"    # video
+      - "303"   # render
+    ipc: host
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      - HOME=/cache          # writable HOME: HF downloads, triton/MIOpen, deepspeed scratch
+      - PYTORCH_ALLOC_CONF=expandable_segments:True   # same anti-fragmentation win as the engine
+      # Single local GPU: disable NCCL peer-to-peer / InfiniBand probing (diffusion-pipe's documented
+      # launch env) so deepspeed doesn't stall trying to discover a multi-GPU fabric that isn't there.
+      - NCCL_P2P_DISABLE=1
+      - NCCL_IB_DISABLE=1
+    # Overridable per run (e.g. append `--regenerate_cache`, or point at a different config).
+    command: >
+      deepspeed --num_gpus=1 train.py --deepspeed --config /config/anima-lora.toml
+    volumes:
+      - ${AI_MODELS_ROOT}/image:/models:ro                       # base weights (anima/vae/llm) — read-only
+      - ./trainer/config:/config:ro                              # training + dataset toml (git-backed)
+      - ${AI_MODELS_ROOT}/imagegen/training/dataset:/dataset     # curated images + .txt captions
+      - ${AI_MODELS_ROOT}/imagegen/training/output:/output       # LoRA checkpoints (one per epoch)
+      - ${AI_MODELS_ROOT}/imagegen/training/cache:/cache         # HOME: HF/triton/deepspeed caches (uid 1000)

@@ -10,21 +10,8 @@ in
   config = lib.mkIf cfg.enable {
     hm.xdg.desktopEntries = {
       # Hiding desktop entries
-      "kvantummanager" = {
-        name = "Kvantum Manager";
-        exec = "kvantummanager";
-        noDisplay = true;
-      };
-      "qt5ct" = {
-        name = "Qt5 Settings";
-        exec = "qt5ct";
-        noDisplay = true;
-      };
-      "qt6ct" = {
-        name = "Qt6 Settings";
-        exec = "qt6ct";
-        noDisplay = true;
-      };
+      # (kvantummanager / qt5ct / qt6ct entries lived here until 2026-08-03 — all three came in via
+      # the old catppuccin + qt5ct theming path and went away with it, so there is nothing to hide)
       "htop" = {
         name = "Htop";
         exec = "htop";
@@ -45,6 +32,14 @@ in
         exec = "nixos-manual";
         noDisplay = true;
       };
+
+      # NOTE: do NOT add a "yazi" entry here. The yazi package already ships
+      # share/applications/yazi.desktop (Terminal=true, MimeType=inode/directory) plus its own
+      # share/pixmaps/yazi.png, so it appears in the launcher on its own. An entry with the same
+      # attribute name silently SHADOWS the package's file inside home-path's buildEnv — no
+      # warning, the winner decided by priority. If yazi ever needs an explicit terminal wrapper
+      # (i.e. if Terminal=true is not honoured by the launcher), name it something else, e.g.
+      # "yazi-kitty", so both coexist instead of one clobbering the other.
 
       # Custom .desktop entry for OnlyOffice
       "onlyoffice-desktopeditors" = {

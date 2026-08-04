@@ -39,6 +39,9 @@ in
             viewer = [
               "org.gnome.gThumb.desktop"
             ];
+            # Nemo handles clicks (browser "show downloads folder", "open containing folder", any
+            # xdg-open on a directory) — a GUI is what those flows expect. Yazi stays the primary
+            # tool for actually working with files, but it is opened deliberately, not by handoff.
             filemanager = [
               "nemo.desktop"
             ];

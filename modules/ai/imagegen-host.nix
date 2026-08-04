@@ -23,9 +23,10 @@ in
 
     dataDir = mkOption {
       type = types.str;
-      default = "/home/${username}/ai-models";
+      default = config.suzu.ai.dataDir;
+      defaultText = "config.suzu.ai.dataDir";
       description = ''
-        Base directory on the dedicated AI NVMe (shared with the companion stack).
+        Base directory on the dedicated AI NVMe (the shared root from modules/ai/common.nix).
         Matches AI_MODELS_ROOT in modules/ai/imagegen/.env.
       '';
     };
@@ -48,7 +49,7 @@ in
     # a one-time `mkdir -p` at build time (ComfyUI convention) — these are just the data roots.
     systemd.tmpfiles.rules =
       # Fast NVMe: models, custom nodes, inputs, saved workflows.
-      map (d: "d ${cfg.dataDir}/${d} 0755 ${username} users -") [
+      config.suzu.ai.mkDirs cfg.dataDir [
         "image"                # ComfyUI model tree (checkpoints, loras, vae, controlnet, upscale_models…)
         "imagegen"             # per-service disposable volumes for the imagegen compose project
         "imagegen/custom_nodes"
@@ -57,9 +58,14 @@ in
         "imagegen/cache"       # HOME for the non-root comfyui container: MIOpen/Triton cache + temp
         "imagegen/swarm-data"  # SwarmUI settings/backends (host-owned bind, so it can run non-root)
         "imagegen/swarm-cache" # HOME for the non-root swarmui container: dotnet/nuget/git caches
+        # Anima LoRA trainer (Phase 8) — on-demand `docker compose --profile train run trainer`.
+        "imagegen/training"
+        "imagegen/training/dataset" # curated training images + .txt captions (you fill this)
+        "imagegen/training/output"  # LoRA checkpoints land here, one per epoch
+        "imagegen/training/cache"   # HOME for the non-root trainer: HF/triton/deepspeed caches
       ]
       # HDD RAID1: the image library (ComfyUI output + SwarmUI output).
-      ++ map (d: "d ${cfg.outputDir}/${d} 0755 ${username} users -") [
+      ++ config.suzu.ai.mkDirs cfg.outputDir [
         ""
         "output"
         "swarm-output"
@@ -71,7 +77,7 @@ in
     environment.systemPackages = [
       (pkgs.writeShellApplication {
         name = "imagegen-ctl";
-        runtimeInputs = with pkgs; [ curl libnotify ];
+        runtimeInputs = with pkgs; [ curl docker coreutils libnotify ];
         text = builtins.readFile ./imagegen/imagegen-ctl.sh;
       })
     ];

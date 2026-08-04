@@ -22,11 +22,12 @@ in
 
     dataDir = mkOption {
       type = types.str;
-      default = "/home/${username}/ai-models";
+      default = config.suzu.ai.dataDir;
+      defaultText = "config.suzu.ai.dataDir";
       description = ''
-        Base directory on the dedicated NVMe for all AI stack data (models and
-        per-service container volumes). Reuses the existing mount from
-        suzu.system.disks; subdirectories are created declaratively below.
+        Base directory on the dedicated NVMe for this stack's data (models and per-service
+        container volumes). Defaults to the shared AI root declared in modules/ai/common.nix;
+        override only to move this one stack off it. Subdirectories are created declaratively below.
       '';
     };
   };
@@ -67,7 +68,7 @@ in
 
     # Declarative version of the guide's `mkdir -p .../{models,olv,...}` step,
     # owned by the user so imperative docker/hf work needs no sudo.
-    systemd.tmpfiles.rules = map (d: "d ${cfg.dataDir}/${d} 0755 ${username} users -") [
+    systemd.tmpfiles.rules = config.suzu.ai.mkDirs cfg.dataDir [
       "models"
       "llama-swap"
       "olv"
