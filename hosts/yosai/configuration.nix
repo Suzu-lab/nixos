@@ -74,7 +74,16 @@
   # Network options
   suzu.networking = {
     enable = true;
-    doh.enable = true;  # Enables DNS over HTTPS (using cloudflared)
+    # Encrypted DNS via dnscrypt-proxy2 (NOT cloudflared — different program, and the resolver is
+    # not Cloudflare either; see modules/nixos/networking.nix for what it actually picks).
+    doh.enable = true;
+  };
+
+  # Proton VPN full tunnel, up at boot, with a fail-closed kill switch. Switch exit node at runtime
+  # with `protonvpn-ctl <br|us|jp|ch|tor>` — no rebuild needed; this only sets the boot default.
+  suzu.system.vpn = {
+    enable = true;
+    server = "br";
   };
 
   # Catppuccin for everything graphical — GTK (incl. libadwaita), icons, cursor, VSCodium and

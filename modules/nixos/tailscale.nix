@@ -37,7 +37,7 @@ let
   # On the phone you bookmark https://<host>.<tailnet>.ts.net[:port] per service (MagicDNS name).
   serves = [
     { port = 443;  target = "http://127.0.0.1:8090";  desc = "ai-cockpit (control panel — landing page)"; }
-    { port = 5443; target = "http://127.0.0.1:8091";  desc = "Filebrowser (home file access)"; }
+    { port = 5443; target = "http://127.0.0.1:8091";  desc = "Copyparty (file access — see nixos/copyparty.nix)"; }
     { port = 6443; target = "http://127.0.0.1:8000";  desc = "SillyTavern (roleplay)"; }
     { port = 8443; target = "http://127.0.0.1:8081";  desc = "llama-swap dashboard (RP backend)"; }
     { port = 7443; target = "http://127.0.0.1:7801";  desc = "SwarmUI (image generation)"; }
@@ -79,7 +79,14 @@ in
       # imagegen-ctl), which live in the system profile. As a niri spawn the cockpit inherited the
       # session PATH; a systemd user service gets only the minimal systemd-user PATH, so hand it the
       # system profile explicitly — otherwise `subprocess.run(["companion-ctl", …])` is FileNotFound.
-      path = [ "/run/current-system/sw" ];
+      # /run/wrappers must come FIRST: there is a `sudo` in /run/current-system/sw/bin too, but it
+      # is not the setuid wrapper, so it dies with "must be owned by uid 0 and have the setuid bit
+      # set" and exits 1 — indistinguishable from a normal command failure. The cockpit needs real
+      # sudo for the Proton VPN controls (switching exit nodes and reading the kill-switch chain).
+      path = [
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
       serviceConfig = {
         ExecStart = lib.getExe ai-cockpit;
         Restart = "on-failure";
@@ -87,26 +94,9 @@ in
       };
     };
 
-    # Filebrowser — web file manager for phone access to my files (served on :5443 above, linked from
-    # the cockpit). Bound to 127.0.0.1 like everything else; only the tailnet serve reaches it.
-    #   - Runs as `suzu` (NOT the default system user): home is 0700, so a dedicated user couldn't
-    #     read it. As suzu it reads/writes with correct ownership and uploads land owned by me.
-    #   - noauth: no login, matching the rest of the panel. The tailnet IS the security boundary here
-    #     (only my own devices, WireGuard-encrypted). Tradeoff accepted: any tailnet device can then
-    #     read everything under root, INCLUDING ~/.ssh and the sops age key — fine because the tailnet
-    #     is 100% mine. `--noauth` only takes effect on the first-run quick setup (fresh DB); the DB
-    #     itself lives in the module's StateDirectory (/var/lib/filebrowser), so a clean deploy applies it.
-    services.filebrowser = {
-      enable = true;
-      user = "suzu";
-      group = "users";
-      settings = {
-        address = "127.0.0.1";
-        port = 8091;
-        root = "/home/suzu";
-        noauth = true;
-      };
-    };
+    # The file server behind :5443 is Copyparty, configured in nixos/copyparty.nix (it gates on this
+    # same `remoteAccess.enable` flag). It used to be Filebrowser, declared right here — see that
+    # module's header for why it was swapped out.
 
     # Apply the serve mappings once the node is authenticated & up. `serve reset` first so this unit
     # is the single source of truth (drops any stale mappings); RemainAfterExit keeps it "active".

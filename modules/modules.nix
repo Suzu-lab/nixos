@@ -11,6 +11,7 @@
     ./nixos/audio.nix
     ./nixos/base.nix # Basic system module
     ./nixos/deepcool-digital.nix  # Module for enabling the display of the DeepCool Digital air cooler
+    ./nixos/copyparty.nix # Web file server for phone access (proxied onto the tailnet on :5443)
     ./nixos/disks.nix # Configuration for mounting the extra disks
     ./nixos/firewall.nix
     ./nixos/fonts.nix
@@ -20,6 +21,7 @@
     ./nixos/netdata.nix # Metrics tool with web interface accessible through port 19999
     ./nixos/networking.nix
     ./nixos/openrgb.nix # RGB control for the motherboard, RAM and GPU
+    ./nixos/protonvpn.nix # Proton VPN full-tunnel (WireGuard) + kill switch; coexists with Tailscale
     ./nixos/secrets.nix # sops-nix declarative secret management (encrypted secrets in secrets/)
     ./nixos/tailscale.nix # Tailscale VPN + phone access (serve) to the AI stacks and stats
 

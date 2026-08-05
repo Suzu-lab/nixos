@@ -19,6 +19,7 @@ import glob
 import json
 import os
 import subprocess
+import time
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -104,6 +105,103 @@ def displays_on():
     return not os.path.exists(os.path.join(rt, "companion-displays-off"))
 
 
+# --- Proton VPN -------------------------------------------------------------------------------
+# The page refreshes every 3s, so nothing here may spawn a process on every poll. Hence: the exit
+# node is read from sysfs (free), the server list and the kill-switch check are cached, and only
+# those two ever shell out.
+_cache = {}
+
+
+def _cached(key, ttl, fn):
+    """Memoise fn() for ttl seconds. On failure keep serving the last good value if we have one,
+    so a transient hiccup shows stale data rather than flapping the UI to 'unknown'."""
+    now = time.monotonic()
+    hit = _cache.get(key)
+    if hit and now - hit[0] < ttl:
+        return hit[1]
+    try:
+        val = fn()
+    except Exception:
+        return hit[1] if hit else None
+    _cache[key] = (now, val)
+    return val
+
+
+def _vpn_servers_uncached():
+    """Exit nodes, discovered from the systemd units that modules/nixos/protonvpn.nix generates.
+    Deliberately NOT a second copy of the server list: adding a server to the Nix module makes it
+    appear here on its own, and this list can never drift out of sync with what can actually run."""
+    p = subprocess.run(
+        ["systemctl", "list-unit-files", "--no-legend", "--plain", "wg-quick-proton-*.service"],
+        capture_output=True, text=True, timeout=10,
+    )
+    out = []
+    for line in p.stdout.splitlines():
+        parts = line.split()
+        if not parts:
+            continue
+        unit = parts[0]
+        if unit.startswith("wg-quick-proton-") and unit.endswith(".service"):
+            out.append(unit[len("wg-quick-proton-"):-len(".service")])
+    return sorted(out)
+
+
+def vpn_servers():
+    # Only changes on a rebuild, so a long TTL is fine.
+    return _cached("servers", 60, _vpn_servers_uncached) or []
+
+
+def vpn_active():
+    """Which exit node is up, from the interface name — no subprocess. wg-quick only creates
+    proton-<name> while the tunnel is up, so this can't disagree with reality."""
+    for path in sorted(glob.glob("/sys/class/net/proton-*")):
+        return os.path.basename(path)[len("proton-"):]
+    return None
+
+
+def _killswitch_uncached():
+    """True armed / False not armed / None unknown.
+
+    `iptables -C` needs root, and exit code alone cannot tell "rule is absent" from "sudo refused":
+    both are 1. (That bit us — a non-setuid sudo earlier in PATH exited 1 and the panel confidently
+    displayed "not armed" while the chain was installed.) So probe escalation first and only then
+    trust the result; anything ambiguous reports unknown rather than a reassuring or alarming lie.
+    """
+    probe = subprocess.run(["sudo", "-n", "true"], capture_output=True, timeout=10)
+    if probe.returncode != 0:
+        return None
+    p = subprocess.run(
+        ["sudo", "-n", "iptables", "-C", "OUTPUT", "-j", "proton-ks"],
+        capture_output=True, timeout=10,
+    )
+    return p.returncode == 0
+
+
+def killswitch():
+    return _cached("killswitch", 15, _killswitch_uncached)
+
+
+def vpn_stats():
+    return {"servers": vpn_servers(), "active": vpn_active(), "killswitch": killswitch()}
+
+
+def run_vpn_action(target):
+    """Switch exit node, or turn the tunnel off. `target` is validated against the discovered unit
+    list, so the client still can't name anything that isn't a real, declared server."""
+    if target != "off" and target not in vpn_servers():
+        return False, f"unknown exit node: {target}"
+    try:
+        p = subprocess.run(
+            ["sudo", "-n", "protonvpn-ctl", target],
+            capture_output=True, text=True, timeout=120,
+        )
+        _cache.pop("killswitch", None)  # it may have just changed; don't serve the stale value
+        out = (p.stdout + p.stderr).strip()[-400:]
+        return p.returncode == 0, out or "ok"
+    except Exception as e:
+        return False, f"vpn {target}: {e}"
+
+
 def stats():
     return {
         "gpu": gpu_stats(),
@@ -111,6 +209,7 @@ def stats():
         "rp": loaded_models(8081),
         "imagegen": comfy_up(),
         "displays": displays_on(),
+        "vpn": vpn_stats(),
     }
 
 
@@ -152,6 +251,9 @@ button:active{background:#2b3040}button.wide{grid-column:1/3}button:disabled{opa
 button.danger{border-color:#3a2530;color:#ffc4cf}
 a.link{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
 background:#181b22;color:var(--acc);text-decoration:none;margin-bottom:8px;font-weight:600}
+select{appearance:none;width:100%;border:1px solid var(--line);background:#20242e;color:var(--fg);
+padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer}
+.vpnrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
 #log{min-height:20px;color:var(--dim);font-size:13px;margin-top:6px;white-space:pre-wrap;word-break:break-word}
 </style></head><body>
 <h1>🖥️ yosai cockpit</h1>
@@ -178,6 +280,14 @@ background:#181b22;color:var(--acc);text-decoration:none;margin-bottom:8px;font-
 <button onclick="act('imagegen-start',this)">▶︎ Start</button>
 </div>
 
+<h2>VPN</h2>
+<div class=card>
+<div class=vpnrow>
+<select id=vpnsel></select>
+<button id=vpngo onclick="vpnApply(this)">Switch</button>
+</div>
+</div>
+
 <h2>System</h2>
 <div class=grid>
 <button class=wide onclick="act('displays-toggle',this)">🌙 Displays off / on</button>
@@ -202,8 +312,38 @@ async function refresh(){
   h+=`<div class=row><span class=k>roleplay</span><span>${ml(s.rp)}</span></div>`;
   h+=`<div class=row><span class=k>imagegen</span><span>${s.imagegen?'up':'<span style=color:var(--dim)>down</span>'}</span></div>`;
   h+=`<div class=row><span class=k>displays</span><span>${s.displays?'<span style=color:var(--ok)>● on</span>':'<span style=color:var(--dim)>○ off</span>'}</span></div>`;
+  const v=s.vpn||{};
+  h+=`<div class=row><span class=k>vpn</span><span>${v.active?'<span style=color:var(--ok)>● '+v.active+'</span>':'<span style=color:var(--bad)>○ off</span>'}</span></div>`;
+  // Only worth flagging when the tunnel is down: with no tunnel, an unarmed kill switch is exactly
+  // what "your traffic is in the clear right now" looks like.
+  const ks = v.killswitch===null||v.killswitch===undefined
+    ? '<span style=color:var(--dim)>unknown</span>'
+    : (v.killswitch?'<span style=color:var(--ok)>armed</span>'
+                   :`<span style=color:${v.active?'var(--warn)':'var(--bad)'}>not armed</span>`);
+  h+=`<div class=row><span class=k>kill switch</span><span>${ks}</span></div>`;
   $('#stats').innerHTML=h;
+  syncVpnSel(v);
  }catch(e){$('#stats').textContent='stats unavailable'}
+}
+// Rebuild the dropdown only when the server list actually changes, so a refresh every 3s doesn't
+// yank the selection out from under you while you're picking one.
+let vpnSig='';
+function syncVpnSel(v){
+ const list=(v.servers||[]);const sig=list.join(',');
+ const sel=$('#vpnsel');
+ if(sig!==vpnSig){
+  vpnSig=sig;
+  sel.innerHTML=list.map(n=>`<option value="${n}">${n}</option>`).join('')
+              +'<option value="off">off (drops kill switch)</option>';
+  sel.value=v.active||'off';
+ }
+ if(document.activeElement!==sel&&!sel.dataset.dirty)sel.value=v.active||'off';
+}
+$('#vpnsel').addEventListener('change',function(){this.dataset.dirty='1'});
+async function vpnApply(btn){
+ const sel=$('#vpnsel');const t=sel.value;
+ delete sel.dataset.dirty;
+ await act('vpn-'+t,btn);
 }
 async function act(name,btn){
  const all=[...document.querySelectorAll('button')];all.forEach(b=>b.disabled=true);
@@ -246,6 +386,11 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get("X-Cockpit") != "1":
             return self._send(403, "forbidden", "text/plain")
         name = self.path[len("/action/"):]
+        # VPN actions are validated against the live unit list rather than a static dict, so the
+        # allowlist property holds without duplicating the server list from protonvpn.nix.
+        if name.startswith("vpn-"):
+            ok, out = run_vpn_action(name[len("vpn-"):])
+            return self._send(200 if ok else 500, out, "text/plain")
         if name not in ACTIONS:
             return self._send(404, "unknown action", "text/plain")
         ok, out = run_action(name)

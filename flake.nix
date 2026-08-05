@@ -51,6 +51,17 @@
     # Flake for the Deepcool cooler digital display
     ddl.url = "github:mzonski/deepcool-digital-linux";
 
+    # Copyparty — web file server for phone access to my files (replaced Filebrowser).
+    # ONLY the NixOS module comes from here: nixpkgs ships the `copyparty` package but NOT
+    # `services.copyparty`, which upstream keeps in its own repo (contrib/nixos/modules).
+    # Deliberately NOT applying `copyparty.overlays.default` — it overrides the global `python3`
+    # package set, a much wider blast radius than this needs, and nixpkgs' own copyparty already
+    # builds with thumbnails + ffmpeg, so the stock package is what the module picks up.
+    copyparty = {
+      url = "github:9001/copyparty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Declarative secret management — encrypted secrets committed to the repo, decrypted at
     # activation into /run/secrets using an age key kept only on the machine.
     sops-nix = {

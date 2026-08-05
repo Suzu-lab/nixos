@@ -10,11 +10,22 @@ in
   config = lib.mkIf cfg.enable {
     programs.gamemode.enable = true;
 
-    # Install Steam and open firewall rules for it
     programs.steam = {
       enable = true;
+
+      # Opens TCP 27036/27037 + UDP 10400/10401/27031-27036 for Steam Remote Play (streaming to
+      # another device, and Remote Play Together). Kept because those are for LAN discovery and
+      # direct streaming, which genuinely need to be reachable.
       remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
+
+      # dedicatedServer.openFirewall REMOVED 2026-08-04. It opens TCP+UDP 27015, and the nixpkgs
+      # option is specifically for a *Source* Dedicated Server (SRCDS — CS/TF2/Gmod), which isn't
+      # run here. It has nothing to do with Steam co-op invites: Palworld & co. use Steam's
+      # networking layer, which connects OUTBOUND to Valve's infrastructure, NAT-punches, and falls
+      # back to Steam Datagram Relay — no inbound port on either peer. Proof it was dead weight:
+      # Palworld's own dedicated server listens on UDP 8211, which this never opened anyway.
+
+
       gamescopeSession.enable = true;
       extraCompatPackages = [ pkgs.proton-ge-bin ];
     };
