@@ -107,9 +107,22 @@ in
       after = [ "tailscaled.service" "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      # Re-apply whenever tailscaled itself restarts. Serve mappings live in tailscaled's state, so
+      # anything that resets it (a restart, or a logout like the one the IPv6 bug caused) drops all
+      # of them silently — the phone just gets connection-refused with nothing in any log.
+      partOf = [ "tailscaled.service" ];
+      # No start-rate limit: the retry below may legitimately need many attempts on a slow boot, or
+      # forever if the node was never authenticated.
+      unitConfig.StartLimitIntervalSec = 0;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        # Keep retrying until tailscale is actually up. This unit used to give up after ~60s and
+        # exit 0, which left the box "active" with zero mappings — exactly what happened on the
+        # 2026-08-05 boot where tailscaled couldn't reach the control plane. Failing loudly and
+        # retrying is what makes it self-heal instead of needing a manual restart.
+        Restart = "on-failure";
+        RestartSec = 30;
         ExecStart = pkgs.writeShellScript "tailscale-serve-up" ''
           set -euo pipefail
           ts=${ts}
@@ -121,8 +134,8 @@ in
             sleep 2
           done
           "$ts" status --json 2>/dev/null | ${pkgs.jq}/bin/jq -e '.BackendState=="Running"' >/dev/null || {
-            echo "tailscale not Running yet (run 'sudo tailscale up'); skipping serve setup." >&2
-            exit 0
+            echo "tailscale not Running yet (run 'sudo tailscale up'); will retry." >&2
+            exit 1
           }
           "$ts" serve reset
           ${serveLines}

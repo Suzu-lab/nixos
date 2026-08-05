@@ -224,6 +224,19 @@ in
             tbl=$((mark))
             ${fixFamily "-4"}
             ${lib.optionalString s.ipv6 (fixFamily "-6")}
+            ${lib.optionalString s.ipv6 ''
+              # Give the MAIN table an IPv6 default via the tunnel. Tailscale marks its own packets
+              # (fwmark 0x80000) and its rule 5210 sends them to main precisely so they skip any
+              # tunnel — but main has no IPv6 route at all here (this host only has a ULA since it
+              # moved behind the OpenWrt router), so those packets fell through to Tailscale's own
+              # `5250: unreachable` and tailscaled died with "network is unreachable" trying to
+              # reach controlplane.tailscale.com over v6. It only started failing once the tunnel
+              # gave the host a *global* v6 address and things began attempting v6 at all.
+              #
+              # No loop: the tunnel's own endpoint is IPv4. Self-cleaning: routes bound to a device
+              # disappear with it, so nothing lingers if the tunnel drops.
+              ip -6 route replace default dev ${ifaceOf name} table main metric 1024
+            ''}
           '';
         peers = [
           {
@@ -264,7 +277,16 @@ in
         # tailscaled marks its own outbound WireGuard packets; they leave via enp7s0, not
         # tailscale0, so without this the tunnel-bypass rules above would be undone by the firewall.
         iptables -A proton-ks -m mark --mark 0x80000/0xff0000 -j RETURN
-        iptables -A proton-ks -d 192.168.0.0/24 -j RETURN
+        # All of RFC1918, not just the LAN prefix. Two reasons, both learned the hard way:
+        #   - The original `192.168.0.0/24` missed the **Docker bridges** (172.17-172.20), so every
+        #     host->container connection was rejected — the companion on 172.18.0.5:12393 included.
+        #   - The LAN prefix itself already moved once (192.168.1.0/24 -> 192.168.0.0/24 when the
+        #     Archer became the router), and a hardcoded /24 would have silently cut the LAN off.
+        # Safe to allow wholesale: private ranges are not routable on the public internet, so they
+        # cannot be the "leak" this kill switch exists to prevent.
+        iptables -A proton-ks -d 10.0.0.0/8 -j RETURN
+        iptables -A proton-ks -d 172.16.0.0/12 -j RETURN
+        iptables -A proton-ks -d 192.168.0.0/16 -j RETURN
         iptables -A proton-ks -d 100.64.0.0/10 -j RETURN
         iptables -A proton-ks -d 224.0.0.0/4 -j RETURN
         # DHCP renewal — this host gets its address from the OpenWrt router, and the broadcast
