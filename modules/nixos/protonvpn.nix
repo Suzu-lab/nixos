@@ -54,11 +54,17 @@ let
   # not the server — the key in sops was generated with Moderate NAT on, which is what matters for
   # NAT traversal; NetShield is irrelevant here since Proton never sees our DNS.
   servers = {
-    br = {
+    br-65 = {
       publicKey = "C3LgiID8tKOhXsu4Tyu8NMz5/WOWZoeZAY41Bybp5gM=";
       endpoint = "146.70.98.162:51820";
       ipv6 = true;
       desc = "BR#65 — Brazil, lowest latency";
+    };
+    br-82 = {
+      publicKey = "uuIq8uVHFloPPDpl0dKcCiGmnSWARGpj6Wcy/XI+6z8=";
+      endpoint = "146.70.98.98:51820";
+      ipv6 = true;
+      desc = "BR#82 — Brazil, lowest latency";
     };
     us = {
       publicKey = "E9m7utnaVJ64+Z3zKXbxfxSMZ/CpKWa8R3mDwKczF2E=";

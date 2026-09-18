@@ -44,6 +44,7 @@
     gaming.enable = true;
     guiEssentials.enable = true;
     keychron.enable = true;
+    logitech.enable = true;
     netdata.enable = true;
     openrgb.enable = true;
   };
@@ -83,7 +84,7 @@
   # with `protonvpn-ctl <br|us|jp|ch|tor>` — no rebuild needed; this only sets the boot default.
   suzu.system.vpn = {
     enable = true;
-    server = "br";
+    server = "br-82";
   };
 
   # Catppuccin for everything graphical — GTK (incl. libadwaita), icons, cursor, VSCodium and

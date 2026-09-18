@@ -72,7 +72,7 @@ in
               repeat-delay = 200; # solves keyboard auto repeat
               repeat-rate = 35;
             };
-            warp-mouse-to-focus.enable = true; # makes cursor move to the newly focused window
+            warp-mouse-to-focus.enable = false; # makes cursor move to the newly focused window
             focus-follows-mouse.enable = true; # makes so the window focus automatically follows the mouse cursor;
           };
           spawn-at-startup = [

@@ -18,6 +18,7 @@
     ./nixos/gayming.nix
     ./nixos/gui-essentials.nix
     ./nixos/keychron.nix  # Module for setting up permissions for configuring the Keychron K6 HE keyboard
+    ./nixos/logitech.nix  # Module for setting up solaar for the Master 3S mouse
     ./nixos/netdata.nix # Metrics tool with web interface accessible through port 19999
     ./nixos/networking.nix
     ./nixos/openrgb.nix # RGB control for the motherboard, RAM and GPU

@@ -52,6 +52,7 @@
       #################################################################
       # User programs
       #################################################################
+      calibre # convert ebooks for the Kindle
       octave # math plotting program for uni work
       qbittorrent # torrent client
       # Simple image editor (crops, paste, annotate). Briefly swapped for `drawing` on the grounds
