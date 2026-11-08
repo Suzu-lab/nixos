@@ -30,6 +30,9 @@ in
       extraCompatPackages = [ pkgs.proton-ge-bin ];
     };
 
+    # Enable protontricks to install runtimes and other required things for some Windows games.
+    programs.steam.protontricks.enable = true;
+
     environment.systemPackages = with pkgs; [
       itch # Client for itch.io games
       lutris

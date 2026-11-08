@@ -16,6 +16,7 @@ in
 
   config = lib.mkIf cfg.enable {
     fonts.packages = with pkgs; [
+      corefonts # MS base fonts required to work with some documents
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
