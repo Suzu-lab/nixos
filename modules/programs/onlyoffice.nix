@@ -10,4 +10,4 @@ in
   config = lib.mkIf cfg.enable {
     hm.programs.onlyoffice.enable = true;
   };
-};
+}
