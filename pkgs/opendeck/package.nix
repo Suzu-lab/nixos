@@ -27,6 +27,7 @@
   pango,
   webkitgtk_4_1,
   openssl,
+  libgit2,
 
   # Plugin dependencies
   libxkbcommon,
@@ -251,6 +252,7 @@ rustPlatform.buildRustPackage {
     pango
     webkitgtk_4_1
     openssl
+    libgit2
   ];
 
   # The Rust code is in the src-tauri subdirectory
